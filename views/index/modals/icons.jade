@@ -1,4 +1,4 @@
-#iconsModal.modal.fade
+#iconsModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="...")
   .modal-dialog
     .modal-content
       .modal-header
@@ -6,7 +6,7 @@
           span(aria-hidden="true") &times;
         h4.modal-title Icons on this challenge
       .modal-body.row
-        .col-md-12.col-xs-12.icon-list(ng-show='icons.length')
-          span.col-xs-3.col-sm-2.col-md-1.icon-sample(ng-repeat='e in icons', ng-bind='e.icon')
+        .col-md-12.col-xs-12(ng-show='icons.length')
+          span.col-xs-3.col-sm-2.col-md-1.fa-3x(ng-repeat='e in icons', ng-bind='codeToS(e.icon)')
       .modal-footer
         button.btn.btn-default(type="button", data-dismiss="modal") Close

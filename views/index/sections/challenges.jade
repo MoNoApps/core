@@ -13,7 +13,7 @@
           th(ng-class='{"info": (e!=challenge), "success": (e==challenge)}')
             span(ng-bind='e.desc')
           td.success
-            i.fa.fa-users &nbsp;3 /39
+            i.fa.fa-users &nbsp;{{e.users || 0}}
           td.td-zero.success
             div(ng-show='e.start')
               a.btn-play.btn-table.btn.btn-success(ng-click='revealIcons(e)',

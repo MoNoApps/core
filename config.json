@@ -21,11 +21,7 @@
     "PRE": "/",
     "ID": "/:id"
   },
-  "views":[
-    "groups",
-    "roles",
-    "tasks",
-    "products"],
+  "views":["",""],
   "pages":[
     "account",
     "recover",
@@ -53,36 +49,6 @@
         "email": 1,
         "status": 1,
         "role": 1
-      }
-    },
-    "groups": {
-      "param": "group",
-      "schema": {
-        "name": 1
-      }
-    },
-    "roles":  {
-      "param": "role",
-      "schema": {
-        "name":  1,
-        "readonly": 1,
-        "resources": 1
-      }
-    },
-    "tasks":  {
-      "param": "task",
-      "schema": {
-        "name": 1
-      }
-    },
-    "products":  {
-      "param": "product",
-      "schema": {
-        "name": 1,
-        "code": 1,
-        "price": 1,
-        "image": 1,
-        "comments": 1
       }
     },
     "levels": { "admin": true, "param": "level", "exclude": true },

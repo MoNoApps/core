@@ -13,8 +13,7 @@ var persist = function(list, model) {
   }
 };
 
-db.roles.DropDB(function(){
-  persist(roles, db.roles);
+db.users.DropDB(function(){
   persist(users, db.users);
   persist(settings, db.settings);
   persist(challenges, db.challenges);

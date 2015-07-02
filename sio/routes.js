@@ -6,6 +6,8 @@ var events = require('./events');
 var listen = function(cb) {
   var users = 0;
   sio.on('connection', function (socket) {
+    socket.curRoom = false;
+    socket.join('match');
     ps.pub.set(conf.site + '::users', users += 1);
     socket.emit('current', {users: users});
 
@@ -20,7 +22,7 @@ var listen = function(cb) {
       });
     });
 
-    socket.on('getUsers', function() {
+    socket.on('getUsers', function(){
       events.users(socket, function(err, users) {
         socket.emit('users', users);
       });
@@ -32,17 +34,30 @@ var listen = function(cb) {
       });
     });
 
-    socket.on('setChallenge', function(e){
+    socket.on('setChallenge', function(e) {
       // console.log('active challenge', e);
     });
 
-    socket.on('play', function(e){
+    socket.on('play', function(challenge){
+      //TODO: validChallenge?
+      if(socket.curRoom){
+        socket.leave(socket.curRoom);
+      }
+
+      socket.curRoom = challenge._id;
+
+      events.changes({
+        socket: socket,
+        sio: sio,
+        name: challenge._id
+      });
+
       events.current(socket, function(err, level){
         socket.emit('level', level);
       });
     });
 
-    socket.on('disconnect', function () {
+    socket.on('disconnect', function (){
       ps.pub.set(conf.site + '::users', users -= 1);
     });
   });

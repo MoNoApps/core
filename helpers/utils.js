@@ -37,7 +37,13 @@ var createToken = function(user, cb){
   });
 };
 
+var shuffle = function(o) {
+  for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+  return o;
+};
+
 module.exports.createPwd = createPwd;
 module.exports.createUUID = createUUID;
 module.exports.comparePwd = comparePwd;
 module.exports.createToken = createToken;
+module.exports.shuffle = shuffle;

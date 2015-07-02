@@ -7,7 +7,8 @@ var testUser = {
   email: 'daniel@monoapps.co',
   status: 1,
   date: new Date().getTime(),
-  text: utils.createUUID()
+  text: complex,
+  admin: true
 };
 
 models.users.Insert(testUser, function(err, users) {
@@ -18,7 +19,7 @@ models.users.Insert(testUser, function(err, users) {
     key: user._id.toString(),
     text: testUser.text || utils.createUUID()
   };
-  
+
   utils.createPwd(options, function(pwd, passphrase) {
     var query = {'_id': options.key};
     user.password = pwd;

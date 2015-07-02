@@ -3,8 +3,8 @@
     "type" : "properties",
     "data" : {
       "name": "deckApp",
-      "user": ["groups", "roles", "tasks", "products"],
-      "admin": ["users"],
+      "user": [],
+      "admin": ["users","levels","challenges","history"],
       "themes": [
         { "name": "Cerulean",
           "css": "/themes/cerulean.min.css" },
