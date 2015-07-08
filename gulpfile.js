@@ -56,6 +56,11 @@ gulp.task('watch', function() {
   gulp.watch(scripts, ['app']);
 });
 
+gulp.task('system', function(){
+  var system = require('./helpers/system');
+  system(function(){});
+});
+
 gulp.task('app', function() {
   var cfg = require('./config.json').port;
   var api = require('./api/routes');
