@@ -1,10 +1,10 @@
-.row.ng-cloak(ng-controller='GameCtrl', ng-show='token')
+.row.ng-cloak(ng-controller='GameController', ng-show='token')
   var(ng-init='model= #{JSON.stringify(model)}')
   div(ng-if="!model")
     include ../modals/icons
     .col-md-6.col-xs-12
-      include challenges
       include stats
+      include challenges
       include board
     .col-md-1
     .col-md-5.col-xs-12

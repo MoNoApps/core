@@ -1,3 +1,3 @@
 a.btn.btn-primary.col-xs-12.col-sm-12.col-md-12(ng-href='/{{model}}/{{f._id}}',
   ng-repeat='f in $parent.feed | filter:$parent.search')
-  span(ng-bind='f.email')
+  span(ng-bind='f.email || f.name || f.id')

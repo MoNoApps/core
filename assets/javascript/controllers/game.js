@@ -1,4 +1,4 @@
-window.app.controller('GameCtrl',
+window.app.controller('GameController',
   ['$scope', '$rootScope', '$http', '$interval', '$timeout',
   function($scope, $rootScope, $http, $interval, $timeout) {
 
@@ -18,22 +18,22 @@ window.app.controller('GameCtrl',
   $scope.wins = 0;
   $scope.loss = 0;
   $scope.done = false;
+  $scope.metrics = {users: 0};
   var interval = false;
   var tape = 9641;
 
   $scope.codeToS = function(code){
-    return code || String.fromCharCode(10033);
+    return String.fromCharCode(code || 10033);
   };
 
   $scope.act = function(action){
     switch(action){
       case 'play':
-        doBoard();
         $scope.isPaused = false;
         $scope.time = 60;
         $scope.status = 'warning';
-        timer();
-        socket.emit('play',{challenge: angular.copy($scope.challenge)});
+        //timer();
+        socket.emit('play',angular.copy($scope.challenge));
         break;
       case 'pause':
         $scope.isPaused = true;
@@ -138,14 +138,9 @@ window.app.controller('GameCtrl',
   var printIcons = function(start, end){
     var icons = [];
     for(var i=start; i<end;i++){
-      icons.push({icon: $scope.codeToS(i,false), desc: ''});
+      icons.push({icon: i, desc: ''});
     }
     return icons;
-  };
-
-  var doBoard = function(){
-    //$scope.board.push({c: p[i], s: 0});
-    socket.emit('getBoard');
   };
 
   var checkIsDone = function (){
@@ -168,17 +163,32 @@ window.app.controller('GameCtrl',
 
   //socket io events
   socket.on('info', function (data) {
-    $timeout(function () {
+    $timeout(function(){
       //TODO. status board
-      //TODO: current challenge
+      if(data.join){
+
+      }
       if(data.users){
         $scope.users = data.users;
       }
     }, 1);
   });
 
+  socket.on('join',function(data){
+    $timeout(function(){
+      for (var i = 0; i < $scope.challenges.length; i++) {
+        var ch = $scope.challenges[i];
+        if(ch._id === data.name){
+          $scope.challenges[i].users = data.size;
+          break;
+        }
+      }
+    }, 1);
+  });
+
   socket.on('level', function (level) {
     $scope.board = level.board;
+    timer();
   });
 
   socket.on('levels', function (levels) {

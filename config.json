@@ -1,5 +1,5 @@
 {
-  "dburl": "mongodb://127.0.0.1/decktools",
+  "dburl": "mongodb://127.0.0.1/game",
   "site": "Match Game",
   "port": {
     "web": 1344,
@@ -21,11 +21,7 @@
     "PRE": "/",
     "ID": "/:id"
   },
-  "views":[
-    "groups",
-    "roles",
-    "tasks",
-    "products"],
+  "views":[],
   "pages":[
     "account",
     "recover",
@@ -55,38 +51,29 @@
         "role": 1
       }
     },
-    "groups": {
-      "param": "group",
+    "levels": { 
+      "admin": true, 
+      "param": "level",
+      "exclude": true,
       "schema": {
-        "name": 1
-      }
+         "name": 1
+       }
     },
-    "roles":  {
-      "param": "role",
-      "schema": {
-        "name":  1,
-        "readonly": 1,
-        "resources": 1
-      }
+    "challenges": { 
+       "admin": true, 
+       "param": "challenge", 
+       "exclude": true,
+       "schema": {
+         "name": 1
+       }
     },
-    "tasks":  {
-      "param": "task",
-      "schema": {
-        "name": 1
-      }
-    },
-    "products":  {
-      "param": "product",
-      "schema": {
-        "name": 1,
-        "code": 1,
-        "price": 1,
-        "image": 1,
-        "comments": 1
-      }
-    },
-    "levels": { "admin": true, "param": "level", "exclude": true },
-    "challenges": { "admin": true, "param": "challenge", "exclude": true },
-    "history": { "admin": true, "param": "history", "exclude": true }
+    "history": { 
+       "admin": true, 
+       "param": "history", 
+       "exclude": true,
+       "schema": {
+         "name": 1
+       }
+    }
   }
 }

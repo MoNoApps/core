@@ -1,31 +1,7 @@
 .row.ng-cloak(ng-switch='model')
-  div(ng-switch-when='users')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/users
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
+  .col-xs-12.col-sm-12.col-md-3
+    include ../navs/list
+    include ../navs/empty
+  .col-xs-12.col-sm-12.col-md-9
+    div(ng-switch-when='users')
       include ../forms/users
-  div(ng-switch-when='roles')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/roles
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
-      include ../forms/roles
-  div(ng-switch-when='groups')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/groups
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
-      include ../forms/groups
-  div(ng-switch-when='tasks')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/tasks
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
-      include ../forms/tasks
-  div(ng-switch-when='products')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/products
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
-      include ../forms/products

@@ -1,14 +1,11 @@
-var shuffle = function(o) {
-  for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-  return o;
-};
+var shuffle = require('../helpers/utils').shuffle;
 
 var level = function(first, last) {
   var range = [];
   var boards = [];
 
   for(var i=first; i<last+1; i++) {
-    range.push({c: String.fromCharCode(i)});
+    range.push({c: String.fromCharCode(i), o: i});
   }
 
   var ll = range.length-7;
