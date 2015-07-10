@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "gulp": "*",
+    "underscore": "*",
     "gulp-concat": "*",
     "gulp-jshint": "*",
     "gulp-minify-css": "*",

@@ -6,16 +6,16 @@ var w = ['tokens', 'settings'];
 var s = ['actions', 'login', 'recover', 'register' ];
 var p = './views/index/forms';
 
-var c = function(n){ return n.replace('.jade',''); };
-
-var ur = function(n,o){
-  u(n + ' (' + o.length + ') -->> \t' + o);
+var c = function (n) { 
+  return n.replace('.jade',''); 
 };
 
-module.exports = function(cb){
-  var t,x,v;
-  var m = Object.keys(r);
-  m = _.difference(m,w);
+module.exports = function (cb) {
+  var t;
+  var x;
+  var v;
+  var m = _.difference(Object.keys(r), w);
+
   if(f.existsSync(p)){
     t = f.readdirSync(p);
     t = _.map(t, c);
@@ -23,8 +23,6 @@ module.exports = function(cb){
     x = _.intersection(m,t);
     v = _.difference(m,t);
   }
-  ur('Models',m);
-  ur('Valid',x);
-  ur('Missing',v);
+
   cb({models: m, valid: x, missing: v});
 };

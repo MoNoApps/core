@@ -1,5 +1,5 @@
 {
-  "dburl": "mongodb://127.0.0.1/decktools",
+  "dburl": "mongodb://127.0.0.1/game",
   "site": "Match Game",
   "port": {
     "web": 1344,
@@ -51,8 +51,29 @@
         "role": 1
       }
     },
-    "levels": { "admin": true, "param": "level", "exclude": true },
-    "challenges": { "admin": true, "param": "challenge", "exclude": true },
-    "history": { "admin": true, "param": "history", "exclude": true }
+    "levels": { 
+      "admin": true, 
+      "param": "level",
+      "exclude": true,
+      "schema": {
+         "name": 1
+       }
+    },
+    "challenges": { 
+       "admin": true, 
+       "param": "challenge", 
+       "exclude": true,
+       "schema": {
+         "name": 1
+       }
+    },
+    "history": { 
+       "admin": true, 
+       "param": "history", 
+       "exclude": true,
+       "schema": {
+         "name": 1
+       }
+    }
   }
 }
