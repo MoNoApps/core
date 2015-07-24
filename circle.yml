@@ -12,6 +12,7 @@ machine:
 
 dependencies:
   pre:
+    - sudo service zookeeper stop
     - sudo rm /etc/apt/sources.list.d/google-chrome.list
     - sudo cp /home/ubuntu/deck/sources.list /etc/apt/sources.list
     - sudo apt-get purge mongodb mongodb-clients mongodb-server mongodb-dev

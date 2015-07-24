@@ -5,4 +5,11 @@ form.form-horizontal(name="modelForm")
       .col-md-10
         input.form-control(required='required',
           type='text', ng-model='$parent.edit.name')
+    .form-group
+      label.col-md-2.control-label Status
+      .col-md-10
+        select.form-control(ng-model='$parent.edit.status')
+            option(value='0') ToDo
+            option(value='1') Done
+            option(value='2') Break
     include actions

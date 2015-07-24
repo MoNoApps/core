@@ -18,7 +18,6 @@ describe('resources', function(){
         inputName.sendKeys(resName);
 
         element(by.css('[ng-click="$parent.create($parent.edit)"]')).click();
-        //S=search in CRUDS
         var searchInput = element(by.model('$parent.search'));
         searchInput.sendKeys(resName);
         expect(searchInput.getAttribute('value')).toBe(resName);
@@ -28,7 +27,6 @@ describe('resources', function(){
 
         var itemBind = element.all(by.binding('f'));
         itemBind.get(0).click();
-
         element(by.css('[ng-click="$parent.delete()"]')).click();
 
         var itemAgainList = element.all(by.repeater('f in $parent.feed'));

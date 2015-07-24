@@ -1,12 +1,15 @@
 .row
-  .col-md-3.col-xs-12
+  .col-xs-12.col-md-3
     h3(ng-bind='"List: " + model')
   .col-xs-12.col-sm-12.col-md-9
     .row
-      .col-xs-12.col-sm-12.col-md-9
+      .col-xs-12.col-sm-12.col-md-10
         include alerts
-      .col-xs-12.col-sm-12.col-md-3
-        a.col-xs-12.col-sm-12.btn.btn-success.pull-right#addLink(
-          ng-click='',
+      .col-sm-12.col-md-2(ng-class='{"hidden-xs hidden-sm": roco, "col-xs-12 col-sm-12": !roco}')
+        a.col-xs-12.col-sm-12.btn.btn-success#addLink(
           ng-href='/{{model}}/new')
-          i.glyphicon.glyphicon-plus &nbsp;New
+          i.glyphicon.glyphicon-plus
+      .hidden-lg.hidden-md(ng-class='{"hidden-xs hidden-sm": !roco, "col-xs-12 col-sm-12": roco}')
+        a.col-xs-12.col-sm-12.btn.btn-success(
+          ng-click='roco=false')
+          i.glyphicon.glyphicon-list

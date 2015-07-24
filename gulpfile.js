@@ -11,6 +11,7 @@ var srcmap = require('gulp-sourcemaps');
 var scripts = [
   './helpers/*.js',
   './api/*.js',
+  './core/*.js',
   './*.js',
   'assets/javascript/*',
   'assets/javascript/services/*.js',
@@ -54,6 +55,11 @@ gulp.task('watch', function() {
   gulp.watch(jsng, ['minify']);
   gulp.watch(styles, ['styles']);
   gulp.watch(scripts, ['app']);
+});
+
+gulp.task('core', function(done) {
+ var core = require('./core/index');
+ core(done);
 });
 
 gulp.task('app', function() {

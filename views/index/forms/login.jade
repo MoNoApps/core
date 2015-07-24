@@ -1,5 +1,7 @@
 form.form.form-horizontal.col-md-12(name='loginForm', ng-show='isEnabledView("login")')
   .form-group
+    a.btn.btn-default.col-md-12.col-sm-12.col-xs-12(href='', ng-click='guestLogin()') Umm, just let me enter as guest!
+  .form-group
     span.col-md-3.control-label Email
     .col-md-9
       input.form-control(type='email', ng-model='user.email'
@@ -12,12 +14,14 @@ form.form.form-horizontal.col-md-12(name='loginForm', ng-show='isEnabledView("lo
         required='required', placeholder='Password')
   .form-group
     .col-md-9.col-md-offset-3
-      a.btn.btn-primary.col-md-12.col-xs-12#loginLink(ng-click='login()'
-        ng-disabled='loginForm.$error.email || !user.email || !user.password') Log in
+      .row
+        a.btn.btn-primary.col-md-12.col-xs-12#loginLink(ng-click='login()'
+          ng-disabled='loginForm.$error.email || !user.email || !user.password') Log in
     .col-md-9.col-md-offset-3
-      .col-md-12
+      br
+      .col-md-6.col-sm-6.col-xs-6
         a.pointer#recoverLink(ng-click='enableView("recover")') Recover
-      .col-md-12
+      .col-md-6.col-sm-6.col-xs-6
         a.pointer#newAccountLink(ng-click='enableView("register")') Sign up
   .form-group
       
