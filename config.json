@@ -1,5 +1,5 @@
 {
-  "dburl": "mongodb://127.0.0.1/decktools",
+  "dburl": "mongodb://127.0.0.1/deck",
   "site": "Deck App",
   "port": {
     "web": 1344,
@@ -72,7 +72,8 @@
     "tasks":  {
       "param": "task",
       "schema": {
-        "name": 1
+        "name": 1,
+        "status": 1
       }
     },
     "products":  {

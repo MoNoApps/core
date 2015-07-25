@@ -1,31 +1,15 @@
 .row.ng-cloak(ng-switch='model')
-  div(ng-switch-when='users')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/users
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
+ .col-sm-12.col-md-3(ng-class='{"hidden-xs hidden-sm": roco, "col-xs-12 col-sm-12": !roco}')
+    include ../navs/list
+    include ../navs/empty
+  .col-sm-12.col-md-9(ng-class='{"hidden-xs hidden-sm": !roco, "col-xs-12 col-sm-12": roco}')
+    div(ng-switch-when='users')
       include ../forms/users
-  div(ng-switch-when='roles')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/roles
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
+    div(ng-switch-when='roles')
       include ../forms/roles
-  div(ng-switch-when='groups')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/groups
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
+    div(ng-switch-when='groups')
       include ../forms/groups
-  div(ng-switch-when='tasks')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/tasks
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
+    div(ng-switch-when='tasks')
       include ../forms/tasks
-  div(ng-switch-when='products')
-    .col-xs-12.col-sm-12.col-md-3
-      include ../navs/products
-      include ../navs/empty
-    .col-xs-12.col-sm-12.col-md-9
+    div(ng-switch-when='products')
       include ../forms/products

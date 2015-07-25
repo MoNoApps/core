@@ -1,5 +1,5 @@
 form.form.form-horizontal.col-md-12(name='recoverForm', ng-show='isEnabledView("recover")')
-  p Read email inbox for instructions.
+  p.text-center Read email inbox for instructions
   .form-group
     span.col-md-3.control-label Email
     .col-md-9
@@ -7,8 +7,10 @@ form.form.form-horizontal.col-md-12(name='recoverForm', ng-show='isEnabledView("
         required='required', placeholder='Your Email')
   .form-group
     .col-md-9.col-md-offset-3
-      a.btn.btn-primary.col-md-12.col-xs-12(ng-click='doRecover()',
-        ng-disabled='recoverForm.$error.email || !recover.email') Recover Account
+      .row
+        a.btn.btn-primary.col-md-12.col-xs-12(ng-click='doRecover()',
+          ng-disabled='recoverForm.$error.email || !recover.email') Recover Account
     .col-md-9.col-md-offset-3
+      br
       .col-md-6
         a.pointer(ng-click='enableView("login")') Log in

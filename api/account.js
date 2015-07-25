@@ -13,6 +13,8 @@ var find = function(req, res){
 
 var update = function(req, res){
   review({ req: req, res: res }, function(err, opt){
+    var restricted = _guest({ req: req, res: res, email: opt.user.email });
+    if(restricted) { return manager(restricted); }
     controllers.users.UpdateById(opt.user._id.toString(), {$set: {name: req.body.name} }, function(err, rsp){
       manager({req: req, res: res, err: err, rsp: rsp});
     });
@@ -21,6 +23,10 @@ var update = function(req, res){
 
 var security = function(req, res){
   review({ req: req, res: res }, function(err, opt){
+
+    var restricted = _guest({ req: req, res: res, email: opt.user.email });
+    if(restricted) { return manager(restricted); }
+
     if(!req.body.password || !req.body.newPwd || !req.body.again || (req.body.newPwd !== req.body.again)){
       return res.send(401);
     }
@@ -41,6 +47,15 @@ var security = function(req, res){
   });
 };
 
+var _guest = function(data){
+  if(data.email=='guest.match@monoapps.co'){
+    data.err = false;
+    data.rsp = {message: 'Update is disabled'};
+    return data;
+  } else {
+    return false;
+  }
+};
 module.exports.find = find;
 module.exports.update = update;
 module.exports.security = security;

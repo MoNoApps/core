@@ -1,0 +1,5 @@
+.pre-scrollable
+  a.btn.btn-default.col-xs-12.col-sm-12.col-md-12(ng-href='/{{model}}/{{f._id}}',
+    ng-class='{"btn-primary": (f.status==0), "btn-success": (f.status==1), "btn-danger": (f.status==2)}',
+    ng-repeat='f in $parent.feed | filter:$parent.search')
+    span(ng-bind='f.email || f.name || f._id')

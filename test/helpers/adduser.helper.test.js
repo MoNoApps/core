@@ -12,7 +12,10 @@ module.exports = function(testUser, cb){
     expect(users.length).toBe(1);
 
     var user = users[0];
-    var options = {key: user._id.toString(), text: utils.createUUID()};
+    var options = {
+      key: user._id.toString(),
+      text: testUser.text || utils.createUUID()
+    };
 
     utils.createPwd(options, function(pwd, passphrase) {
       expect(pwd.type).toEqual(jasmine.any(String));

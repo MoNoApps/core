@@ -1,0 +1,28 @@
+{
+  "tab": "  ",
+  "head":  "form.form-horizontal(name='modelForm')",
+  "fieldset": "fieldset",
+  "block":  {
+    "value": ".form-group"
+  },
+  "label": {
+    "value": "label.col-md-2.control-label",
+    "bind": "[[title]]"
+  },
+  "rocky": {
+    "value": ".col-md-10"
+  },
+  "input": {
+    "value": "input.form-control",
+    "bind": "ng-model='$parent.edit.[[field]]'",
+    "types": {
+      "url":    "type='url'",
+      "text":   "type='text'",
+      "email":  "type='email'",
+      "number": "type='number'"
+    },
+    "required": "required='true'"
+  },
+  "actions": "include actions",
+  "schema": "h3.text-center No schema found"
+}

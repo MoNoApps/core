@@ -18,10 +18,10 @@
     form.navbar-form.navbar-left.ng-cloack(ng-if='model')
       input.form-control.col-lg-8.ng-cloak(ng-model="$parent.search", type='text', placeholder='Search on {{model}}')
     ul.nav.navbar-nav.navbar-right
-      li.dropdown(ng-show='resources.length')
-        a.dropdown.active(ng-click='logout()', ng-if='resources.length',  href='') Log Out
+      li.dropdown(ng-if='token')
+        a.dropdown.active(ng-click='logout()', href='') Log Out
     ul.nav.navbar-nav.navbar-right
-      li.dropdown
+      li.dropdown(ng-if='token')
         a.dropdown-toggle#themesLink(href='#', data-toggle='dropdown')
           | Theme
           b.caret

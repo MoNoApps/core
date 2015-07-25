@@ -24,8 +24,8 @@ var addRoutes = function(opts){
   });
 };
 
-// WEB
-var addView =  function(web, route){
+// WEB VIEW
+var addView = function(web, route){
   web.get(
     ['/' + route,
      '/' + route + '/:id', '/' + route + '/new'] ,
@@ -40,7 +40,7 @@ var addView =  function(web, route){
 };
 
 //WEB PAGE
-var addPage =  function(web, name){
+var addPage = function(web, name){
   web.get('/' + name, function(req, res){
     res.render(name + '/index', { site: site });
   });
