@@ -28,7 +28,7 @@ describe('home', function(){
     element(by.css('[ng-click="login()"]')).click();
 
     var resourceList = element.all(by.binding('rname'));
-    expect(resourceList.count()).toEqual(0);
+    expect(resourceList.count()).toEqual(4);
 
     views.forEach(function(r,i) {
       resourceList.get(i).getInnerHtml().then(function(a,b) {
