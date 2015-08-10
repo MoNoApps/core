@@ -46,6 +46,13 @@ var addPage = function(web, name){
   });
 };
 
+//WEB PAGE
+var addPlank = function(web, name,path){
+  web.get('/' + name, function(req, res){
+    res.render(name + '/index', { site: site });
+  });
+};
+
 module.exports.addView = addView;
 module.exports.addPage = addPage;
 module.exports.addRoutes = addRoutes;

@@ -6,9 +6,18 @@ var sio = require('socket.io')(svr);
 var generator = require('../helpers/generator');
 var pages = require('../config.json').pages;
 var resources = require('../config.json').resources;
+var planks = require('../config.json').planks;
+
+var dirname = __dirname.replace('/web', '');
+var views = [dirname + '/views'];
+
+for(var d in planks){
+  views.push(dirname + '/planks/' + planks[d] + '/views');
+  generator.addPage(web, planks[d]);
+}
 
 // settings
-web.set('views', __dirname.replace('/web', '/views'));
+web.set('views', views);
 web.set('view engine', 'jade');
 web.use(express.static(__dirname.replace('/web', '/public')));
 

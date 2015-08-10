@@ -21,6 +21,9 @@
     "PRE": "/",
     "ID": "/:id"
   },
+  "planks": [
+    "bamboo"
+  ],
   "views":[
     "groups",
     "roles",
