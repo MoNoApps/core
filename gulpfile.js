@@ -13,7 +13,7 @@ var scripts = [
   './api/*.js',
   './core/*.js',
   './*.js',
-  'assets/javascript/*',
+  'assets/javascript/*.js',
   'assets/javascript/services/*.js',
   'assets/javascript/controllers/*.js',
   'test/*.js',

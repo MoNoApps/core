@@ -1,4 +1,5 @@
-window.app.controller('ListController',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
+window.app.controller('ListController',['$scope', '$rootScope', '$http', 'Socket',
+function($scope, $rootScope, $http, Socket) {
 
   //---- common vars ----//
   $scope.model = false;
@@ -158,5 +159,8 @@ window.app.controller('ListController',['$scope', '$rootScope', '$http', functio
     });
     console.log('watch:model');
   });
+
+  //websocket events
+  Socket.emit('report', window.location.pathname);
 
 }]);
