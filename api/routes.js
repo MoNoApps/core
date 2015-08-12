@@ -8,12 +8,34 @@ var utils = require('../helpers/utils');
 var controllers = require('./controllers');
 var generator = require('../helpers/generator');
 var resources = require("../config.json").resources;
+var planks = require('../config.json').planks;
+var inspector = require('../helpers/inspector');
 
 // settings
 var api = restify.createServer();
 api.use(restify.bodyParser());
 api.use(restify.queryParser());
 
+//plank routes
+for(var idx in planks){
+  var plank = require('../planks/' + planks[idx] + '/plank');
+  var prefix = '/' + planks[idx];
+  for(var g in plank.api.GET) {
+    if (plank.api.GET.hasOwnProperty(g)) {
+      var definition = plank.api.GET[g];
+      api.get(prefix + inspector.apiParams(definition), definition.fn);
+    }
+  }
+
+  for(var p in plank.api.POST) {
+    if (plank.api.POST.hasOwnProperty(p)) {
+      var definition = plank.api.POST[p];
+      api.post(prefix + inspector.apiParams(definition), definition.fn);
+    }
+  }
+}
+
+//TODO: add auto generated routes for planks
 // auto generated routes
 try{
   for(var route in resources){
@@ -47,5 +69,7 @@ api.get('/email/confirm/:code', commons.confirm);
 api.get('/account', account.find);
 api.post('/account', account.update);
 api.post('/security', account.security);
+
+//console.log(api.router.reverse);
 
 module.exports = api;
