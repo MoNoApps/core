@@ -29,11 +29,6 @@
   "planks": [
     "bamboo"
   ],
-  "views":[
-    "groups",
-    "roles",
-    "tasks",
-    "products"],
   "pages":[
     "account",
     "recover",
