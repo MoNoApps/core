@@ -14,7 +14,6 @@ Zappy.prototype.Get = function(req, res){
   var ge = { req: req, res: res, zap: this, admin: this.mg };
   var cl = this.cl;
   review( ge, function(err, opt){
-    console.log('here');
     opt.zap.cx.List({}, function(err, rsp){
       manager({req: req, res: res, err: err, rsp: rsp, clean: cl});
     });
