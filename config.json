@@ -19,7 +19,12 @@
   },
   "APIVARS": {
     "PRE": "/",
-    "ID": "/:id"
+    "ID": "/:id",
+    "PLANKS": {
+      "DIR":"/planks",
+      "MAIN": "/plank.js",
+      "VIEWS": "/views"
+    }
   },
   "planks": [
     "bamboo"
