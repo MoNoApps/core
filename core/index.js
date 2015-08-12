@@ -15,7 +15,7 @@ wizard( function (res) {
     rl.question('\nDo you want to create forms (y/N)?', function(a) {
       if (ry.test(a)) {
         for (var i in res.missing) {
-          form.add({name: res.missing[i]});
+          form.add({name: res.missing[i], resource: res.resources[res.missing[i]]});
         }
       }
 

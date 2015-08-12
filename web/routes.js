@@ -35,6 +35,8 @@ web.get('/', function(req, res){
   res.render('index/index', {site: require('../config.json').site});
 });
 
+//console.log(web._router.stack);
+
 module.exports.web = web;
 module.exports.svr = svr;
 module.exports.sio = sio;

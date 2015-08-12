@@ -1,0 +1,23 @@
+form.form-horizontal(name='modelForm')
+  fieldset
+    .form-group
+      label.col-md-2.control-label Tar
+      .col-md-10
+        input.form-control(ng-model='$parent.edit.tar', type='text', required='true')
+    .form-group
+      label.col-md-2.control-label Zar
+      .col-md-10
+        input.form-control(ng-model='$parent.edit.zar', type='text', required='true')
+    .form-group
+      label.col-md-2.control-label War
+      .col-md-10
+        input.form-control(ng-model='$parent.edit.war', type='text', required='true')
+    .form-group
+      label.col-md-2.control-label Name
+      .col-md-10
+        input.form-control(ng-model='$parent.edit.name', type='text', required='true')
+    .form-group
+      label.col-md-2.control-label Props
+      .col-md-10
+        input.form-control(ng-model='$parent.edit.props', type='text', required='true')
+    include actions
