@@ -1,6 +1,7 @@
 var generator = require('../helpers/generator');
 var planks = require('../config.json').planks;
 var pconf = require('../config.json').APIVARS.PLANKS;
+var planksDir = __dirname.replace('/helpers', pconf.DIR);
 
 var apiParams = function (defRoute) {
   var defParams = '/' + defRoute.route;
@@ -14,7 +15,6 @@ var apiParams = function (defRoute) {
 };
 
 var addPlanksApi = function(api){
-  var planksDir = __dirname.replace('/helpers', pconf.DIR);
   for(var idx in planks){
     var name = planks[idx];
     var prefix = '/' + name;
@@ -45,8 +45,14 @@ var addPlanksWeb = function(web){
   var views = [];
   for(var idx in planks){
     var name = planks[idx];
-    views.push(getViewPath(name));
-    generator.addPage(web, name);
+    var prefix = '/' + name;
+    var plank = require(planksDir + prefix + pconf.CONFIG);
+
+    for(var idy in plank.pages) {
+      var page = plank.pages[idy];
+      views.push(getViewPath(page));
+      generator.addPage(web, page);
+    }
   }
 
   return views;

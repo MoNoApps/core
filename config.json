@@ -23,7 +23,8 @@
     "PLANKS": {
       "DIR":"/planks",
       "MAIN": "/plank.js",
-      "VIEWS": "/views"
+      "VIEWS": "/views",
+      "CONFIG": "/config.json"
     }
   },
   "planks": [
