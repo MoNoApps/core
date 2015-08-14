@@ -20,8 +20,8 @@ dependencies:
     - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
     - echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
     - sudo apt-get update
-    - sudo apt-get autoremove
-    - sudo apt-get install -y nginx mongodb-org
+    # sudo apt-get autoremove
+    - sudo apt-get install nginx mongodb-org -y
     - sudo rm /etc/nginx/sites-enabled/default
     - sudo cp /home/ubuntu/deck/deck.conf /etc/nginx/sites-enabled/deck.conf
     - sudo service nginx reload
@@ -31,3 +31,6 @@ dependencies:
     # make chrome lxc-friendly
     - sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
     - rm google-chrome-stable.deb
+checkout:
+  post:
+    - /home/ubuntu/deck/refresh.sh
