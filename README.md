@@ -34,7 +34,7 @@ Main database of the project. Every plugin has their own db url.
 ````js
 "site": "Deck App"
 ````
-#### ports
+### ports
 ````js
 "port": {
   "web": 1344,
@@ -62,7 +62,7 @@ node examples/ping.mandril.js
   "ACK": "/api/email/confirm/"
 }
 ````
-#### variables
+### variables
 ````js
 "APIVARS": {
   "PRE": "/",
@@ -83,7 +83,7 @@ node examples/ping.mandril.js
 ]
 ````
 
-#### pages
+### pages
 Public pages. Unrestricted access and main file located at {name}/index.jade
 ````js
 "pages":[
@@ -93,7 +93,7 @@ Public pages. Unrestricted access and main file located at {name}/index.jade
   "docs",
   "dev"]
 ````
-## resources
+### resources
 One json definition for models/api/views/cruds.
 ````js
 "resources": {
@@ -110,7 +110,7 @@ One json definition for models/api/views/cruds.
   ...
 }
 ````
-## helpers
+### helpers
 We have written a lot of filters like:
 ````sh
 helpers/filters.js # admin, schema, author, cleaner
