@@ -6,9 +6,12 @@ var sio = require('socket.io')(svr);
 var generator = require('../helpers/generator');
 var pages = require('../config.json').pages;
 var resources = require('../config.json').resources;
+var inspector = require('../helpers/inspector');
 
 // settings
-web.set('views', __dirname.replace('/web', '/views'));
+var views = inspector.addPlanksWeb(web);
+views.push(__dirname.replace('/web', '/views'));
+web.set('views', views);
 web.set('view engine', 'jade');
 web.use(express.static(__dirname.replace('/web', '/public')));
 
@@ -31,6 +34,8 @@ for(var p in pages){
 web.get('/', function(req, res){
   res.render('index/index', {site: require('../config.json').site});
 });
+
+//console.log(web._router.stack);
 
 module.exports.web = web;
 module.exports.svr = svr;

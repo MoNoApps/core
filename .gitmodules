@@ -1,0 +1,3 @@
+[submodule "planks/bamboo"]
+	path = planks/bamboo
+	url = git@github.com:MoNoApps/plank.git

@@ -8,12 +8,16 @@ var utils = require('../helpers/utils');
 var controllers = require('./controllers');
 var generator = require('../helpers/generator');
 var resources = require("../config.json").resources;
+var inspector = require('../helpers/inspector');
 
 // settings
 var api = restify.createServer();
 api.use(restify.bodyParser());
 api.use(restify.queryParser());
 
+inspector.addPlanksApi(api);
+
+//TODO: add auto generated routes for planks
 // auto generated routes
 try{
   for(var route in resources){
@@ -47,5 +51,7 @@ api.get('/email/confirm/:code', commons.confirm);
 api.get('/account', account.find);
 api.post('/account', account.update);
 api.post('/security', account.security);
+
+//console.log(api.router.reverse);
 
 module.exports = api;
