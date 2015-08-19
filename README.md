@@ -171,9 +171,17 @@ gulp core
 "themes": [{"name": "the name", "css": "/themes/{filename}.min.css" }]
 ````
 
-## guest user
+## user management
+Add the guest user:
 ````js
 node migrations/guest.js
+````
+Create normal users: register your own email.</br>
+Be admin just setting something like:
+````sh
+mongo
+>use deck
+>db.users.update({email: 'admin@monoapps.co', admin: true});
 ````
 
 ## writing plugins
