@@ -191,5 +191,7 @@ See [bamboo sample](https://github.com/MoNoApps/plank)
 ````sh
 npm install istanbul mocha-istanbul -g
 make cov
+````
+
 ## deploy
 Use [nginx config](deck.conf) to deploy. If needed add the hostname domains on /etc/hosts file.
