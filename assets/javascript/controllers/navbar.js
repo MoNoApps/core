@@ -23,7 +23,7 @@ window.app.controller('NavBarController',['$scope','$rootScope', '$http', functi
   };
 
   $scope.setResource = function(resource) {
-    $rootScope.$emit('change:model', resource);
+    window.location.pathname = '/' + resource;
   };
 
   $scope.logout = function() {

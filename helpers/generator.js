@@ -1,6 +1,7 @@
 // references
 var Zappy = require('../helpers/zappy').Zappy;
 var site = require('../config.json').site;
+var theme = require('../config.json').theme;
 var AV = require('../config.json').APIVARS;
 
 // API
@@ -25,15 +26,18 @@ var addRoutes = function(opts){
 };
 
 // WEB VIEW
-var addView = function(web, route){
+var addView = function(web, model){
   web.get(
-    ['/' + route,
-     '/' + route + '/:id', '/' + route + '/new'] ,
+    ['/' + model,
+     '/' + model + '/:id', '/' + model + '/new'] ,
     function(req, res){
+      var _id = req.params.id;
+      console.log(theme);
       res.render('index/index', {
-        model: route,
-        id: req.params.id,
-        site: site
+        id: _id,
+        site: site,
+        model: model,
+        theme: theme
       });
     }
   );
@@ -42,7 +46,11 @@ var addView = function(web, route){
 //WEB PAGE
 var addPage = function(web, name){
   web.get('/' + name, function(req, res){
-    res.render(name + '/index', { site: site });
+    res.render(name + '/index', {
+      site: site,
+      model: false,
+      theme: theme
+    });
   });
 };
 

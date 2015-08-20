@@ -32,7 +32,11 @@ for(var p in pages){
 
 // main
 web.get('/', function(req, res){
-  res.render('index/index', {site: require('../config.json').site});
+  res.render('index/index', {
+    model: false,
+    site: require('../config.json').site,
+    theme: require('../config.json').theme
+  });
 });
 
 //console.log(web._router.stack);

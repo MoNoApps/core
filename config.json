@@ -1,6 +1,7 @@
 {
   "dburl": "mongodb://127.0.0.1/deck",
   "site": "Deck App",
+  "theme": "/themes/paper.min.css",
   "port": {
     "web": 1344,
     "api": 1345,
@@ -28,7 +29,7 @@
     }
   },
   "planks": [
-    "bamboo"
+    "wizard"
   ],
   "pages":[
     "account",

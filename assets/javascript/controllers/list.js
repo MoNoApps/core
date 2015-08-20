@@ -143,11 +143,6 @@ function($scope, $rootScope, $http, Socket) {
     console.log('load:resources');
   });
 
-  $rootScope.$on('change:model', function (event, data) {
-    window.location.pathname = '/' + data + '/new';
-    console.log('change:model');
-  });
-
   $rootScope.$on('watch:search', function (event, data) {
     $scope.search = data;
     console.log('watch:search');

@@ -6,26 +6,18 @@ var uglify = require('gulp-uglify');
 var mincss = require('gulp-minify-css');
 var srcmap = require('gulp-sourcemaps');
 // var minimg = require('gulp-imagemin');
+var assets = require('./core/_assets');
 
 // vars
-var scripts = [
-  './helpers/*.js',
-  './api/*.js',
-  './core/*.js',
-  './*.js',
-  'assets/javascript/*.js',
-  'assets/javascript/services/*.js',
-  'assets/javascript/controllers/*.js',
-  'test/*.js',
-  'test/e2e/*.js',
-  'test/helpers/*.js'
-];
-var jsng = [
-  'assets/javascript/app.js',
-  'assets/javascript/services/*.js',
-  'assets/javascript/controllers/*.js'
-];
-var styles = ['assets/styles/*.css'];
+var scripts = [];
+var jsng = [];
+var styles = [];
+
+assets(function(a,b,c){
+  scripts = a;
+  jsng = b;
+  styles = c;
+});
 
 gulp.task('lint', function() {
   gulp.src(scripts)

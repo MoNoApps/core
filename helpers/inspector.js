@@ -72,7 +72,7 @@ var addPlanksWeb = function(web){
       var prefix = '/' + name;
       var plank = require(planksDir + prefix + pconf.CONFIG);
 
-      for(var idy in plank.pages) {
+      for(var idy in plank.pages){
         var page = plank.pages[idy];
         views.push(getViewPath(page));
         generator.addPage(web, page);
