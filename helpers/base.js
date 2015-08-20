@@ -27,8 +27,8 @@ CBase.prototype.Create = function(query, callback){
   });
 };
 
-CBase.prototype.Update = function(query, callback){
-  this.model.Update(query, function(err, results){
+CBase.prototype.Update = function(query, doc, callback){
+  this.model.Update(query, doc, {w: 1}, function(err, results){
     callback(err, results);
   });
 };

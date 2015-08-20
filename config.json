@@ -14,7 +14,8 @@
   "TTL": 84000,
   "URL": {
     "BASE": "http://deck.wrine.co",
-    "ACK": "/api/email/confirm/"
+    "ACK": "/api/email/confirm/",
+    "REC": "/api/email/recover/"
   },
   "APIVARS": {
     "PRE": "/",
