@@ -32,7 +32,7 @@ var addView = function(web, model){
      '/' + model + '/:id', '/' + model + '/new'] ,
     function(req, res){
       var _id = req.params.id;
-      console.log(theme);
+
       res.render('index/index', {
         id: _id,
         site: site,
