@@ -1,7 +1,7 @@
-module.exports = function(browser,path){
+var base = require('../../config.json').URL.BASE;
 
-  browser.get(require('../../config.json').URL.BASE+(path||''));
+module.exports = function(browser, path){
+  browser.get(base + (path||''));
   browser.manage().window().maximize();
   browser.waitForAngular();
-
 };

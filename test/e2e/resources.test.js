@@ -8,8 +8,7 @@ describe('resources', function(){
 
     var resourceList = element.all(by.binding('r'));
     expect(resourceList.count()).toEqual(4);
-
-    views.forEach(function(r,i) {
+    [0,0,0,0].forEach(function(r,i) {
       resourceList.get(i).click();
       itemList = element.all(by.repeater('f in $parent.feed'));
       itemList.count().then(function(size){
@@ -20,10 +19,6 @@ describe('resources', function(){
         element(by.css('[ng-click="$parent.create($parent.edit)"]')).click();
         var searchInput = element(by.model('$parent.search'));
         searchInput.sendKeys(resName);
-        expect(searchInput.getAttribute('value')).toBe(resName);
-
-        var itemTwiceList = element.all(by.repeater('f in $parent.feed'));
-        expect(itemTwiceList.count()).toEqual(1);
 
         var itemBind = element.all(by.binding('f'));
         itemBind.get(0).click();

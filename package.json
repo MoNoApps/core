@@ -5,7 +5,7 @@
   "description": "MPill implementation",
   "main": "app.js",
   "scripts": {
-    "test": "node migrations/seed.js; protractor protractor.js; mocha;"
+    "test": "node migrations/seed.js; node migrations/guest.js; protractor protractor.js; mocha;"
   },
   "author": "Daniel Martinez",
   "license": "MIT",
