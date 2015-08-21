@@ -15,13 +15,13 @@ dependencies:
     - sudo service zookeeper stop
     - sudo rm /etc/apt/sources.list.d/google-chrome.list
     - sudo cp /home/ubuntu/deck/sources.list /etc/apt/sources.list
-    - sudo apt-get purge mongodb mongodb-clients mongodb-server mongodb-dev
-    - sudo apt-get purge mongodb-10gen
-    - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-    - echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+    # sudo apt-get purge mongodb mongodb-clients mongodb-server mongodb-dev
+    # sudo apt-get purge mongodb-10gen
+    # sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+    # echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
     - sudo apt-get update
     # sudo apt-get autoremove
-    - sudo apt-get install nginx sudo apt-get install mongodb-org=3.0.5 mongodb-org-server=3.0.5 mongodb-org-shell=3.0.5 mongodb-org-mongos=3.0.5 mongodb-org-tools=3.0.5 -y
+    - sudo apt-get install nginx -y
     - sudo rm /etc/nginx/sites-enabled/default
     - sudo cp /home/ubuntu/deck/deck.conf /etc/nginx/sites-enabled/deck.conf
     - sudo service nginx reload
