@@ -19,7 +19,8 @@
     "async": "*",
     "socket.io": "*",
     "redis": "*",
-    "uuid": "*"
+    "uuid": "*",
+    "underscore": "*"
   },
   "devDependencies": {
     "gulp": "*",

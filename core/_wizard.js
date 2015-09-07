@@ -1,6 +1,5 @@
 var f = require('fs');
 var _ = require('underscore');
-var u = require('util').log;
 var r = {};
 var cr = require('../config.json').resources;
 var k = require('../config.json').planks;
@@ -9,7 +8,6 @@ var n = __dirname.replace('/core', b.DIR);
 var w = ['tokens', 'settings'];
 var s = ['actions', 'login', 'recover', 'register' ];
 var p = './views/index/forms';
-
 
 var c = function (n) {
   return n.replace('.jade','');
@@ -44,7 +42,8 @@ module.exports = function (cb) {
   var t;
   var x;
   var v;
-  var m = _.difference(Object.keys(r), w);
+  var u = _.union(Object.keys(r), Object.keys(cr));
+  var m = _.difference(u, w);
 
   if(f.existsSync(p)){
     t = f.readdirSync(p);
