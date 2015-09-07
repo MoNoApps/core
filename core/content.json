@@ -5,12 +5,12 @@
   "block":  {
     "value": ".form-group"
   },
+  "rocky": {
+    "value": ".col-md-10"
+  },
   "label": {
     "value": "label.col-md-2.control-label",
     "bind": "[[title]]"
-  },
-  "rocky": {
-    "value": ".col-md-10"
   },
   "input": {
     "value": "input.form-control",
@@ -20,9 +20,13 @@
       "text":   "type='text'",
       "email":  "type='email'",
       "number": "type='number'"
-    },
-    "required": "required='true'"
+    }
   },
+  "select": {
+    "value": "select.form-control",
+    "bind": "ng-model='$parent.edit.[[field]]'"
+  },
+  "required": "required='[[required]]'",
   "actions": "include actions",
   "schema": "h3.text-center No schema found"
 }

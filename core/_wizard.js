@@ -38,12 +38,18 @@ var init = function() {
 init();
 j(r);
 
-module.exports = function (cb) {
+var generator = function (cb) {
   var t;
   var x;
   var v;
   var u = _.union(Object.keys(r), Object.keys(cr));
   var m = _.difference(u, w);
+
+  for(var idx in r) {
+    if (r.hasOwnProperty(idx)) {
+      rc[idx] = r[idx];
+    }
+  }
 
   if(f.existsSync(p)){
     t = f.readdirSync(p);
@@ -53,5 +59,13 @@ module.exports = function (cb) {
     v = _.difference(m,t);
   }
 
-  cb({models: m, valid: x, missing: v, resources: r});
+  cb({
+    models: m,
+    valid: x,
+    missing: v,
+    resources: u,
+    schemas: cr
+  });
 };
+
+module.exports = generator;

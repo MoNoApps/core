@@ -5,7 +5,7 @@ var pconf = require('../config.json').APIVARS.PLANKS;
 var planksDir = __dirname.replace('/helpers', pconf.DIR);
 
 var apiParams = function (defRoute) {
-  var defParams = '/' + defRoute.route;
+  var defParams = '';
 
   if(defRoute.params) {
     for(var param in defRoute.params) {
@@ -26,14 +26,28 @@ var addPlanksApi = function(api){
       for(var g in plank.api.GET) {
         if (plank.api.GET.hasOwnProperty(g)) {
           var defGET = plank.api.GET[g];
-          api.get(prefix + apiParams(defGET), defGET.fn);
+          api.get(prefix + '/' + defGET.route + apiParams(defGET), defGET.fn);
         }
       }
 
       for(var p in plank.api.POST) {
         if (plank.api.POST.hasOwnProperty(p)) {
           var defPOST = plank.api.POST[p];
-          api.post(prefix + apiParams(defPOST), defPOST.fn);
+          api.post(prefix + '/' + defPOST.route + apiParams(defPOST), defPOST.fn);
+        }
+      }
+
+      for(var d in plank.api.DELETE) {
+        if (plank.api.DELETE.hasOwnProperty(d)) {
+          var defDELETE = plank.api.DELETE[d];
+          api.del(prefix + '/' + defDELETE.route + apiParams(defDELETE), defDELETE.fn);
+        }
+      }
+
+      for(var t in plank.api.PUT) {
+        if (plank.api.PUT.hasOwnProperty(t)) {
+          var defPUT = plank.api.PUT[t];
+          api.delete(prefix + '/' + defPUT.route + apiParams(defPUT), defPUT.fn);
         }
       }
 

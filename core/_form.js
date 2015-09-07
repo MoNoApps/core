@@ -13,21 +13,41 @@ var add = function (opts) {
 
   for (var field in model) {
     if (model.hasOwnProperty(field)) {
-        count += 1;
-        var title = field.charAt(0).toUpperCase() + field.slice(1);
+      count += 1;
+      var title = field.charAt(0).toUpperCase() + field.slice(1);
+      data +='' +
+      indent(2) + F.block.value +
+      indent(3) + F.label.value +
+        ' ' + F.label.bind +
+      indent(3) + F.rocky.value;
 
-        data +='' +
-        indent(2) + F.block.value +
-        indent(3) + F.label.value +
-          ' ' + F.label.bind +
-        indent(3) + F.rocky.value +
-        indent(4) + F.input.value +
-              '(' + F.input.bind +
-             ', ' + F.input.types.text +
-             ', ' + F.input.required +
-               ')';
-      data = data.replace('[[title]]', title);
+      var hasOptions = '';
+      var properties = '';
+
+      for(var prop in field.properties) {
+        properties += indent(3) + ', ' + prop + '="' + field.properties[prop] + '"';
+      }
+
+      switch (field.tag) {
+        case 'select':
+          for(var s in field.options) {
+            data += indent(4) + "option(value='" + s + "') " + field.options[s];
+          }
+          data += indent(4) + F.input.value +
+            '(' + F.input.bind + properties + ')';
+          break;
+        case 'label':
+        case 'area':
+        case 'image':
+        case 'input':
+          data += indent(4) + F.select.value +
+            '(' + F.select.bind + properties + ')';
+          break;
+      }
+
+      data = data.replace('[[title]]', field.title || field);
       data = data.replace('[[field]]', field);
+      data += hasOptions;
     }
   }
 
@@ -41,4 +61,13 @@ var add = function (opts) {
   fs.writeFile(dest, data);
 };
 
+var destroy = function(opts){
+  var dest = __dirname + dir + opts.name + ext;
+  var fs = require('fs');
+  if(fs.existsSync(dest)){
+    fs.unlink(dest);
+  }
+};
+
 module.exports.add = add;
+module.exports.destroy = destroy;
