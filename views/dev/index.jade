@@ -9,8 +9,7 @@ include ../layouts/app
     meta(name='author', content='#{site}')
     
     link(rel="icon" href="/img/favicon.ico")
-    link(rel='stylesheet', href='/themes/paper.min.css')
-    link(rel='stylesheet', ng-href="{{theme}}", ng-if='theme')
+    link(rel='stylesheet', href='#{theme}')
   body
     .navbar.navbar-default
       .navbar-header 
