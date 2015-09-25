@@ -9,7 +9,7 @@ var resources = require('../config.json').resources;
 var inspector = require('../helpers/inspector');
 
 // settings
-var views = inspector.addPlanksWeb(web);
+var views = inspector.addPluginsWeb(web);
 views.push(__dirname.replace('/web', '/views'));
 web.set('views', views);
 web.set('view engine', 'jade');

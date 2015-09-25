@@ -2,7 +2,7 @@
   "0": {
     "type" : "properties",
     "data" : {
-      "name": "deckApp",
+      "name": "coreApp",
       "user": ["groups", "roles", "tasks", "products"],
       "admin": ["users"],
       "themes": [

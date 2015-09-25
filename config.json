@@ -1,6 +1,6 @@
 {
-  "dburl": "mongodb://127.0.0.1/deck",
-  "site": "Deck App",
+  "dburl": "mongodb://127.0.0.1/coreapp",
+  "site": "Core App",
   "theme": "/themes/paper.min.css",
   "port": {
     "web": 1344,
@@ -9,26 +9,26 @@
   },
   "mandril":{
     "from": "noreply@wrine.co",
-    "name": "Deck Tools",
+    "name": "Core App",
     "token": ""
   },
   "TTL": 84000,
   "URL": {
-    "BASE": "http://deck.wrine.co",
+    "BASE": "http://core.wrine.co",
     "ACK": "/api/email/confirm/",
     "REC": "/api/email/recover/"
   },
   "APIVARS": {
     "PRE": "/",
     "ID": "/:id",
-    "PLANKS": {
-      "DIR":"/planks",
-      "MAIN": "/plank.js",
+    "PLUGINS": {
+      "DIR":"/plugins",
+      "MAIN": "/plugin.js",
       "VIEWS": "/views",
       "CONFIG": "/config.json"
     }
   },
-  "planks": [
+  "plugins": [
     "wizard"
   ],
   "pages":[

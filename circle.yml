@@ -1,36 +1,29 @@
 machine:
   hosts:
     wrine.co: 127.0.0.1
-    deck.wrine.co: 127.0.0.1
+    core.wrine.co: 127.0.0.1
   post:
     - npm install gulp protractor mocha -g
     - webdriver-manager update
     - webdriver-manager start:
         background: true
-    - cd /home/ubuntu/deck; gulp:
+    - cd /home/ubuntu/core; gulp:
         background: true
 
 dependencies:
   pre:
     - sudo service zookeeper stop
     - sudo rm /etc/apt/sources.list.d/google-chrome.list
-    - sudo cp /home/ubuntu/deck/sources.list /etc/apt/sources.list
-    # sudo apt-get purge mongodb mongodb-clients mongodb-server mongodb-dev
-    # sudo apt-get purge mongodb-10gen
-    # sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-    # echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+    - sudo cp /home/ubuntu/core/sources.list /etc/apt/sources.list
     - sudo apt-get update
-    # sudo apt-get autoremove
     - sudo apt-get install nginx -y
     - sudo rm /etc/nginx/sites-enabled/default
-    - sudo cp /home/ubuntu/deck/deck.conf /etc/nginx/sites-enabled/deck.conf
+    - sudo cp /home/ubuntu/core/core.conf /etc/nginx/sites-enabled/core.conf
     - sudo service nginx reload
-    # latest stable chrome
     - curl -L -o google-chrome-stable.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     - sudo dpkg -i google-chrome-stable.deb
-    # make chrome lxc-friendly
     - sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
     - rm google-chrome-stable.deb
 checkout:
   post:
-    - /home/ubuntu/deck/refresh.sh
+    - /home/ubuntu/core/refresh.sh

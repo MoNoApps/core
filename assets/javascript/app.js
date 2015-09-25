@@ -1,2 +1,2 @@
-var app = window.angular.module('deckApp', ['ng', 'ngResource']);
+var app = window.angular.module('coreApp', ['ng', 'ngResource']);
 window.console.log('ng:app');
