@@ -5,8 +5,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var mincss = require('gulp-minify-css');
 var srcmap = require('gulp-sourcemaps');
-// var minimg = require('gulp-imagemin');
-var assets = require('./core/_assets');
+var assets = require('./autoform/_assets');
 
 // vars
 var scripts = [];
@@ -49,9 +48,9 @@ gulp.task('watch', function() {
   gulp.watch(scripts, ['app']);
 });
 
-gulp.task('core', function(done) {
- var core = require('./core/index');
- core(done);
+gulp.task('autoform', function(done) {
+ var autoform = require('./autoform/index');
+ autoform(done);
 });
 
 gulp.task('app', function() {

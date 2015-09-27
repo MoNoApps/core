@@ -1,5 +1,5 @@
 var fs = require('fs');
-var indent = require('../core/_indent');
+var indent = require('../autoform/_indent');
 
 var fill = function (models) {
   var content = ".row.ng-cloak(ng-switch='model')" +

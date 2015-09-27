@@ -11,7 +11,7 @@ module.exports = function(cb) {
   js.push('./helpers/*.js');
   js.push('./api/*.js');
   js.push('./web/*.js');
-  js.push('./core/*.js');
+  js.push('./autoform/*.js');
   js.push('./*.js');
   js.push('assets/javascript/*.js');
   js.push('assets/javascript/services/*.js');

@@ -1,5 +1,5 @@
-var F = require('../core/content.json');
-var indent = require('../core/_indent');
+var F = require('../autoform/content.json');
+var indent = require('../autoform/_indent');
 
 var ext = '.jade';
 var dir = '/../views/index/forms/';
