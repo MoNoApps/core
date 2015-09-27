@@ -1,8 +1,8 @@
 {
-  "name": "deck",
+  "name": "core",
   "private": "true",
-  "version": "1.0.0",
-  "description": "MPill implementation",
+  "version": "2.0.2",
+  "description": "MoNoApps Core",
   "main": "app.js",
   "scripts": {
     "test": "node migrations/seed.js; node migrations/guest.js; protractor protractor.js; mocha;"

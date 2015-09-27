@@ -15,9 +15,8 @@ var api = restify.createServer();
 api.use(restify.bodyParser());
 api.use(restify.queryParser());
 
-inspector.addPlanksApi(api);
+inspector.addPluginsApi(api);
 
-//TODO: add auto generated routes for planks
 // auto generated routes
 try{
   for(var route in resources){

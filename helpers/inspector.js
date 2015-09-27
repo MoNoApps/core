@@ -1,8 +1,8 @@
 var generator = require('../helpers/generator');
 var controllers = require('../api/controllers');
-var planks = require('../config.json').planks;
-var pconf = require('../config.json').APIVARS.PLANKS;
-var planksDir = __dirname.replace('/helpers', pconf.DIR);
+var plugins = require('../config.json').plugins;
+var pconf = require('../config.json').APIVARS.PLUGINS;
+var pluginsDir = __dirname.replace('/helpers', pconf.DIR);
 
 var apiParams = function (defRoute) {
   var defParams = '';
@@ -15,38 +15,38 @@ var apiParams = function (defRoute) {
   return defParams;
 };
 
-var addPlanksApi = function(api){
-  for(var idx in planks){
-    if(planks.hasOwnProperty(idx)){
-      var name = planks[idx];
+var addPluginsApi = function(api){
+  for(var idx in plugins){
+    if(plugins.hasOwnProperty(idx)){
+      var name = plugins[idx];
       var prefix = '/' + name;
-      var plank = require(planksDir + prefix + pconf.MAIN);
-      var _cfg_ = require(planksDir + prefix + pconf.CONFIG);
+      var plugin = require(pluginsDir + prefix + pconf.MAIN);
+      var _cfg_ = require(pluginsDir + prefix + pconf.CONFIG);
 
-      for(var g in plank.api.GET) {
-        if (plank.api.GET.hasOwnProperty(g)) {
-          var defGET = plank.api.GET[g];
+      for(var g in plugin.api.GET) {
+        if (plugin.api.GET.hasOwnProperty(g)) {
+          var defGET = plugin.api.GET[g];
           api.get(prefix + '/' + defGET.route + apiParams(defGET), defGET.fn);
         }
       }
 
-      for(var p in plank.api.POST) {
-        if (plank.api.POST.hasOwnProperty(p)) {
-          var defPOST = plank.api.POST[p];
+      for(var p in plugin.api.POST) {
+        if (plugin.api.POST.hasOwnProperty(p)) {
+          var defPOST = plugin.api.POST[p];
           api.post(prefix + '/' + defPOST.route + apiParams(defPOST), defPOST.fn);
         }
       }
 
-      for(var d in plank.api.DELETE) {
-        if (plank.api.DELETE.hasOwnProperty(d)) {
-          var defDELETE = plank.api.DELETE[d];
+      for(var d in plugin.api.DELETE) {
+        if (plugin.api.DELETE.hasOwnProperty(d)) {
+          var defDELETE = plugin.api.DELETE[d];
           api.del(prefix + '/' + defDELETE.route + apiParams(defDELETE), defDELETE.fn);
         }
       }
 
-      for(var t in plank.api.PUT) {
-        if (plank.api.PUT.hasOwnProperty(t)) {
-          var defPUT = plank.api.PUT[t];
+      for(var t in plugin.api.PUT) {
+        if (plugin.api.PUT.hasOwnProperty(t)) {
+          var defPUT = plugin.api.PUT[t];
           api.delete(prefix + '/' + defPUT.route + apiParams(defPUT), defPUT.fn);
         }
       }
@@ -78,22 +78,22 @@ var getViewPath = function(name) {
   return dirname + pconf.DIR + '/' + name + pconf.VIEWS;
 };
 
-var addPlanksWeb = function(web){
+var addPluginsWeb = function(web){
   var views = [];
-  for(var idx in planks){
-    if(planks.hasOwnProperty(idx)){
-      var name = planks[idx];
+  for(var idx in plugins){
+    if(plugins.hasOwnProperty(idx)){
+      var name = plugins[idx];
       var prefix = '/' + name;
-      var plank = require(planksDir + prefix + pconf.CONFIG);
+      var plugin = require(pluginsDir + prefix + pconf.CONFIG);
 
-      for(var idy in plank.pages){
-        var page = plank.pages[idy];
+      for(var idy in plugin.pages){
+        var page = plugin.pages[idy];
         views.push(getViewPath(page));
         generator.addPage(web, page);
       }
 
-      for(var route in plank.resources){
-        if(plank.resources.hasOwnProperty(route)){
+      for(var route in plugin.resources){
+        if(plugin.resources.hasOwnProperty(route)){
           generator.addView(web, route);
         }
       }
@@ -104,5 +104,5 @@ var addPlanksWeb = function(web){
 };
 
 //module.exports.apiParams = apiParams;
-module.exports.addPlanksApi = addPlanksApi;
-module.exports.addPlanksWeb = addPlanksWeb;
+module.exports.addPluginsApi = addPluginsApi;
+module.exports.addPluginsWeb = addPluginsWeb;

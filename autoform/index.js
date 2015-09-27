@@ -1,7 +1,7 @@
 var readline = require('readline');
-var wizard = require('../core/_wizard');
-var form = require('../core/_form');
-var fill = require('../core/_switch');
+var wizard = require('../autoform/_wizard');
+var form = require('../autoform/_form');
+var fill = require('../autoform/_switch');
 var ry = new RegExp(/^(?:y|yes)$/);
 
 var rl = readline.createInterface({

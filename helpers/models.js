@@ -4,15 +4,15 @@ var MPill = require('mpill').MPill;
 // vars
 var dburl     = require("../config.json").dburl;
 var resources = require("../config.json").resources;
-var planks = require('../config.json').planks;
-var pconf = require('../config.json').APIVARS.PLANKS;
-var planksDir = __dirname.replace('/helpers', pconf.DIR);
+var plugins = require('../config.json').plugins;
+var pconf = require('../config.json').APIVARS.PLUGINS;
+var pluginsDir = __dirname.replace('/helpers', pconf.DIR);
 
-for(var idx in planks){
-  if(planks.hasOwnProperty(idx)){
-    var name = planks[idx];
+for(var idx in plugins){
+  if(plugins.hasOwnProperty(idx)){
+    var name = plugins[idx];
     var prefix = '/' + name;
-    var _cfg_ = require(planksDir + prefix + pconf.CONFIG);
+    var _cfg_ = require(pluginsDir + prefix + pconf.CONFIG);
 
     for(var g in _cfg_.resources){
       if(_cfg_.resources.hasOwnProperty(g)){

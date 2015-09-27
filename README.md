@@ -1,8 +1,8 @@
-[![Code Climate](https://codeclimate.com/github/MoNoApps/deck/badges/gpa.svg)](https://codeclimate.com/github/MoNoApps/deck)
-[![Test Coverage](https://codeclimate.com/github/MoNoApps/deck/badges/coverage.svg)](https://codeclimate.com/github/MoNoApps/deck/coverage)
-[![Circle CI](https://circleci.com/gh/MoNoApps/deck.svg?style=svg)](https://circleci.com/gh/monoapps/deck)
+[![Code Climate](https://codeclimate.com/github/MoNoApps/core/badges/gpa.svg)](https://codeclimate.com/github/MoNoApps/core)
+[![Test Coverage](https://codeclimate.com/github/MoNoApps/core/badges/coverage.svg)](https://codeclimate.com/github/MoNoApps/core/coverage)
+[![Circle CI](https://circleci.com/gh/MoNoApps/core.svg?style=svg)](https://circleci.com/gh/monoapps/core)
 
-# deck tools
+# core tools
 Dynamic CRUD in seconds with good code quality and NoSQL flexibility.
 ## ready to use
 - Email registry
@@ -32,7 +32,7 @@ Main database of the project. Every plugin has their own db url.
 ````
 ### application name
 ````js
-"site": "Deck App"
+"site": "Core App"
 ````
 ### ports
 ````js
@@ -46,8 +46,8 @@ Main database of the project. Every plugin has their own db url.
 Create an account on mandril and add your token.
 ````js
 "mandril":{
-  "from": "noreply@deck.monoapps.co",
-  "name": "Deck Tools",
+  "from": "noreply@core.monoapps.co",
+  "name": "Core App",
   "token": "YOUR TOKEN HERE"
 }
 ````
@@ -58,7 +58,7 @@ node examples/ping.mandril.js
 ### website info
 ````js
 "URL": {
-  "BASE": "http://deck.wrine.co",
+  "BASE": "http://core.wrine.co",
   "ACK": "/api/email/confirm/"
 }
 ````
@@ -67,19 +67,19 @@ node examples/ping.mandril.js
 "APIVARS": {
   "PRE": "/",
   "ID": "/:id",
-  "PLANKS": { // plugins definition for deck
-    "DIR":"/planks", // base folder for plugins
-    "MAIN": "/plank.js", // main file per plugins
+  "PLUGINS": { // plugins definition for core
+    "DIR":"/plugins", // base folder for plugins
+    "MAIN": "/plugin.js", // main file per plugins
     "VIEWS": "/views", // views folder of the plugins
     "CONFIG": "/config.json" // configuration file of the plugins
   }
 }
 ````
-### pugins or planks
+### pugins or plugins
 
 ````js
-"planks": [
-  "bamboo" // github submodule on planks folder
+"plugins": [
+  "bamboo" // github submodule on plugins folder
 ]
 ````
 
@@ -117,7 +117,7 @@ helpers/filters.js # admin, schema, author, cleaner
 helpers/base.js # controller base who knows his own model
 helpers/email.js # send emails
 helpers/generator.js # add api and web (pages[no auth] and views[auth crud view])
-helpers/inspector.js # helper for dynamic plank creation
+helpers/inspector.js # helper for dynamic plugin creation
 helper/manager.js # filter auth request and prepare response
 helpers/models.js # helper for models defined on plugins and core
 helpers/ps.js # helper for redis pub/sub
@@ -180,12 +180,12 @@ Create normal users: register your own email.</br>
 Be admin just setting something like:
 ````sh
 mongo
->use deck
+>use coreapp
 >db.users.update({email: 'admin@monoapps.co', admin: true});
 ````
 
 ## writing plugins
-See [bamboo sample](https://github.com/MoNoApps/plank)
+See [wizard sample](https://github.com/MoNoApps/wizard)
 
 ## coverage
 ````sh
@@ -194,4 +194,4 @@ make cov
 ````
 
 ## deploy
-Use [nginx config](deck.conf) to deploy. If needed add the hostname domains on /etc/hosts file.
+Use [nginx config](core.conf) to deploy. If needed add the hostname domains on /etc/hosts file.

@@ -1,4 +1,4 @@
-var F = require('../core/content.json');
+var F = require('../autoform/content.json');
 
 var indent = function (n) {
   var tabs = '\n';
