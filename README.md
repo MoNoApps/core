@@ -75,11 +75,11 @@ node examples/ping.mandril.js
   }
 }
 ````
-### pugins or plugins
+### pugins
 
 ````js
 "plugins": [
-  "bamboo" // github submodule on plugins folder
+  "wizard" // github submodule on plugins folder
 ]
 ````
 
