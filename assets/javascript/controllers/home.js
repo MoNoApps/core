@@ -1,6 +1,6 @@
 window.app.controller('HomeController',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
 
-  $scope.token =  window.localStorage.getItem('token');
+  $scope.token = window.localStorage.getItem('token');
   $scope.view = 'login';
 
   $scope.guestLogin = function(){
@@ -21,7 +21,7 @@ window.app.controller('HomeController',['$scope', '$rootScope', '$http', functio
   };
 
   $scope.doRegister = function(){
-    $http.post('/api/register/'+$scope.register.email)
+    $http.post('/api/register/' + $scope.register.email)
     .success(function(data){
       if(data.code !== 'InternalError'){
         $scope.view = 'login';
@@ -31,7 +31,8 @@ window.app.controller('HomeController',['$scope', '$rootScope', '$http', functio
     })
     .error(function(data){
       $scope.alert = '';
-      if(data.error){ $scope.error = data.error; }else{ $scope.error = data; }
+      if(data.error){ $scope.error = data.error; }
+      else { $scope.error = data; }
     });
   };
 
@@ -46,7 +47,8 @@ window.app.controller('HomeController',['$scope', '$rootScope', '$http', functio
     })
     .error(function(data){
       $scope.alert = '';
-      if(data.error){ $scope.error = data.error; }else{ $scope.error = data; }
+      if(data.error){ $scope.error = data.error; }
+      else { $scope.error = data; }
     });
   };
 

@@ -3,13 +3,13 @@ window.app.controller('NavBarController',['$scope','$rootScope', '$http', functi
   $scope.search = '';
   $scope.themes = [];
   $scope.resources = [];
-  var token = '?token=' + window.localStorage.getItem('token');
   $scope.token = window.localStorage.getItem('token');
 
   var getTheme = function() {
     var tbase = '/themes/paper.min.css';
     var theme = window.localStorage.getItem('theme');
-    if(theme === null) { return tbase;  }else{ return theme; }
+    if(theme === null) { return tbase;  }
+    else{ return theme; }
   };
 
   $scope.setTheme = function(theme) {
@@ -32,7 +32,8 @@ window.app.controller('NavBarController',['$scope','$rootScope', '$http', functi
   };
 
   $scope.getProperties = function() {
-    $http.get('/api/properties' + token)
+    if(!$scope.token){ return; }
+    $http.get('/api/properties')
     .success(function(data) {
       if(data.code !== "InternalError") {
         $scope.themes = data.themes;
@@ -66,8 +67,6 @@ window.app.controller('NavBarController',['$scope','$rootScope', '$http', functi
 
   $scope.theme = getTheme();
 
-  if(token!=='?token=null') {
-    $scope.getProperties();
-  }
+  $scope.getProperties();
 
 }]);

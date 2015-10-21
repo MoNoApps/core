@@ -1,16 +1,11 @@
 window.app.controller('AccountController',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
 
   //---- common vars ----//
-  $scope.token =  window.localStorage.getItem('token');
-  var token = '?token=' + window.localStorage.getItem('token');
-
-  if(!$scope.token){
-    window.location = '/';
-  }
+  $scope.token = window.localStorage.getItem('token');
 
   //---- public functions ----//
   $scope.saveAccount = function(){
-    $http.post('/api/account' + token, $scope.account)
+    $http.post('/api/account', $scope.account)
     .success(function() {
       $scope.success = 'Account updated';
       console.log('post:account');
@@ -40,7 +35,7 @@ window.app.controller('AccountController',['$scope', '$rootScope', '$http', func
     query.newPwd = $scope.newPwd;
     query.again = $scope.again;
 
-    $http.post('/api/security' + token, query )
+    $http.post('/api/security', query )
     .success(function() {
       $scope.success = 'Password updated';
       console.log('post:account');
@@ -52,7 +47,7 @@ window.app.controller('AccountController',['$scope', '$rootScope', '$http', func
 
   //---- private functions ----//
   var getAccount = function(){
-    $http.get('/api/account' + token)
+    $http.get('/api/account')
     .success(function(data) {
       $scope.account = data;
       console.log('info:account');

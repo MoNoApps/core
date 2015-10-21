@@ -12,6 +12,7 @@
     "name": "Core App",
     "token": ""
   },
+  "ALLOW": ["127.0.0.1"],
   "TTL": 84000,
   "URL": {
     "BASE": "http://core.wrine.co",
@@ -60,12 +61,26 @@
         "role": 1
       }
     },
-    "groups": {
-      "param": "group",
-      "schema": {
-        "name": 1
-      }
-    },
+
+"groups":{
+  "desc": "groups",
+  "collection": "groups",
+  "admin": true,
+  "param": "",
+  "exclude": false,
+  "schema": {
+    "name": {
+      "tag": "input",
+      "type": "text",
+      "active": true,
+      "text": "name",
+      "name": "name",
+      "placeholder": "Here the name of the user",
+      "required": true
+    }
+  }
+},
+
     "roles":  {
       "param": "role",
       "schema": {

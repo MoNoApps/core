@@ -1,18 +1,12 @@
-form.form-horizontal(name="modelForm")
+form.form-horizontal(name='modelForm')
   fieldset
     .form-group
-      label.col-md-2.control-label Name
+      label.col-md-2.control-label name
       .col-md-10
-        input.form-control(required='required',
-          type='text', ng-model='$parent.edit.name')
     .form-group
-      label.col-md-2.control-label Read-only 
+      label.col-md-2.control-label readonly
       .col-md-10
-        pre
-          code(class="language-js") {{$parent.edit.readonly || '^'}}
     .form-group
-      label.col-md-2.control-label Resources
+      label.col-md-2.control-label resources
       .col-md-10
-        pre
-          code(class="language-js") {{parent.edit.resources || '^'}}
     include actions

@@ -1,15 +1,9 @@
-form.form-horizontal(name="modelForm")
+form.form-horizontal(name='modelForm')
   fieldset
     .form-group
-      label.col-md-2.control-label Name
+      label.col-md-2.control-label name
       .col-md-10
-        input.form-control(required='required',
-          type='text', ng-model='$parent.edit.name')
     .form-group
-      label.col-md-2.control-label Status
+      label.col-md-2.control-label status
       .col-md-10
-        select.form-control(ng-model='$parent.edit.status')
-            option(value='0') ToDo
-            option(value='1') Done
-            option(value='2') Break
     include actions

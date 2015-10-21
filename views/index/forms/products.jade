@@ -1,28 +1,18 @@
-form.form-horizontal.ng-cloak(name="modelForm")
+form.form-horizontal(name='modelForm')
   fieldset
     .form-group
-      label.col-md-2.control-label Name
+      label.col-md-2.control-label name
       .col-md-10
-        input.form-control(required='required',
-          type='text', ng-model='$parent.edit.name')
     .form-group
-      label.col-md-2.control-label Code
+      label.col-md-2.control-label code
       .col-md-10
-        input.form-control(type='string', ng-model='$parent.edit.code')
     .form-group
-      label.col-md-2.control-label Price
+      label.col-md-2.control-label price
       .col-md-10
-        input.form-control(type='number', ng-model='$parent.edit.price')
     .form-group
-      label.col-md-2.control-label Image
+      label.col-md-2.control-label image
       .col-md-10
-        input.form-control(type='url', ng-model='$parent.edit.image')
-    .form-group(ng-show="$parent.edit.image")
-      .col-md-2
-      .col-md-6
-        img.product.form-control(ng-src='{{$parent.edit.image}}')
     .form-group
-      label.col-md-2.control-label Comments
+      label.col-md-2.control-label comments
       .col-md-10
-        input.form-control(type='string', ng-model='$parent.edit.comments')
     include actions
