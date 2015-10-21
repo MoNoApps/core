@@ -7,17 +7,14 @@ function($scope, $rootScope, $http, Socket) {
   $scope.commons = {};
   $scope.feed = [];
   $scope.resources = [];
-  $scope.token =  window.localStorage.getItem('token');
-
-  //---- common vars ----//
-  var token = '?token=' + window.localStorage.getItem('token');
+  $scope.token = window.localStorage.getItem('token');
 
   //---- private functions ----//
   var getList = function(model, cb){
     if(!model) { return false; }
 
     $scope.model = model;
-    $http.get('/api/' + model + token)
+    $http.get('/api/' + model)
     .success(function(data) {
       if(data.code !== "InternalError") {
         $scope.feed = data;
@@ -69,7 +66,7 @@ function($scope, $rootScope, $http, Socket) {
 
   //---- scope functions ----//
   $scope.update = function() {
-    $http.put('/api/' + $scope.model + '/' + $scope.id + token, $scope.edit)
+    $http.put('/api/' + $scope.model + '/' + $scope.id, $scope.edit)
     .success(function() {
       $scope.alert = 'Message: ' + $scope.model + ' has been update';
     })
@@ -80,7 +77,7 @@ function($scope, $rootScope, $http, Socket) {
   };
 
   $scope.create = function(newModel) {
-    $http.post('/api/' + $scope.model + token, newModel)
+    $http.post('/api/' + $scope.model, newModel)
     .success(function() {
       $scope.alert = 'Message: ' + $scope.model + ' created';
       getList($scope.model, function(){
@@ -93,7 +90,7 @@ function($scope, $rootScope, $http, Socket) {
   };
 
   $scope.delete = function() {
-    $http.delete('/api/' + $scope.model + '/' + $scope.id + token)
+    $http.delete('/api/' + $scope.model + '/' + $scope.id)
     .success(function() {
       $scope.alert = 'Message: ' + $scope.model + ' has been delete';
       var newpath = '/' + $scope.model + '/new';

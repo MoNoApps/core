@@ -7,6 +7,7 @@ var generator = require('../helpers/generator');
 var pages = require('../config.json').pages;
 var resources = require('../config.json').resources;
 var inspector = require('../helpers/inspector');
+var middleware = require('../helpers/middleware');
 
 // settings
 var views = inspector.addPluginsWeb(web);
@@ -14,16 +15,9 @@ views.push(__dirname.replace('/web', '/views'));
 web.set('views', views);
 web.set('view engine', 'jade');
 web.use(express.static(__dirname.replace('/web', '/public')));
-
-// old browser
-web.all('*', function(req, res, next) {
-  var regex = /(MSIE [1-3].0|Mozilla\/4.0)/g;
-  var header = req.headers['user-agent'].match(regex);
-  if(header && header.length){
-    return res.render('browser');
-  }
-  next();
-});
+web.use(middleware.trusted);
+web.use(middleware.robots);
+web.use(middleware.browser);
 
 // resources
 for(var route in resources){

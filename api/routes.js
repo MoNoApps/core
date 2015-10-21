@@ -13,7 +13,11 @@ var inspector = require('../helpers/inspector');
 // settings
 var api = restify.createServer();
 api.use(restify.bodyParser());
-api.use(restify.queryParser());
+// api.use(restify.queryParser());
+api.use(function(req, res, next){
+  req.params.token = req.headers.token || false;
+  next();
+});
 
 inspector.addPluginsApi(api);
 

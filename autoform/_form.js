@@ -1,5 +1,6 @@
 var F = require('../autoform/content.json');
 var indent = require('../autoform/_indent');
+var fill = require('../autoform/_switch');
 
 var ext = '.jade';
 var dir = '/../views/index/forms/';
@@ -11,10 +12,11 @@ var add = function (opts) {
     indent(1) + F.fieldset;
   var count = 0;
 
-  for (var field in model) {
-    if (model.hasOwnProperty(field)) {
+  for (var name in model) {
+    if (model.hasOwnProperty(name)) {
+      var field = model[name];
       count += 1;
-      var title = field.charAt(0).toUpperCase() + field.slice(1);
+      var title = name.charAt(0).toUpperCase() + name.slice(1);
       data +='' +
       indent(2) + F.block.value +
       indent(3) + F.label.value +
@@ -24,8 +26,9 @@ var add = function (opts) {
       var hasOptions = '';
       var properties = '';
 
-      for(var prop in field.properties) {
-        properties += indent(3) + ', ' + prop + '="' + field.properties[prop] + '"';
+      for(var prop in field) {
+        if (prop==='tag' || prop==='exclude'){ continue;}
+        properties += ', ' + prop + '="' + field[prop] + '"';
       }
 
       switch (field.tag) {
@@ -33,20 +36,18 @@ var add = function (opts) {
           for(var s in field.options) {
             data += indent(4) + "option(value='" + s + "') " + field.options[s];
           }
-          data += indent(4) + F.input.value +
-            '(' + F.input.bind + properties + ')';
-          break;
-        case 'label':
-        case 'area':
-        case 'image':
-        case 'input':
           data += indent(4) + F.select.value +
             '(' + F.select.bind + properties + ')';
           break;
+        case 'textarea':
+        case 'input':
+          data += indent(4) + F.input.value +
+            '(' + F.input.bind + properties + ')';
+          break;
       }
 
-      data = data.replace('[[title]]', field.title || field);
-      data = data.replace('[[field]]', field);
+      data = data.replace('[[title]]', title || name);
+      data = data.replace('[[field]]', name);
       data += hasOptions;
     }
   }
@@ -59,6 +60,7 @@ var add = function (opts) {
 
   var fs = require('fs');
   fs.writeFile(dest, data);
+  fill();
 };
 
 var destroy = function(opts){
@@ -66,6 +68,7 @@ var destroy = function(opts){
   var fs = require('fs');
   if(fs.existsSync(dest)){
     fs.unlink(dest);
+    fill();
   }
 };
 
