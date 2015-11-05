@@ -15,7 +15,7 @@ views.push(__dirname.replace('/web', '/views'));
 web.set('views', views);
 web.set('view engine', 'jade');
 web.use(express.static(__dirname.replace('/web', '/public')));
-web.use(middleware.trusted);
+// web.use(middleware.trusted);
 web.use(middleware.robots);
 web.use(middleware.browser);
 

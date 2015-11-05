@@ -19,6 +19,7 @@ Dynamic CRUD in seconds with good code quality and NoSQL flexibility.
 - AngularJS FrontEnd
 - Socket.IO ready
 - Templates support with jade lang
+- Sanbox mode
 
 ## CoC
 Convention over Configuration.</br>
@@ -78,9 +79,10 @@ node examples/ping.mandril.js
 ### pugins
 
 ````js
-"plugins": [
+#config.json
+32"plugins": [
   "wizard" // github submodule on plugins folder
-]
+33]
 ````
 
 ### pages
@@ -138,6 +140,7 @@ persist(roles, db.roles);
 ````
 
 ## update github modules
+Only in case you have added submodules.
 ````sh
 ./refresh.sh
 ````
@@ -185,7 +188,21 @@ mongo
 ````
 
 ## writing plugins
-See [wizard sample](https://github.com/MoNoApps/wizard)
+See [wizard sample](https://github.com/MoNoApps/wizard)<br>
+Add plugins on config.plugins.
+
+## sanbox
+Prevent visibility enabling the trusted mode
+
+````js
+# web/routes.js
+18 web.use(middleware.trusted);
+````
+Write your allowed ips.
+````js
+#config.js
+15   "ALLOW": ["127.0.0.1"],
+````
 
 ## coverage
 ````sh

@@ -30,7 +30,6 @@
     }
   },
   "plugins": [
-    "wizard"
   ],
   "pages":[
     "account",
