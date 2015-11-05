@@ -56,9 +56,8 @@ window.app.controller('HomeController',['$scope', '$rootScope', '$http', functio
     $http.post('/api/login', $scope.user)
     .success(function(data) {
       if(data.code !== 'InternalError'){
-        $scope.error = false;
         window.localStorage.setItem('token', data.token);
-        window.location = '/';
+        window.location.reload();
       }
     })
     .error(function(data, status) {
