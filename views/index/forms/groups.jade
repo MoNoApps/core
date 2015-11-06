@@ -3,5 +3,5 @@ form.form-horizontal(name='modelForm')
     .form-group
       label.col-md-2.control-label Name
       .col-md-10
-        input.form-control(ng-model='$parent.edit.name', type="text", active="true", text="name", name="name", placeholder="Here the name of the user", required="true")
+        input.form-control(ng-model='$parent.edit.name', type="text", active="true", text="Name", name="name", placeholder="Group Name", required="true", autocomplete="true", autofocus="true", min="1", max="40")
     include actions

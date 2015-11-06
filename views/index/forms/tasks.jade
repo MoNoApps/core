@@ -1,9 +1,11 @@
 form.form-horizontal(name='modelForm')
   fieldset
     .form-group
-      label.col-md-2.control-label name
+      label.col-md-2.control-label Name
       .col-md-10
+        input.form-control(ng-model='$parent.edit.name', type="text", active="true", text="Task Name", name="name", placeholder="Task Name", required="true", min="1", max="100")
     .form-group
-      label.col-md-2.control-label status
+      label.col-md-2.control-label Status
       .col-md-10
+        select.form-control(ng-model='$parent.edit.status', type="text", active="true", text="Task Status", name="status")
     include actions

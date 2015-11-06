@@ -1,6 +1,4 @@
 var db = require('../helpers/models');
-var roles = require('./data/roles.json');
-var users = require('./data/users.json');
 var settings = require('./data/settings.json');
 
 var persist = function(list, model) {
@@ -12,7 +10,5 @@ var persist = function(list, model) {
 };
 
 db.roles.DropDB(function(){
-  persist(roles, db.roles);
-  persist(users, db.users);
   persist(settings, db.settings);
 });

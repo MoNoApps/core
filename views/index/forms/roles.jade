@@ -1,12 +1,7 @@
 form.form-horizontal(name='modelForm')
   fieldset
     .form-group
-      label.col-md-2.control-label name
+      label.col-md-2.control-label Name
       .col-md-10
-    .form-group
-      label.col-md-2.control-label readonly
-      .col-md-10
-    .form-group
-      label.col-md-2.control-label resources
-      .col-md-10
+        input.form-control(ng-model='$parent.edit.name', type="text", active="true", text="Role Name", name="name", placeholder="Role Name", required="true", autocomplete="true", min="1", max="10")
     include actions

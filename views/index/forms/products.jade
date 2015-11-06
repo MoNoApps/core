@@ -1,18 +1,27 @@
 form.form-horizontal(name='modelForm')
   fieldset
     .form-group
-      label.col-md-2.control-label name
+      label.col-md-2.control-label Name
       .col-md-10
+        input.form-control(ng-model='$parent.edit.name', type="text", active="true", text="Product Name", name="name", placeholder="Product Name")
     .form-group
-      label.col-md-2.control-label code
+      label.col-md-2.control-label Code
       .col-md-10
+        input.form-control(ng-model='$parent.edit.code', type="number", active="true", text="Code", name="code", placeholder="Product Code", min="0", value="0")
     .form-group
-      label.col-md-2.control-label price
+      label.col-md-2.control-label Price
       .col-md-10
+        input.form-control(ng-model='$parent.edit.price', type="number", active="true", text="Price", name="price", placeholder="Price", min="0")
     .form-group
-      label.col-md-2.control-label image
+      label.col-md-2.control-label Image
       .col-md-10
+        input.form-control(ng-model='$parent.edit.image', type="url", active="true", text="Product Image", name="image", required="false", value="https://www.filepicker.io/api/file/XGVI0snoRVy8pziOBGSf/convert?w=500")
     .form-group
-      label.col-md-2.control-label comments
+      label.col-md-2.control-label Comment
       .col-md-10
+        input.form-control(ng-model='$parent.edit.comment', type="text", active="true", text="Comment", name="comment", placeholder="Product Comment")
+    .form-group
+      label.col-md-2.control-label Taxes
+      .col-md-10
+        input.form-control(ng-model='$parent.edit.taxes', type="text", active="true", text="Taxes", name="taxes", placeholder="Taxes", min="0")
     include actions

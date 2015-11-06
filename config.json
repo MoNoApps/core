@@ -30,6 +30,7 @@
     }
   },
   "plugins": [
+    "wizard"
   ],
   "pages":[
     "account",
@@ -60,49 +61,136 @@
         "role": 1
       }
     },
-
-"groups":{
-  "desc": "groups",
-  "collection": "groups",
-  "admin": true,
-  "param": "",
-  "exclude": false,
-  "schema": {
-    "name": {
-      "tag": "input",
-      "type": "text",
-      "active": true,
-      "text": "name",
-      "name": "name",
-      "placeholder": "Here the name of the user",
-      "required": true
-    }
-  }
-},
-
-    "roles":  {
+    "groups": {
+      "desc": "groups",
+      "param": "group",
+      "exclude": false,
+      "clean": {},
+      "schema": {
+        "name": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Name",
+          "name": "name",
+          "placeholder": "Group Name",
+          "required": true,
+          "autocomplete": true,
+          "autofocus": true,
+          "min": 1,
+          "max": 40
+        }
+      }
+    },
+    "roles": {
+      "desc": "roles",
       "param": "role",
+      "admin": false,
+      "exclude": false,
+      "clean": {},
       "schema": {
-        "name":  1,
-        "readonly": 1,
-        "resources": 1
+        "name": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Role Name",
+          "name": "name",
+          "placeholder": "Role Name",
+          "required": true,
+          "autocomplete": true,
+          "min": 1,
+          "max": 10
+        }
       }
     },
-    "tasks":  {
+    "tasks": {
+      "desc": "tasks",
+      "admin": false,
+      "exclude": false,
       "param": "task",
+      "clean": {},
       "schema": {
-        "name": 1,
-        "status": 1
+        "name": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Task Name",
+          "name": "name",
+          "placeholder": "Task Name",
+          "required": true,
+          "min": 1,
+          "max": 100
+        },
+        "status": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "status",
+          "text": "Task Status",
+          "name": "status"
+        }
       }
     },
-    "products":  {
+    "products": {
+      "desc": "products",
+      "admin": false,
+      "exclude": false,
       "param": "product",
+      "clean": {},
       "schema": {
-        "name": 1,
-        "code": 1,
-        "price": 1,
-        "image": 1,
-        "comments": 1
+        "name": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Product Name",
+          "name": "name",
+          "placeholder": "Product Name"
+        },
+        "code": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Code",
+          "name": "code",
+          "placeholder": "Product Code",
+          "min": 0,
+          "value": "0"
+        },
+        "price": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Price",
+          "name": "price",
+          "placeholder": "Price",
+          "min": 0
+        },
+        "image": {
+          "tag": "input",
+          "type": "url",
+          "active": true,
+          "text": "Product Image",
+          "name": "image",
+          "required": false,
+          "value": "https://www.filepicker.io/api/file/XGVI0snoRVy8pziOBGSf/convert?w=500"
+        },
+        "comment": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Comment",
+          "name": "comment",
+          "placeholder": "Product Comment"
+        },
+        "taxes": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Taxes",
+          "name": "taxes",
+          "placeholder": "Taxes",
+          "min": 0
+        }
       }
     }
   }
