@@ -12,6 +12,7 @@
     "name": "Core App",
     "token": ""
   },
+  "INDEX": "index/index",
   "ALLOW": ["127.0.0.1"],
   "TTL": 84000,
   "URL": {

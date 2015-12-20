@@ -22,7 +22,8 @@ Dynamic CRUD in seconds with good code quality and NoSQL flexibility.
 - Sanbox mode
 
 ## CoC
-Convention over Configuration.</br>
+Configuration over Convention.<br>
+Know and edit the configuration of the project and control the foundations.
 ````sh
 vi config.json
 ````
@@ -42,6 +43,12 @@ Main database of the project. Every plugin has their own db url.
   "api": 1345,
   "rds": 6379
 }
+````
+### index
+Change the index file editing the INDEX property.<br>
+By default app search files in 'view' folder but you can write relative or absolute paths.
+````js
+"INDEX": "plugins/plugin-name/folder/file.jade"
 ````
 ### email
 Create an account on mandril and add your token.
