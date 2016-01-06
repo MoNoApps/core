@@ -182,7 +182,15 @@ gulp core
 ````
 
 ## user management
-Add the guest user:
+Add the guest user.
+
+````json
+//config.json
+#This will show the button to enter as guest.
+#Be carrefoul with this because user and passw will be visible.
+#Do not enable unless you really want all allow access to the whole world.
+guest.enabled = true;
+````
 ````js
 node migrations/guest.js
 ````

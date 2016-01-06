@@ -1,4 +1,5 @@
 var utils = require('../helpers/utils');
+var guest = require('../config.json').guest;
 var controllers = require('./controllers');
 var review = require('../helpers/manager').review;
 var manager = require('../helpers/manager').response;
@@ -47,15 +48,27 @@ var security = function(req, res){
   });
 };
 
-var _guest = function(data){
-  if(data.email=='guest.match@monoapps.co'){
+var guestInfo = function(req, res) {
+  if (guest.enabled) {
+    var user = {email: guest.email, password: guest.text};
+    res.json(user);
+  } else {
+   res.json({}); 
+  }
+};
+
+var _guest = function(data) {
+  if (data.email===guest.email) {
     data.err = false;
     data.rsp = {message: 'Update is disabled'};
     return data;
-  } else {
-    return false;
   }
+
+  return false;
 };
+
 module.exports.find = find;
+module.exports.guest = guestInfo;
 module.exports.update = update;
 module.exports.security = security;
+

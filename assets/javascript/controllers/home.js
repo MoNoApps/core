@@ -1,14 +1,25 @@
-window.app.controller('HomeController',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
+window.app.controller('HomeController',['$scope', '$rootScope', '$http', '$timeout', function($scope, $rootScope, $http, $timeout) {
 
+  $scope.guest = {};
   $scope.token = window.localStorage.getItem('token');
   $scope.view = 'login';
+  $scope.user = {};
 
-  $scope.guestLogin = function(){
-    $scope.user = {
-      email: 'guest.match@monoapps.co',
-      password: 'demo#2015'
-    };
+  $scope.guestLogin = function () {
+    $scope.user = $scope.guest;
+    $scope.login();
   };
+
+  function getGuest () {
+    $http.get('/api/guest')
+    .success(function(data) {
+      $scope.guest = data;
+    })
+    .error(function(data) {
+      if(data.error){ $scope.error = data.error; }
+      else { $scope.error = data; }
+    });
+  }
 
   $scope.enableView = function(name){
     $scope.view = name;
@@ -65,5 +76,7 @@ window.app.controller('HomeController',['$scope', '$rootScope', '$http', functio
       if(data.error){ $scope.error = data.error; }else{ $scope.error = data; }
     });
   };
+
+  getGuest();
 
 }]);

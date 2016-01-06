@@ -1,5 +1,5 @@
 form.form.form-horizontal.col-md-12(name='loginForm', ng-show='isEnabledView("login")')
-  .form-group
+  .form-group(ng-if="guest.email")
     a.btn.btn-default.col-md-12.col-sm-12.col-xs-12(href='', ng-click='guestLogin()') Umm, just let me enter as guest!
   .form-group
     span.col-md-3.control-label Email

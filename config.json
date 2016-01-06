@@ -12,6 +12,13 @@
     "name": "Core App",
     "token": ""
   },
+  "guest": {
+    "email": "guest@wrine.co",
+    "text": "guest.wrine",
+    "status": 1,
+    "admin": false,
+    "enabled": false
+  },
   "INDEX": "index/index",
   "ALLOW": ["127.0.0.1"],
   "TTL": 84000,

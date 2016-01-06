@@ -51,6 +51,7 @@ api.post('/recover/:email', commons.recover);
 api.get('/email/confirm/:code', commons.confirm);
 api.get('/email/recover/:code', commons.rescue);
 
+api.get('/guest', account.guest);
 api.get('/account', account.find);
 api.post('/account', account.update);
 api.post('/security', account.security);

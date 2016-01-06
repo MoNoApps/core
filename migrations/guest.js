@@ -1,21 +1,22 @@
-var resources = require('../config.json').resources;
+var config = require('../config.json');
+var resources = config.resources;
 var models = require('../helpers/models');
 var utils = require('../helpers/utils');
 var adduser = require('../test/helpers/adduser.helper.test');
+var guest = config.guest;
+var text = guest.text;
 
-var testUser = {
-  email: 'guest.match@monoapps.co',
-  status: 1,
-  date: new Date().getTime()
-};
+delete guest.text;
+delete guest.enabled;
+guest.date = new Date().getTime();
 
-models.users.Insert(testUser, function(err, users) {
+models.users.Insert(guest, function(err, users) {
   if(err) { process.exit(); }
   users = (users.ops ? users.ops : users); //db v3|v2
   var user = users[0];
   var options = {
     key: user._id.toString(),
-    text: 'demo#2015'
+    text: text
   };
 
   utils.createPwd(options, function(pwd, passphrase) {
@@ -26,3 +27,4 @@ models.users.Insert(testUser, function(err, users) {
     });
   });
 });
+
