@@ -1,4 +1,4 @@
-window.app.controller('HomeController',['$scope', '$rootScope', '$http', '$timeout', function($scope, $rootScope, $http, $timeout) {
+window.app.controller('HomeController',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
 
   $scope.guest = {};
   $scope.token = window.localStorage.getItem('token');
