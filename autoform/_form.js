@@ -1,6 +1,5 @@
 var F = require('../autoform/content.json');
 var indent = require('../autoform/_indent');
-var fill = require('../autoform/_switch');
 
 var ext = '.jade';
 var dir = '/../views/index/forms/';
@@ -8,9 +7,8 @@ var dir = '/../views/index/forms/';
 var add = function (opts) {
   var dest = __dirname + dir + opts.name + ext;
   var model = opts.resource.schema;
-  var data =    F.head +
-    indent(1) + F.fieldset;
   var count = 0;
+  var data = F.head + indent(1) + F.fieldset;
 
   for (var name in model) {
     if (model.hasOwnProperty(name)) {
@@ -18,16 +16,16 @@ var add = function (opts) {
       count += 1;
       var title = name.charAt(0).toUpperCase() + name.slice(1);
       data +='' +
-      indent(2) + F.block.value +
-      indent(3) + F.label.value +
-        ' ' + F.label.bind +
-      indent(3) + F.rocky.value;
+        indent(2) + F.block.value +
+        indent(3) + F.label.value +
+        ' ' +       F.label.bind +
+        indent(3) + F.rocky.value;
 
       var hasOptions = '';
       var properties = '';
 
       for(var prop in field) {
-        if (prop==='tag' || prop==='exclude'){ continue;}
+        if (prop==='tag' || prop==='exclude'){ continue; }
         properties += ', ' + prop + '="' + field[prop] + '"';
       }
 
@@ -60,7 +58,6 @@ var add = function (opts) {
 
   var fs = require('fs');
   fs.writeFile(dest, data);
-  fill();
 };
 
 var destroy = function(opts){
@@ -68,7 +65,6 @@ var destroy = function(opts){
   var fs = require('fs');
   if(fs.existsSync(dest)){
     fs.unlink(dest);
-    fill();
   }
 };
 

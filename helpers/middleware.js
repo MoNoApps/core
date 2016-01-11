@@ -2,7 +2,8 @@ var CONFIG = require('../config.json');
 
 var browser = function(req, res, next) {
   var regex = /(MSIE [1-3].0|Mozilla\/4.0)/g;
-  var header = req.headers['user-agent'].match(regex);
+  var header = req.headers['user-agent'];
+  header = header ? header.match(regex) : false;
 
   if(header && header.length){
     return res.render('browser');

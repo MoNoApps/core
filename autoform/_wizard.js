@@ -47,7 +47,7 @@ var generator = function (cb) {
 
   for(var idx in r) {
     if (r.hasOwnProperty(idx)) {
-      rc[idx] = r[idx];
+      cr[idx] = r[idx];
     }
   }
 
