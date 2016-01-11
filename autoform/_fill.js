@@ -2,7 +2,6 @@ var fs = require('fs');
 var indent = require('../autoform/_indent');
 
 var fill = function (models) {
-  console.log(models)
   var content = ".row.ng-cloak(ng-switch='model')" +
   indent(1) + ".col-sm-12.col-md-3(ng-class='{\"hidden-xs hidden-sm\": roco, \"col-xs-12 col-sm-12\": !roco}')" +
   indent(2) + "include ../navs/list" +
