@@ -3,7 +3,7 @@ var gulp   = require('gulp');
 var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var mincss = require('gulp-minify-css');
+var mincss = require('gulp-cssnano');
 var srcmap = require('gulp-sourcemaps');
 var assets = require('./autoform/_assets');
 

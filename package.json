@@ -1,7 +1,7 @@
 {
   "name": "core",
   "private": "true",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "MoNoApps Core",
   "main": "app.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "gulp": "*",
     "gulp-concat": "*",
     "gulp-jshint": "*",
-    "gulp-minify-css": "*",
+    "gulp-cssnano": "*",
     "gulp-sourcemaps": "*",
     "gulp-uglify": "*"
   }
