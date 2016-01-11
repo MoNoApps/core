@@ -12,6 +12,10 @@
     "value": "label.col-md-2.control-label",
     "bind": "[[title]]"
   },
+  "textarea": {
+    "value": "textarea.col-md-2",
+    "bind": "ng-model='$parent.edit.[[field]]'"
+  },
   "input": {
     "value": "input.form-control",
     "bind": "ng-model='$parent.edit.[[field]]'",
@@ -26,7 +30,13 @@
     "value": "select.form-control",
     "bind": "ng-model='$parent.edit.[[field]]'"
   },
+  "image": {
+    "source":"input.form-control(ng-model='$parent.edit.[[field]]'[[properties]])",
+    "pre": ".thumbnail(ng-show='$parent.edit.[[field]]')",
+    "value": "img",
+    "bind": "ng-src='{{$parent.edit.[[field]]}}', alt=''"
+  },
   "required": "required='[[required]]'",
   "actions": "include actions",
-  "schema": "h3.text-center No schema found"
+  "schema": "h3.text-center Schema not found"
 }

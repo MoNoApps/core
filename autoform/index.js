@@ -1,7 +1,7 @@
 var readline = require('readline');
 var wizard = require('../autoform/_wizard');
 var form = require('../autoform/_form');
-var fill = require('../autoform/_switch');
+var fill = require('../autoform/_fill');
 var ry = new RegExp(/^(?:y|yes)$/);
 
 var rl = readline.createInterface({
@@ -19,7 +19,7 @@ var doWizard = function (done) {
 
         if (ry.test(a)) {
           for (var i in res.missing) {
-            form.add({name: res.missing[i], resource: res.resources[res.missing[i]]});
+            form.add({name: res.missing[i], resource: {schema: res.schemas[res.missing[i]].schema}});
           }
         }
 

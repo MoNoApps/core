@@ -1,17 +1,15 @@
 .row.ng-cloak(ng-switch='model')
- .col-sm-12.col-md-3(ng-class='{"hidden-xs hidden-sm": roco, "col-xs-12 col-sm-12": !roco}')
+  .col-sm-12.col-md-3(ng-class='{"hidden-xs hidden-sm": roco, "col-xs-12 col-sm-12": !roco}')
     include ../navs/list
     include ../navs/empty
   .col-sm-12.col-md-9(ng-class='{"hidden-xs hidden-sm": !roco, "col-xs-12 col-sm-12": roco}')
     div(ng-switch-when='users')
       include ../forms/users
-    div(ng-switch-when='roles')
-      include ../forms/roles
     div(ng-switch-when='groups')
       include ../forms/groups
+    div(ng-switch-when='roles')
+      include ../forms/roles
     div(ng-switch-when='tasks')
       include ../forms/tasks
     div(ng-switch-when='products')
       include ../forms/products
-    div(ng-switch-when='bars')
-      include ../forms/bars

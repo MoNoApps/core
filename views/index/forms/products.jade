@@ -15,7 +15,9 @@ form.form-horizontal(name='modelForm')
     .form-group
       label.col-md-2.control-label Image
       .col-md-10
-        input.form-control(ng-model='$parent.edit.image', type="url", active="true", text="Product Image", name="image", required="false", value="https://www.filepicker.io/api/file/XGVI0snoRVy8pziOBGSf/convert?w=500")
+        input.form-control(ng-model='$parent.edit.image', active="true", text="Product Image", name="image", placeholder="Product Image", required="false")
+        .thumbnail(ng-show='$parent.edit.image')
+          img(ng-src='{{$parent.edit.image}}', alt='')
     .form-group
       label.col-md-2.control-label Comment
       .col-md-10

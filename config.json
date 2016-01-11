@@ -174,13 +174,12 @@
           "min": 0
         },
         "image": {
-          "tag": "input",
-          "type": "url",
+          "tag": "image",
           "active": true,
           "text": "Product Image",
           "name": "image",
-          "required": false,
-          "value": "https://www.filepicker.io/api/file/XGVI0snoRVy8pziOBGSf/convert?w=500"
+          "placeholder": "Product Image",
+          "required": false
         },
         "comment": {
           "tag": "input",

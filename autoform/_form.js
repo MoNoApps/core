@@ -4,7 +4,7 @@ var indent = require('../autoform/_indent');
 var ext = '.jade';
 var dir = '/../views/index/forms/';
 
-var add = function (opts) {
+function add (opts) {
   var dest = __dirname + dir + opts.name + ext;
   var model = opts.resource.schema;
   var count = 0;
@@ -30,6 +30,15 @@ var add = function (opts) {
       }
 
       switch (field.tag) {
+        case 'image':
+          var imgSource = F.image.source;
+          var imgValue = F.image.value;
+          imgSource =  imgSource.replace('[[properties]]', properties);
+          data += indent(4) + imgSource.replace('[[field]]', name);
+          data += indent(4) + F.image.pre.replace('[[field]]', name) +
+            indent(5) + imgValue +
+              '(' + F.image.bind + ')';
+          break;
         case 'select':
           for(var s in field.options) {
             data += indent(4) + "option(value='" + s + "') " + field.options[s];
@@ -38,6 +47,9 @@ var add = function (opts) {
             '(' + F.select.bind + properties + ')';
           break;
         case 'textarea':
+           data += indent(4) + F.textarea.value +
+            '(' + F.textarea.bind + properties + ')';
+          break;
         case 'input':
           data += indent(4) + F.input.value +
             '(' + F.input.bind + properties + ')';
@@ -58,15 +70,15 @@ var add = function (opts) {
 
   var fs = require('fs');
   fs.writeFile(dest, data);
-};
+}
 
-var destroy = function(opts){
+function destroy (opts){
   var dest = __dirname + dir + opts.name + ext;
   var fs = require('fs');
   if(fs.existsSync(dest)){
     fs.unlink(dest);
   }
-};
+}
 
 module.exports.add = add;
 module.exports.destroy = destroy;
