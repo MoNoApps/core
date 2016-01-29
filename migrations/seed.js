@@ -1,7 +1,7 @@
 var db = require('../helpers/models');
 var settings = require('./data/settings.json');
 
-var persist = function(list, model) {
+function persist (list, model) {
   for (var r in list){
     if(list.hasOwnProperty(r)){
       model.Insert(list[r]);
@@ -9,6 +9,9 @@ var persist = function(list, model) {
   }
 };
 
-db.roles.DropDB(function(){
+function updateSettings () {
   persist(settings, db.settings);
-});
+}
+
+db.settings.DropCollection(updateSettings);
+
