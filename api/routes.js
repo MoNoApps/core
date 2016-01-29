@@ -45,6 +45,7 @@ try{
 api.get('/', commons.ping);
 api.get('/ping', commons.ping);
 api.post('/login', commons.login);
+api.get('/theme', commons.theme);
 api.get('/properties', commons.properties);
 api.post('/register/:email', commons.signup);
 api.post('/recover/:email', commons.recover);

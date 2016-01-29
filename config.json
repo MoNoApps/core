@@ -1,7 +1,7 @@
 {
   "dburl": "mongodb://127.0.0.1/coreapp",
   "site": "Core App",
-  "theme": "/themes/paper.min.css",
+  "theme": "http://cdn.monoapps.co/paper.min.css",
   "port": {
     "web": 1344,
     "api": 1345,

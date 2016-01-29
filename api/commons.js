@@ -43,6 +43,10 @@ var confirm = function(req, res){
   });
 };
 
+var theme = function(req, res){
+  res.json({theme: config.theme});
+};
+
 var properties = function(req, res){
   review({ req: req, res: res }, function(err, opt){
     controllers.settings.GetOne({"type": "properties"}, function(err, rsp){
@@ -139,8 +143,10 @@ var rescue = function(req, res){
 
 module.exports.ping = ping;
 module.exports.login = login;
+module.exports.theme = theme;
 module.exports.signup = signup;
 module.exports.rescue = rescue;
 module.exports.confirm = confirm;
 module.exports.recover = recover;
 module.exports.properties = properties;
+

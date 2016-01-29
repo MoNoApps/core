@@ -6,10 +6,13 @@ window.app.controller('NavBarController',['$scope','$rootScope', '$http', functi
   $scope.token = window.localStorage.getItem('token');
 
   var getTheme = function() {
-    var tbase = '/themes/paper.min.css';
-    var theme = window.localStorage.getItem('theme');
-    if(theme === null) { return tbase;  }
-    else{ return theme; }
+    $http.get('/api/theme')
+    .success(function(data) {
+      var tbase = data.theme;
+      var theme = window.localStorage.getItem('theme');
+      if(theme === null) { return tbase;  }
+      else{ return theme; }
+    });
   };
 
   $scope.setTheme = function(theme) {
