@@ -2,10 +2,10 @@
   .col-xs-12.col-sm-12.col-md-10.col-md-offset-2(ng-if='$parent.edit._id')
     a.btn.btn-success.col-xs-6.col-sm-12.col-md-6#updateLink(ng-click='$parent.update()', 
       ng-disabled='$parent.modelForm.$invalid')
-      i.glyphicon.glyphicon-edit
+      i.fa.fa-pencil
     a.btn.btn-danger.col-xs-6.col-sm-12.col-md-6#deleteLink(ng-click='$parent.delete()')
-      i.glyphicon.glyphicon-trash
+      i.fa.fa-trash
   .col-xs-12.col-sm-12.col-md-10.col-md-offset-2(ng-if='!$parent.edit._id')
     a.btn.btn-success.col-xs-12.col-sm-12.col-md-12#createLink(ng-click='$parent.create($parent.edit)', 
       ng-disabled='$parent.modelForm.$invalid')
-      i.glyphicon.glyphicon-ok
+      i.fa.fa-save
