@@ -19,6 +19,7 @@
     "admin": false,
     "enabled": false
   },
+  "autoform": true,
   "INDEX": "index/index",
   "ALLOW": ["127.0.0.1"],
   "TTL": 84000,

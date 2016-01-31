@@ -20,6 +20,7 @@ Dynamic CRUD in seconds with good code quality and NoSQL flexibility.
 - Socket.IO ready
 - Templates support with jade lang
 - Sanbox mode
+- Form generation automatic
 
 ## CoC
 Configuration over Convention.<br>
@@ -66,7 +67,7 @@ node examples/ping.mandril.js
 ### website info
 ````js
 "URL": {
-  "BASE": "http://core.wrine.co",
+  "BASE": "http://core.monoapps.co",
   "ACK": "/api/email/confirm/"
 }
 ````
@@ -136,36 +137,34 @@ helpers/zappy.js # middleware between response and controller
 
 ## migrations
 `````sh
-# WARNING: save a copy or your current db first or comment dropDB
+Updates are welcome. DropDB or DropCollection need a review.
 node migrations/seed.js
 # drop current database and insert all defaults
 `````
 Add your own data
 ````js
-var roles = require('migrations/data/roles.json');
-persist(roles, db.roles);
+#Roles must be defined in config.json
+#Replace 'collection' with your new model
+var #{collection} = require('migrations/data/#{collection}.json');
+persist(#{collection}, db.#{collection});
 ````
 
 ## update github modules
-Only in case you have added submodules.
 ````sh
 ./refresh.sh
 ````
 
 ## form code generator
-Add your missing but registered resources as forms.
+Add your missing forms.
 ````sh
-npm install underscore
 # Run wizard to create forms
-gulp core
-# [00:00:00] Forms by models are OK.
-# or
+gulp autoform
+````
 
-rm views/index/forms/bars.jade
-gulp core
-# You have missing forms: bars
-# Do you want to create forms (y/N)?y
-[15:56:22] Finished 'core' after 5.24 s
+Enable autoform by default
+````json
+//config.json
+autofom: true
 ````
 
 ## menu
@@ -178,7 +177,7 @@ gulp core
 ## themes
 ````js
 // vi migrations/data/settings.json
-"themes": [{"name": "the name", "css": "/themes/{filename}.min.css" }]
+"themes": [{"name": "the name", "css": "{URL}.min.css" }]
 ````
 
 ## user management

@@ -10,17 +10,17 @@
   "author": "Daniel Martinez",
   "license": "MIT",
   "dependencies": {
+    "async": "*",
     "express": "*",
     "hamper": "*",
     "jade": "*",
     "mandrill-api": "*",
     "mpill": "*",
-    "restify": "*",
-    "async": "*",
-    "socket.io": "*",
     "redis": "*",
-    "uuid": "*",
-    "underscore": "*"
+    "restify": "*",
+    "socket.io": "*",
+    "underscore": "*",
+    "uuid": "*"
   },
   "devDependencies": {
     "gulp": "*",

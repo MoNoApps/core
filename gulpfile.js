@@ -49,18 +49,18 @@ gulp.task('watch', function() {
 });
 
 gulp.task('autoform', function(done) {
- var autoform = require('./autoform/index');
- autoform(done);
+  var autoform = require('./autoform/index');
+  autoform(done);
 });
 
 gulp.task('app', function() {
-  var cfg = require('./config.json').port;
+  var prt = require('./config.json').port;
   var api = require('./api/routes');
   var svr = require('./web/routes').svr;
   var sio = require('./sio/routes');
 
-  api.listen(cfg.api, function() {});
-  svr.listen(cfg.web, function() {});
+  api.listen(prt.api, function() {});
+  svr.listen(prt.web, function() {});
   sio.listen(function() {});
 });
 
@@ -70,5 +70,6 @@ gulp.task('default',[
   'lint',
   'minify',
   'styles',
+  'autoform',
   'app'
 ]);
