@@ -51,7 +51,7 @@ function generator (res) {
 
 function getTime () {
   var date =  new Date();
-  return ['[', date.getHours(), date.getMinutes(), date.getSeconds(),'] '].join(':');
+  return ['[' + date.getHours(), date.getMinutes(), date.getSeconds() + ']'].join(':');
 }
 
 
