@@ -49,9 +49,19 @@ function generator (res) {
   }
 }
 
+function zerofill (n) {
+  if (n.toString().length===1) { return '0' + n; }
+  return n;
+}
+
 function getTime () {
   var date =  new Date();
-  return ['[' + date.getHours(), date.getMinutes(), date.getSeconds() + ']'].join(':');
+  return [
+    '[' + 
+      zerofill(date.getHours()),
+      zerofill(date.getMinutes()),
+      zerofill(date.getSeconds()) +
+    ']'].join(':');
 }
 
 
