@@ -56,7 +56,7 @@ function addPluginsApi (api) {
   }
 }
 
-addResourceRoutes (resources, api){
+function addResourceRoutes (resources, api){
   for (var route in resources) {
     if (resources.hasOwnProperty(route)) {
       if (resources[route].exclude){ continue; }
@@ -73,12 +73,12 @@ addResourceRoutes (resources, api){
   }
 }
 
-getViewPath (name) {
+function getViewPath (name) {
   var dirname = __dirname.replace('/helpers', '');
   return dirname + pconf.DIR + '/' + name + pconf.VIEWS;
 }
 
-addPluginsWeb (web, express){
+function addPluginsWeb (web, express){
   var views = [];
   for (var idx in plugins) {
     if (plugins.hasOwnProperty(idx)) {
