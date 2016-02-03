@@ -11,7 +11,7 @@ var inspector = require('../helpers/inspector');
 var middleware = require('../helpers/middleware');
 
 // settings
-var views = inspector.addPluginsWeb(web);
+var views = inspector.addPluginsWeb(web, express);
 views.push(__dirname.replace('/web', '/views'));
 web.set('views', views);
 web.set('view engine', 'jade');
