@@ -40,10 +40,7 @@
           "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/united/bootstrap.min.css" },
         { "name": "Yeti",
           "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/yeti/bootstrap.min.css" }
-      ],
-      "commons":{
-        "sizes": []
-      }
+      ]
     }
   }
 }
