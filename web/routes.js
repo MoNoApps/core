@@ -44,6 +44,10 @@ web.get('/', function(req, res){
   });
 });
 
+web.get('/templates/:name', function (req, res) {
+  res.render('templates/' + req.params.name);
+});
+
 //console.log(web._router.stack);
 
 module.exports.web = web;
