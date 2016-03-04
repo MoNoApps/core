@@ -86,13 +86,14 @@ function addPluginsWeb (web, express){
       var prefix = '/' + name;
       var plugin = require(pluginsDir + prefix + pconf.CONFIG);
 
+      views.push(getViewPath(name));
       web.use(express.static(pluginsDir + prefix + '/public'));
 
       for (var idy in plugin.pages) {
         var page = plugin.pages[idy];
-        views.push(getViewPath(page));
         generator.addPage(web, page);
       }
+      
 
       for (var route in plugin.resources) {
         if (plugin.resources.hasOwnProperty(route)) {
