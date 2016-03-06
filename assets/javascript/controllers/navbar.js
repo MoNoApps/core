@@ -4,6 +4,7 @@ window.app.controller('NavBarController',['$scope','$rootScope', '$http', functi
   $scope.themes = [];
   $scope.resources = [];
   $scope.token = window.localStorage.getItem('token');
+  $scope.gravatar = window.localStorage.getItem('gravatar');
 
   var getTheme = function() {
     $http.get('/api/theme')

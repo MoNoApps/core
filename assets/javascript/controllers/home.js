@@ -68,6 +68,7 @@ window.app.controller('HomeController',['$scope', '$rootScope', '$http', functio
     .success(function(data) {
       if(data.code !== 'InternalError'){
         window.localStorage.setItem('token', data.token);
+        window.localStorage.setItem('gravatar', data.gravatar);
         window.location.reload();
       }
     })

@@ -8,46 +8,52 @@ var review = require('../helpers/manager').review;
 var manager = require('../helpers/manager').response;
 var sendM  = require('../helpers/email').sendMail;
 
-var ping = function(req, res){
+function ping(req, res) {
   res.send(200);
-};
+}
 
-var login = function(req, res){
-  if(!req.body){ return res.send(401); }
-  register.isPwdOK(req.body.email, req.body.password, function(err, token, isOK){
-    if(isOK){
-      if(token.ops){
-        res.send(200 , {token: token.ops[0]._id});
-      }else{
-        res.send(200 , {token: token[0]._id});
+function login(req, res) {
+  if (!req.body) { return res.send(401); }
+
+  register.isPwdOK(req.body.email, req.body.password, function(err, isOK, token, gravatar) {
+    if (isOK) {
+      if (token.ops) {
+        res.send(200 , {
+          token: token.ops[0]._id,
+          gravatar: gravatar
+        });
+      } else {
+        res.send(200 , {
+          token: token[0]._id,
+          gravatar: gravatar
+        });
       }
-
-    }else{
+    } else {
       res.send(401);
     }
   });
-};
+}
 
-var signup = function(req, res){
+function signup(req, res) {
   register.addUser(req.params.email, function(err, success){
     if(err){ return res.send(401, err); }
     res.send(200, success);
   });
-};
+}
 
-var confirm = function(req, res){
+function confirm(req, res) {
   register.confirmEmail(req.params.code, function(err){
     if(err){ return res.send(401, {message: err}); }
     res.header('Location', '/registered');
     res.send(302, {message: 'User Confirmed'});
   });
-};
+}
 
-var theme = function(req, res){
+function theme(req, res) {
   res.json({theme: config.theme});
-};
+}
 
-var properties = function(req, res){
+function properties(req, res) {
   review({ req: req, res: res }, function(err, opt){
     controllers.settings.GetOne({"type": "properties"}, function(err, rsp){
       if(err){ return res.status(501); }
@@ -61,10 +67,10 @@ var properties = function(req, res){
       manager({req: req, res: res, err: err, rsp: rsp.data});
     });
   });
-};
+}
 
 //NOTE: don't handle errors
-var recover = function(req, res){
+function recover(req, res) {
   var email = req.params.email;
 
   _markUser(email, function(err, key){
@@ -88,9 +94,9 @@ var recover = function(req, res){
   });
 
   res.send(200);
-};
+}
 
-var _markUser = function(email, cb){
+function _markUser(email, cb) {
   var key = utils.createUUID();
   controllers.users.Update(
     {email: email},
@@ -99,10 +105,10 @@ var _markUser = function(email, cb){
       cb(err, key);
     }
   );
-};
+}
 
 //NOTE: don't handle errors
-var rescue = function(req, res){
+function rescue(req, res) {
   models.users.FindOne({recover: req.params.code}, function(err, user){
     if(err){ } // do nothing
     if(user){
@@ -139,7 +145,7 @@ var rescue = function(req, res){
 
   res.header('Location', '/recover');
   res.send(302, { site: config.site });
-};
+}
 
 module.exports.ping = ping;
 module.exports.login = login;

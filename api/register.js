@@ -1,10 +1,16 @@
-// references
 var config = require('../config.json');
 var models = require('../helpers/models');
 var utils  = require('../helpers/utils');
 var sendM  = require('../helpers/email').sendMail;
+var crypto = require('crypto');
 
-var addUser = function(email, cb){
+function getGravatarURL(email) {
+  var size = 50;
+  var hash = crypto.createHash('md5').update(email).digest('hex');
+  return 'https://secure.gravatar.com/avatar/' + hash + '.jpg?size=' + size;
+}
+
+function addUser(email, cb) {
   models.users.FindOne({email: email}, function(err, user){
     if(err){ return cb('Email Registry Error.'); }
     if(user){ return cb(false); } // No Error if found user
@@ -35,9 +41,9 @@ var addUser = function(email, cb){
       });
     });
   });
-};
+}
 
-var confirmEmail = function(code, cb){
+function confirmEmail(code, cb) {
   models.users.FindOne({code: code}, function(err, user){
     if(err){ return cb('Email Registry Error.'); }
     if(user){
@@ -47,6 +53,7 @@ var confirmEmail = function(code, cb){
         delete user.code;
         user.status = 1;
         user.date = new Date().getTime();
+        user.gravatar = getGravatarURL(user.email);
 
         models.users.UpdateByObjectId({'_id': user._id.toString()}, user, '_id', function(err, ack){
           if(err){ return cb('User Update Error.'); }
@@ -79,9 +86,9 @@ var confirmEmail = function(code, cb){
       return cb('User Not Found.');
     }
   });
-};
+}
 
-var isPwdOK = function(email, text, cb){
+function isPwdOK(email, text, cb) {
   models.users.FindOne({email: email}, function(err, user){
     if(err || !user){
       cb(false);
@@ -90,15 +97,15 @@ var isPwdOK = function(email, text, cb){
       utils.comparePwd(options, user.password, function(isValid){
         if(isValid){
           utils.createToken(user, function(err, token){
-            cb(err, token, isValid);
+            cb(err, isValid, token, user.gravatar);
           });
         }else{
-          cb('Invalid Auth', false, isValid);
+          cb('Invalid Auth', isValid);
         }
       });
     }
   });
-};
+}
 
 module.exports.isPwdOK = isPwdOK;
 module.exports.addUser = addUser;
