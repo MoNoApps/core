@@ -32,6 +32,9 @@
           li.divider
           li
             a(ng-click='delTheme()') Default
+      li(ng-show='isHttp()')
+        a(ng-click='goHttpsUrl()')
+          button.btn.btn-success(type='button', data-toggle='button', aria-pressed='false', autocomplete='off') https
       li(ng-show="token")
         div
           a(href='/account')

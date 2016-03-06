@@ -59,6 +59,17 @@ window.app.controller('NavBarController',['$scope','$rootScope', '$http', functi
     return text.charAt(0).toUpperCase() + text.substring(1, text.length);
   };
 
+  function isHttp() {
+    return window.location.protocol === 'http:';
+  }
+
+  function goHttpsUrl() {
+    window.location =  window.location.href.replace('http:','https:');
+  }
+
+  $scope.isHttp = isHttp;
+  $scope.goHttpsUrl = goHttpsUrl;
+
   $rootScope.$on('load:param', function (event, data) {
     $scope.model = data;
     console.log('load:param');
