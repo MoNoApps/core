@@ -2,29 +2,35 @@
 var MPill = require('mpill').MPill;
 
 // vars
-var dburl     = require("../config.json").dburl;
-var resources = require("../config.json").resources;
-var plugins = require('../config.json').plugins;
+var config = require("../config.json");
+var plugins = config.plugins;
 var pconf = require('../config.json').APIVARS.PLUGINS;
 var pluginsDir = __dirname.replace('/helpers', pconf.DIR);
+var models = {};
 
-for(var idx in plugins){
-  if(plugins.hasOwnProperty(idx)){
-    var name = plugins[idx];
-    var prefix = '/' + name;
-    var _cfg_ = require(pluginsDir + prefix + pconf.CONFIG);
+function addModel(name, dburl) {
+  models[name] = new MPill(name, dburl);
+}
 
-    for(var g in _cfg_.resources){
-      if(_cfg_.resources.hasOwnProperty(g)){
-        module.exports[g] = new MPill(g, _cfg_.dburl);
-      }
+function resourcesIterator(resources, dburl) {
+  for (var name in resources) {
+    if (resources.hasOwnProperty(name)) {
+      addModel(name, dburl);
     }
   }
 }
 
-//Exports every new collection
-for(var c in resources){
-  if(resources.hasOwnProperty(c)){
-    module.exports[c] = new MPill(c, dburl);
+resourcesIterator(config.resources, config.dburl);
+
+for (var idx in plugins) {
+  if (plugins.hasOwnProperty(idx)) {
+    var plugin = plugins[idx];
+    var prefix = '/' + plugin;
+    var _cfg_ = require(pluginsDir + prefix + pconf.CONFIG);
+
+    resourcesIterator(_cfg_.resources, _cfg_.dburl);
   }
 }
+
+module.exports = models;
+
