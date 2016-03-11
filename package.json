@@ -1,11 +1,12 @@
 {
   "name": "core",
   "private": "true",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "MoNoApps Core",
   "main": "app.js",
   "scripts": {
     "test": "node migrations/seed.js; node migrations/guest.js; protractor protractor.js; mocha;"
+    "start": "gulp",
   },
   "author": "Daniel Martinez",
   "license": "MIT",
