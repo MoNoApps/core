@@ -26,9 +26,10 @@
   "devDependencies": {
     "gulp": "*",
     "gulp-concat": "*",
-    "gulp-jshint": "*",
     "gulp-cssnano": "*",
+    "gulp-jshint": "*",
     "gulp-sourcemaps": "*",
-    "gulp-uglify": "*"
+    "gulp-uglify": "*",
+    "jshint": "*"
   }
 }
