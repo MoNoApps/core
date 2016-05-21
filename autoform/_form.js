@@ -4,7 +4,7 @@ var indent = require('../autoform/_indent');
 var ext = '.jade';
 var dir = '/../views/index/forms/';
 
-function add (opts) {
+function add(opts) {
   var dest = __dirname + dir + opts.name + ext;
   var model = opts.resource.schema;
   var count = 0;
@@ -15,17 +15,17 @@ function add (opts) {
       var field = model[name];
       count += 1;
       var title = name.charAt(0).toUpperCase() + name.slice(1);
-      data +='' +
+      data += '' +
         indent(2) + F.block.value +
         indent(3) + F.label.value +
-        ' ' +       F.label.bind +
+        ' ' + F.label.bind +
         indent(3) + F.rocky.value;
 
       var hasOptions = '';
       var properties = '';
 
-      for(var prop in field) {
-        if (prop==='tag' || prop==='exclude'){ continue; }
+      for (var prop in field) {
+        if (prop === 'tag' || prop === 'exclude') { continue; }
         properties += ', ' + prop + '="' + field[prop] + '"';
       }
 
@@ -33,21 +33,21 @@ function add (opts) {
         case 'image':
           var imgSource = F.image.source;
           var imgValue = F.image.value;
-          imgSource =  imgSource.replace('[[properties]]', properties);
+          imgSource = imgSource.replace('[[properties]]', properties);
           data += indent(4) + imgSource.replace('[[field]]', name);
           data += indent(4) + F.image.pre.replace('[[field]]', name) +
             indent(5) + imgValue +
-              '(' + F.image.bind + ')';
+            '(' + F.image.bind + ')';
           break;
         case 'select':
-          for(var s in field.options) {
+          for (var s in field.options) {
             data += indent(4) + "option(value='" + s + "') " + field.options[s];
           }
           data += indent(4) + F.select.value +
             '(' + F.select.bind + properties + ')';
           break;
         case 'textarea':
-           data += indent(4) + F.textarea.value +
+          data += indent(4) + F.textarea.value +
             '(' + F.textarea.bind + properties + ')';
           break;
         case 'input':
@@ -72,10 +72,10 @@ function add (opts) {
   fs.writeFile(dest, data);
 }
 
-function destroy (opts){
+function destroy(opts) {
   var dest = __dirname + dir + opts.name + ext;
   var fs = require('fs');
-  if(fs.existsSync(dest)){
+  if (fs.existsSync(dest)) {
     fs.unlink(dest);
   }
 }

@@ -1,8 +1,8 @@
-var app = window.angular.module('coreApp', ['ng', 'ngResource']);
+(function (NG) {
+  'use strict';
 
-app.run(['$http', function($http) {
-  var token = window.localStorage.getItem('token');
-  $http.defaults.headers.common.Token = token;
-}]);
-
-window.console.log('ng:app');
+  NG.module('coreApp', ['ngResource'])
+    .run(['$http', function ($http) {
+      $http.defaults.headers.common.Token = window.localStorage.getItem('token');
+    }]);
+})(window.angular);

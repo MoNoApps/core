@@ -1,6 +1,6 @@
 var plugins = require('../config.json').plugins;
 
-module.exports = function(cb) {
+module.exports = function (cb) {
   var js = [];
   var ng = [];
   var st = [];
@@ -23,8 +23,8 @@ module.exports = function(cb) {
   js.push('test/helpers/*.js');
   st.push('assets/styles/*.css');
 
-  for(var idx in plugins){
-    if(plugins.hasOwnProperty(idx)){
+  for (var idx in plugins) {
+    if (plugins.hasOwnProperty(idx)) {
       var name = plugins[idx];
       js.push('plugins/' + name + '/helpers/*.js');
       js.push('plugins/' + name + '/api/*.js');

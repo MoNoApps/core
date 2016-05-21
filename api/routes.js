@@ -14,7 +14,7 @@ var inspector = require('../helpers/inspector');
 var api = restify.createServer();
 api.use(restify.bodyParser());
 // api.use(restify.queryParser());
-api.use(function(req, res, next){
+api.use(function (req, res, next) {
   req.params.token = req.headers.token || false;
   next();
 });
@@ -22,10 +22,10 @@ api.use(function(req, res, next){
 inspector.addPluginsApi(api);
 
 // auto generated routes
-try{
-  for(var route in resources){
+try {
+  for (var route in resources) {
     if (resources.hasOwnProperty(route)) {
-      if(resources[route].exclude){ continue; }
+      if (resources[route].exclude) { continue; }
 
       generator.addRoutes({
         api: api,
@@ -33,11 +33,11 @@ try{
         admin: resources[route].admin,
         controller: controllers[route],
         schema: resources[route].schema,
-        clean:  resources[route].clean
+        clean: resources[route].clean
       });
     }
   }
-}catch(e){
+} catch (e) {
   console.log(e);
 }
 

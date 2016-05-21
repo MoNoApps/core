@@ -5,7 +5,7 @@ var events = require('./events');
 
 function current() {
   var count = pub.get(conf.site + '::users');
-  return {users: count};
+  return { users: count };
 }
 
 function incUsers() {

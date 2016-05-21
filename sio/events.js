@@ -3,8 +3,8 @@ var review = require('../helpers/manager').review;
 
 function users(socket, cb) {
   review(
-    {req: {params: {token: socket.token} }, res: {} }, 
-    ((err, opt) => db.users.Find({}, ((err, rsp) =>  cb(err, rsp))))
+    { req: { params: { token: socket.token } }, res: {} },
+    ((err, opt) => db.users.Find({}, ((err, rsp) => cb(err, rsp))))
   );
 }
 

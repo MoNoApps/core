@@ -20,7 +20,7 @@ Dynamic CRUD in seconds with good code quality and NoSQL flexibility.
 - Socket.IO ready
 - Templates support with jade lang
 - Sanbox mode
-- Form generation automatic
+- Dynamic form generation
 
 ## CoC
 Configuration over Convention.<br>
@@ -52,18 +52,11 @@ By default app search files in 'view' folder but you can write relative or absol
 "INDEX": "plugins/plugin-name/folder/file.jade"
 ````
 ### email
-Create an account on mandril and add your token.
+Add your sendgrid token:
 ````js
-"mandril":{
-  "from": "noreply@core.monoapps.co",
-  "name": "Core App",
-  "token": "YOUR TOKEN HERE"
-}
+# .zshr or .bashrc
+export SENDGRID_TOKEN=mysecret
 ````
-Testing your email configuration.
-`````sh
-node examples/ping.mandril.js
-`````
 ### website info
 ````js
 "URL": {
@@ -206,7 +199,7 @@ See [wizard sample](https://github.com/MoNoApps/wizard)<br>
 Add plugins on config.plugins.
 
 ## sanbox
-Prevent visibility enabling the trusted mode
+Prevent network visibility enabling the trusted mode
 
 ````js
 # web/routes.js
@@ -224,5 +217,5 @@ npm install istanbul mocha-istanbul -g
 make cov
 ````
 
-## deploy
+## domain name
 Use [nginx config](core.conf) to deploy. If needed add the hostname domains on /etc/hosts file.

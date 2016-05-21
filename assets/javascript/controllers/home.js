@@ -1,4 +1,4 @@
-window.app.controller('HomeController',['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
+window.app.controller('HomeController', ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
 
   $scope.guest = {};
   $scope.token = window.localStorage.getItem('token');
@@ -10,72 +10,72 @@ window.app.controller('HomeController',['$scope', '$rootScope', '$http', functio
     $scope.login();
   };
 
-  function getGuest () {
+  function getGuest() {
     $http.get('/api/guest')
-    .success(function(data) {
-      $scope.guest = data;
-    })
-    .error(function(data) {
-      if(data.error){ $scope.error = data.error; }
-      else { $scope.error = data; }
-    });
+      .success(function (data) {
+        $scope.guest = data;
+      })
+      .error(function (data) {
+        if (data.error) { $scope.error = data.error; }
+        else { $scope.error = data; }
+      });
   }
 
-  $scope.enableView = function(name){
+  $scope.enableView = function (name) {
     $scope.view = name;
     $scope.alert = false;
     $scope.error = false;
   };
 
-  $scope.isEnabledView = function(name){
+  $scope.isEnabledView = function (name) {
     return window.angular.equals($scope.view, name);
   };
 
-  $scope.doRegister = function(){
+  $scope.doRegister = function () {
     $http.post('/api/register/' + $scope.register.email)
-    .success(function(data){
-      if(data.code !== 'InternalError'){
-        $scope.view = 'login';
-        $scope.alert = 'User Registered. Read your email inbox and follow instructions.';
-        $scope.error = '';
-      }
-    })
-    .error(function(data){
-      $scope.alert = '';
-      if(data.error){ $scope.error = data.error; }
-      else { $scope.error = data; }
-    });
+      .success(function (data) {
+        if (data.code !== 'InternalError') {
+          $scope.view = 'login';
+          $scope.alert = 'User Registered. Read your email inbox and follow instructions.';
+          $scope.error = '';
+        }
+      })
+      .error(function (data) {
+        $scope.alert = '';
+        if (data.error) { $scope.error = data.error; }
+        else { $scope.error = data; }
+      });
   };
 
-  $scope.doRecover = function(){
+  $scope.doRecover = function () {
     $http.post('/api/recover/' + $scope.recover.email)
-    .success(function(data){
-      if(data.code !== 'InternalError'){
-        $scope.view = 'login';
-        $scope.alert = 'Read your email inbox and follow instructions.';
-        $scope.error = '';
-      }
-    })
-    .error(function(data){
-      $scope.alert = '';
-      if(data.error){ $scope.error = data.error; }
-      else { $scope.error = data; }
-    });
+      .success(function (data) {
+        if (data.code !== 'InternalError') {
+          $scope.view = 'login';
+          $scope.alert = 'Read your email inbox and follow instructions.';
+          $scope.error = '';
+        }
+      })
+      .error(function (data) {
+        $scope.alert = '';
+        if (data.error) { $scope.error = data.error; }
+        else { $scope.error = data; }
+      });
   };
 
-  $scope.login = function(){
+  $scope.login = function () {
     $http.post('/api/login', $scope.user)
-    .success(function(data) {
-      if(data.code !== 'InternalError'){
-        window.localStorage.setItem('token', data.token);
-        window.localStorage.setItem('gravatar', data.gravatar);
-        window.location.reload();
-      }
-    })
-    .error(function(data, status) {
-      if(status === 401){ $scope.error = 'Unauthorized'; return false; }
-      if(data.error){ $scope.error = data.error; }else{ $scope.error = data; }
-    });
+      .success(function (data) {
+        if (data.code !== 'InternalError') {
+          window.localStorage.setItem('token', data.token);
+          window.localStorage.setItem('gravatar', data.gravatar);
+          window.location.reload();
+        }
+      })
+      .error(function (data, status) {
+        if (status === 401) { $scope.error = 'Unauthorized'; return false; }
+        if (data.error) { $scope.error = data.error; } else { $scope.error = data; }
+      });
   };
 
   getGuest();
