@@ -1,7 +1,7 @@
 {
   "name": "core",
-  "private": "true",
-  "version": "3.0.0",
+  "private": true,
+  "version": "3.1.0",
   "description": "MoNoApps Core",
   "main": "app.js",
   "scripts": {
@@ -15,10 +15,10 @@
     "express": "*",
     "hamper": "*",
     "jade": "*",
-    "mandrill-api": "*",
     "mpill": "*",
     "redis": "*",
     "restify": "*",
+    "sendgrid": "*",
     "socket.io": "*",
     "underscore": "*",
     "uuid": "*"

@@ -1,5 +1,5 @@
 window.app.service('Socket', [
-  function() {
+  function () {
     return window.io();
   }
 ]);

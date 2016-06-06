@@ -1,48 +1,18 @@
 var config = require('../config.json');
-var mandrill = require('mandrill-api/mandrill');
 
-var sendMail = function(data, cb) {
+function sendMail(data, cb) {
 
-  var message = {
-    "html": data.html,
-    "text": data.text,
-    "subject": data.subject,
-    "from_email": config.mandril.from,
-    "from_name": config.mandril.name,
-    "to": [{
-      "email": data.email,
-      "name": data.name,
-      "type": "to"
-    }],
-    "headers": {
-      "Reply-To": config.mandril.email
-    },
-    "tags": data.tags || [],
-    "metadata": data.metadata || {},
-    "subaccount": config.mandril.sub || null,
-    "important": false,
-    "track_opens": null,
-    "track_clicks": null,
-    "auto_text": null,
-    "auto_html": null,
-    "inline_css": null,
-    "url_strip_qs": null,
-    "preserve_recipients": null,
-    "view_content_link": null,
-    "bcc_address": data.bcc || null,
-    "tracking_domain": null,
-    "signing_domain": null,
-    "return_path_domain": null
-  };
-
-  var client = new mandrill.Mandrill(config.mandril.token);
-  client.messages.send({'message': message}, function(result) {
-    console.log(result);
-    if(cb){ cb(false, result); }
-  }, function(e) {
-    console.log(e);
-    if(cb){ cb(e); }
+  var sendgrid = require("sendgrid")(process.env.SENDGRID_TOKEN);
+  var email = new sendgrid.Email();
+  email.addTo(data.email);
+  email.setFrom(config.mail.from);
+  email.setSubject(data.subject);
+  email.setHtml(data.html);
+  sendgrid.send(email, function (error, json) {
+    if (error && cb) { cb(error); }
+    console.log(error, json);
   });
-};
+
+}
 
 module.exports.sendMail = sendMail;

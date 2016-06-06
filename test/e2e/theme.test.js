@@ -1,16 +1,16 @@
 var initialize = require('../helpers/initialize.helper.test');
 
-describe('themes', function(){
+describe('themes', function () {
 
-  it('should allow change theme', function() {
+  it('should allow change theme', function () {
     initialize(browser);
 
     var themeList = element.all(by.repeater('t in themes'));
     expect(themeList.count()).toEqual(16);
 
-    themeList.each(function(e,i) {
+    themeList.each(function (e, i) {
       element(by.id('themesLink')).click();
-      element(by.id('theme'+i)).click();
+      element(by.id('theme' + i)).click();
     });
   });
 

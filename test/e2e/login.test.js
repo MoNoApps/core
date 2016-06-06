@@ -3,9 +3,9 @@ var initialize = require('../helpers/initialize.helper.test');
 var email = 'guest.match@monoapps.co';
 var passphrase = 'demo#2015';
 
-describe('home', function(){
+describe('home', function () {
 
-  it('should allow login', function() {
+  it('should allow login', function () {
 
     initialize(browser);
 
@@ -15,7 +15,7 @@ describe('home', function(){
 
     var resourceList = element.all(by.binding('rname'));
     expect(resourceList.count()).toEqual(4);
-    
+
   });
 
 });

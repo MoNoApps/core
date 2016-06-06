@@ -4,18 +4,18 @@ var plugins = require('../config.json').plugins;
 var pconf = require('../config.json').APIVARS.PLUGINS;
 var pluginsDir = __dirname.replace('/helpers', pconf.DIR);
 
-function apiParams (defRoute) {
+function apiParams(defRoute) {
   var defParams = '';
 
   if (defRoute.params) {
     for (var param in defRoute.params) {
-      if (param) { defParams += '/:'+ param; }
+      if (param) { defParams += '/:' + param; }
     }
   }
   return defParams;
 }
 
-function addPluginsApi (api) {
+function addPluginsApi(api) {
   for (var idx in plugins) {
     if (plugins.hasOwnProperty(idx)) {
       var name = plugins[idx];
@@ -30,7 +30,7 @@ function addPluginsApi (api) {
         }
       }
 
-      for(var p in plugin.api.POST) {
+      for (var p in plugin.api.POST) {
         if (plugin.api.POST.hasOwnProperty(p)) {
           var defPOST = plugin.api.POST[p];
           api.post(prefix + '/' + defPOST.route + apiParams(defPOST), defPOST.fn);
@@ -56,10 +56,10 @@ function addPluginsApi (api) {
   }
 }
 
-function addResourceRoutes (resources, api){
+function addResourceRoutes(resources, api) {
   for (var route in resources) {
     if (resources.hasOwnProperty(route)) {
-      if (resources[route].exclude){ continue; }
+      if (resources[route].exclude) { continue; }
 
       generator.addRoutes({
         api: api,
@@ -67,18 +67,18 @@ function addResourceRoutes (resources, api){
         admin: resources[route].admin,
         controller: controllers[route],
         schema: resources[route].schema,
-        clean:  resources[route].clean
+        clean: resources[route].clean
       });
     }
   }
 }
 
-function getViewPath (name) {
+function getViewPath(name) {
   var dirname = __dirname.replace('/helpers', '');
   return dirname + pconf.DIR + '/' + name + pconf.VIEWS;
 }
 
-function addPluginsWeb (web, express){
+function addPluginsWeb(web, express) {
   var views = [];
   for (var idx in plugins) {
     if (plugins.hasOwnProperty(idx)) {
@@ -93,7 +93,7 @@ function addPluginsWeb (web, express){
         var page = plugin.pages[idy];
         generator.addPage(web, page);
       }
-      
+
 
       for (var route in plugin.resources) {
         if (plugin.resources.hasOwnProperty(route)) {

@@ -1,8 +1,8 @@
 {
   "tab": "  ",
-  "head":  "form.form-horizontal(name='modelForm')",
+  "head": "form.form-horizontal(name='modelForm')",
   "fieldset": "fieldset",
-  "block":  {
+  "block": {
     "value": ".form-group"
   },
   "rocky": {
@@ -20,9 +20,9 @@
     "value": "input.form-control",
     "bind": "ng-model='$parent.edit.[[field]]'",
     "types": {
-      "url":    "type='url'",
-      "text":   "type='text'",
-      "email":  "type='email'",
+      "url": "type='url'",
+      "text": "type='text'",
+      "email": "type='email'",
       "number": "type='number'"
     }
   },
@@ -31,7 +31,7 @@
     "bind": "ng-model='$parent.edit.[[field]]'"
   },
   "image": {
-    "source":"input.form-control(ng-model='$parent.edit.[[field]]'[[properties]])",
+    "source": "input.form-control(ng-model='$parent.edit.[[field]]'[[properties]])",
     "pre": ".thumbnail(ng-show='$parent.edit.[[field]]')",
     "value": "img",
     "bind": "ng-src='{{$parent.edit.[[field]]}}', alt=''"

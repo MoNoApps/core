@@ -10,6 +10,6 @@ exports.config = {
     './test/e2e/logout.test.js'
   ],
   multiCapabilities: [
-    { browserName: 'chrome'}
+    { browserName: 'chrome' }
   ]
 };

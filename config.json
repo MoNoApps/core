@@ -7,10 +7,9 @@
     "api": 1345,
     "rds": 6379
   },
-  "mandril":{
+  "mail": {
     "from": "noreply@wrine.co",
-    "name": "Core App",
-    "token": ""
+    "name": "Core App"
   },
   "guest": {
     "email": "guest@wrine.co",
@@ -21,7 +20,9 @@
   },
   "autoform": true,
   "INDEX": "index/index",
-  "ALLOW": ["127.0.0.1"],
+  "ALLOW": [
+    "127.0.0.1"
+  ],
   "TTL": 84000,
   "URL": {
     "BASE": "http://core.wrine.co",
@@ -32,7 +33,7 @@
     "PRE": "/",
     "ID": "/:id",
     "PLUGINS": {
-      "DIR":"/plugins",
+      "DIR": "/plugins",
       "MAIN": "/plugin.js",
       "VIEWS": "/views",
       "CONFIG": "/config.json"
@@ -41,12 +42,13 @@
   "plugins": [
     "wizard"
   ],
-  "pages":[
+  "pages": [
     "account",
     "recover",
     "registered",
     "docs",
-    "dev"],
+    "dev"
+  ],
   "resources": {
     "tokens": {
       "admin": true,
@@ -61,9 +63,11 @@
     "users": {
       "admin": true,
       "param": "user",
-      "clean": {"password": 1},
+      "clean": {
+        "password": 1
+      },
       "schema": {
-        "name":  1,
+        "name": 1,
         "date": 1,
         "email": 1,
         "status": 1,
