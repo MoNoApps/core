@@ -14,9 +14,6 @@ machine:
 
 dependencies:
   pre:
-    - sudo service zookeeper stop
-    - sudo cp /home/ubuntu/core/sources.list /etc/apt/sources.list
-    - sudo apt-get update
     - sudo apt-get install nginx -y
     - sudo rm /etc/nginx/sites-enabled/default
     - sudo cp /home/ubuntu/core/core.conf /etc/nginx/sites-enabled/core.conf
