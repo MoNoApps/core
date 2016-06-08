@@ -19,10 +19,7 @@ dependencies:
     - sudo rm /etc/nginx/sites-enabled/default
     - sudo cp /home/ubuntu/core/core.conf /etc/nginx/sites-enabled/core.conf
     - sudo service nginx reload
-    - curl -L -o google-chrome-stable.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    - sudo dpkg -i google-chrome-stable.deb
     - sudo sed -i 's|HERE/chrome\"|HERE/chrome\" --disable-setuid-sandbox|g' /opt/google/chrome/google-chrome
-    - rm google-chrome-stable.deb
 checkout:
   post:
     - /home/ubuntu/core/refresh.sh
