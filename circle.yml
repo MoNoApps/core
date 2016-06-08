@@ -1,4 +1,6 @@
 machine:
+  node:
+    version: 6.2.1
   hosts:
     wrine.co: 127.0.0.1
     core.wrine.co: 127.0.0.1
