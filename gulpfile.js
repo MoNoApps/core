@@ -20,7 +20,7 @@ assets(function (a, b, c) {
 
 gulp.task('lint', function () {
   gulp.src(scripts)
-    .pipe(jshint())
+    .pipe(jshint({ esversion: 6 }))
     .pipe(jshint.reporter('default'));
 });
 
