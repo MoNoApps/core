@@ -18,7 +18,7 @@ Dynamic CRUD in seconds with good code quality and NoSQL flexibility.
 - JS and CSS minify
 - AngularJS FrontEnd
 - Socket.IO ready
-- Templates support with jade lang
+- Templates support with pug
 - Sanbox mode
 - Dynamic form generation
 
@@ -49,7 +49,7 @@ Main database of the project. Every plugin has their own db url.
 Change the index file editing the INDEX property.<br>
 By default app search files in 'view' folder but you can write relative or absolute paths.
 ````js
-"INDEX": "plugins/plugin-name/folder/file.jade"
+"INDEX": "plugins/plugin-name/folder/file.pug"
 ````
 ### email
 Add your sendgrid token:
@@ -87,7 +87,7 @@ export SENDGRID_TOKEN=mysecret
 ````
 
 ### pages
-Public pages. Unrestricted access and main file located at {name}/index.jade
+Public pages. Unrestricted access and main file located at {name}/index.pug
 ````js
 "pages":[
   "account",

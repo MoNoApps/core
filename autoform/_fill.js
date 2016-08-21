@@ -13,7 +13,7 @@ var fill = function (models) {
       indent(3) + "include ../forms/" + models[m];
   }
 
-  var dest = __dirname + '/../views/index/sections/switch-model.jade';
+  var dest = __dirname + '/../views/index/sections/switch-model.pug';
   fs.unlink(dest, function () {
     fs.writeFile(dest, content);
   });

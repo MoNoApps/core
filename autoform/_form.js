@@ -1,7 +1,7 @@
 var F = require('../autoform/content.json');
 var indent = require('../autoform/_indent');
 
-var ext = '.jade';
+var ext = '.pug';
 var dir = '/../views/index/forms/';
 
 function add(opts) {

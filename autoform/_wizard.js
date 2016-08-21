@@ -10,7 +10,7 @@ var s = ['actions', 'login', 'recover', 'register'];
 var p = './views/index/forms';
 
 var c = function (n) {
-  return n.replace('.jade', '');
+  return n.replace('.pug', '');
 };
 
 var j = function (props) {
