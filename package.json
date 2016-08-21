@@ -11,25 +11,25 @@
   "author": "Daniel Martinez",
   "license": "MIT",
   "dependencies": {
-    "async": "*",
-    "express": "*",
-    "hamper": "*",
-    "jade": "*",
-    "mpill": "*",
-    "redis": "*",
-    "restify": "*",
-    "sendgrid": "*",
-    "socket.io": "*",
-    "underscore": "*",
-    "uuid": "*"
+    "async": "latest",
+    "express": "latest",
+    "hamper": "latest",
+    "pug": "latest",
+    "mpill": "latest",
+    "redis": "latest",
+    "restify": "latest",
+    "sendgrid": "latest",
+    "socket.io": "latest",
+    "underscore": "latest",
+    "uuid": "latest"
   },
   "devDependencies": {
-    "gulp": "*",
-    "gulp-concat": "*",
-    "gulp-cssnano": "*",
-    "gulp-jshint": "*",
-    "gulp-sourcemaps": "*",
-    "gulp-uglify": "*",
-    "jshint": "*"
+    "gulp": "latest",
+    "gulp-concat": "latest",
+    "gulp-cssnano": "latest",
+    "gulp-jshint": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-uglify": "latest",
+    "jshint": "latest"
   }
 }
