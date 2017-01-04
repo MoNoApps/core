@@ -121,7 +121,7 @@ helpers/base.js # controller base who knows his own model
 helpers/email.js # send emails
 helpers/generator.js # add api and web (pages[no auth] and views[auth crud view])
 helpers/inspector.js # helper for dynamic plugin creation
-helper/manager.js # filter auth request and prepare response
+helpers/manager.js # filter auth request and prepare response
 helpers/models.js # helper for models defined on plugins and core
 helpers/ps.js # helper for redis pub/sub
 helpers/utils.js # helper for password and auth
