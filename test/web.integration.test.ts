@@ -32,4 +32,22 @@ describe("Web Server Integration Test Suite (SSR & Middleware)", () => {
     const html = await res.text();
     assert.match(html, /html/i);
   });
+
+  it("GET /account should serve SPA index.html for client-side routing", async () => {
+    const res = await fetch(`${BASE_URL}/account`, {
+      headers: { Accept: "text/html" },
+    });
+    assert.strictEqual(res.status, 200);
+    const html = await res.text();
+    assert.match(html, /html/i);
+  });
+
+  it("GET /docs should serve SPA index.html for client-side routing", async () => {
+    const res = await fetch(`${BASE_URL}/docs`, {
+      headers: { Accept: "text/html" },
+    });
+    assert.strictEqual(res.status, 200);
+    const html = await res.text();
+    assert.match(html, /html/i);
+  });
 });

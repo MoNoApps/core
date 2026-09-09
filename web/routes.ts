@@ -59,6 +59,21 @@ web.get("/templates/:name", (req: express.Request, res: express.Response) => {
   res.render(`templates/${req.params.name}`);
 });
 
+// SPA catch-all fallback for React 19 client-side routing
+web.use(
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (
+      req.method === "GET" &&
+      req.accepts("html") &&
+      fs.existsSync(distIndex)
+    ) {
+      res.sendFile(distIndex);
+      return;
+    }
+    next();
+  },
+);
+
 export default {
   web,
   svr,

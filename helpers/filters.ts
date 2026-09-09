@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import type { User, AuthToken } from "../src/types/index";
 import { getCollection } from "./db";
+import { models } from "./models";
 
 export type Callback<T = unknown> = (
   err: string | boolean | null | Error,
@@ -122,18 +123,10 @@ export async function authenticateToken(
     ) {
       return null;
     }
-    const tokensCol = await getCollection<AuthToken>("tokens");
-    const token = await tokensCol.findOne({
-      _id: new ObjectId(tokenId),
-    } as any);
+    const token = (await models.tokens.findById(tokenId)) as any;
     if (!token) return null;
 
-    const usersCol = await getCollection<User>("users");
-    const userId =
-      typeof token.user === "string" && ObjectId.isValid(token.user)
-        ? new ObjectId(token.user)
-        : (token.user as ObjectId);
-    const user = await usersCol.findOne({ _id: userId } as any);
+    const user = (await models.users.findById(token.user)) as any;
     if (!user) return null;
 
     return { user, token };
