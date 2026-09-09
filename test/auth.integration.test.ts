@@ -12,6 +12,7 @@ describe("Authentication & Account Lifecycle Suite", () => {
 
   const testUserId = "507f1f77bcf86cd799439044";
   const testSessionTokenId = "507f1f77bcf86cd799439033";
+  const testExpiredTokenId = "507f1f77bcf86cd799439055";
   const initialPassword = "MyInitialPassword123!";
   const { pwd: initialPwdHash } = utils.createPwd({
     key: testUserId,
@@ -33,10 +34,23 @@ describe("Authentication & Account Lifecycle Suite", () => {
           _id: testSessionTokenId,
           token: testSessionTokenId,
           user: testUserId,
+          createdAt: new Date(),
+          expires: 84000,
+        } as any;
+      }
+      if (tokenId.toString() === testExpiredTokenId) {
+        return {
+          _id: testExpiredTokenId,
+          token: testExpiredTokenId,
+          user: testUserId,
+          createdAt: new Date(Date.now() - 200000 * 1000), // Created 200k seconds ago
+          expires: 84000,
         } as any;
       }
       return null;
     };
+
+    models.tokens.deleteById = async () => true;
 
     models.users.findById = async (userId: any) => {
       if (userId.toString() === testUserId) {
@@ -81,6 +95,24 @@ describe("Authentication & Account Lifecycle Suite", () => {
     assert.strictEqual(profile.email, "auth_test@monoapps.co");
     assert.strictEqual(profile.name, "Auth Test User");
     assert.strictEqual(profile.password, undefined);
+  });
+
+  it("GET /account with expired token should return 401 Token expired (Issue #14)", async () => {
+    const res = await fetch(`${BASE_URL}/account`, {
+      headers: { token: testExpiredTokenId },
+    });
+    assert.strictEqual(res.status, 401);
+    const body = (await res.json()) as any;
+    assert.strictEqual(body.error, "Token expired");
+  });
+
+  it("GET /account with forged or non-existent token should return 401 Invalid token", async () => {
+    const res = await fetch(`${BASE_URL}/account`, {
+      headers: { token: "507f1f77bcf86cd799439099" },
+    });
+    assert.strictEqual(res.status, 401);
+    const body = (await res.json()) as any;
+    assert.strictEqual(body.error, "Invalid token");
   });
 
   it("POST /security with mismatched password confirmation should return 401", async () => {

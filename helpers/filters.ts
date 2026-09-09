@@ -108,12 +108,18 @@ export function cleanerFilter<T extends Record<string, unknown>>(
   return cleaned;
 }
 
+export interface AuthenticateResult {
+  user: User;
+  token: AuthToken;
+  expired?: boolean;
+}
+
 /**
- * Authenticates a token ID against MongoDB using try/catch controlled promise.
+ * Authenticates a token ID against MongoDB and evaluates expiration TTL.
  */
 export async function authenticateToken(
   tokenId: string,
-): Promise<{ user: User; token: AuthToken } | null> {
+): Promise<AuthenticateResult | null> {
   try {
     if (
       !tokenId ||
@@ -125,6 +131,30 @@ export async function authenticateToken(
     }
     const token = (await models.tokens.findById(tokenId)) as any;
     if (!token) return null;
+
+    // Check token expiration based on creation timestamp and TTL (Issue #14)
+    let createdAt = Date.now();
+    if (token.createdAt instanceof Date) {
+      createdAt = token.createdAt.getTime();
+    } else if (typeof token.createdAt === "number") {
+      createdAt = token.createdAt;
+    } else if (token.expires && token._id && ObjectId.isValid(token._id)) {
+      createdAt = new ObjectId(token._id).getTimestamp().getTime();
+    }
+
+    const ttlSeconds =
+      typeof token.expires === "number" ? token.expires : 84000;
+
+    const isExpired =
+      Boolean(token.createdAt || token.expires) &&
+      Date.now() > createdAt + ttlSeconds * 1000;
+
+    if (isExpired) {
+      try {
+        await models.tokens.deleteById(tokenId);
+      } catch {}
+      return { user: null as any, token, expired: true };
+    }
 
     const user = (await models.users.findById(token.user)) as any;
     if (!user) return null;
@@ -143,14 +173,14 @@ export async function authFilter(
   res: any,
   tokenId: string,
   callback?: (err: any, user?: User, token?: AuthToken) => void,
-): Promise<{ user: User; token: AuthToken } | null> {
+): Promise<AuthenticateResult | null> {
   try {
     if (!tokenId || typeof tokenId !== "string" || tokenId.length < 24) {
       res.send(401);
       return null;
     }
     const result = await authenticateToken(tokenId);
-    if (!result) {
+    if (!result || result.expired || !result.user) {
       res.send(401);
       return null;
     }

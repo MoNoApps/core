@@ -85,7 +85,17 @@ export async function review(
     }
 
     const authResult = await filters.authenticateToken(token);
-    if (!authResult || !authResult.user || !authResult.token) {
+    if (!authResult) {
+      sendStatus(opts.res, 401, { error: "Invalid token" });
+      return null;
+    }
+
+    if (authResult.expired) {
+      sendStatus(opts.res, 401, { error: "Token expired" });
+      return null;
+    }
+
+    if (!authResult.user || !authResult.token) {
       sendStatus(opts.res, 401, { error: "Invalid token" });
       return null;
     }
