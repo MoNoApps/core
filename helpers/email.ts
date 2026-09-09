@@ -1,3 +1,4 @@
+import sgMail from "@sendgrid/mail";
 import config from "../config.json";
 
 export interface EmailData {
@@ -23,19 +24,24 @@ export function sendMail(
   }
 
   try {
-    const sendgrid = require("sendgrid")(token);
-    const email = new sendgrid.Email();
-    email.addTo(data.email);
-    email.setFrom(config.mail?.from || "noreply@monoapps.co");
-    email.setSubject(data.subject);
-    email.setHtml(data.html);
+    sgMail.setApiKey(token);
+    const msg = {
+      to: data.email,
+      from: config.mail?.from || "noreply@monoapps.co",
+      subject: data.subject,
+      html: data.html,
+      text: data.text || data.subject,
+    };
 
-    sendgrid.send(email, (error: Error | null, json: unknown) => {
-      if (error && cb) {
-        return cb(error);
-      }
-      if (cb) cb(null, json);
-    });
+    sgMail
+      .send(msg)
+      .then((result) => {
+        if (cb) cb(null, result);
+      })
+      .catch((err) => {
+        console.error("[sendMail] Error sending email:", err);
+        if (cb) cb(err);
+      });
   } catch (err) {
     console.error("[sendMail] Error sending email:", err);
     if (cb) cb(err as Error);
