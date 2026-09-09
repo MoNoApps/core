@@ -3,8 +3,11 @@
 [![Circle CI](https://circleci.com/gh/MoNoApps/core.svg?style=svg)](https://circleci.com/gh/monoapps/core)
 
 # core tools
+
 Dynamic CRUD in seconds with good code quality and NoSQL flexibility.
+
 ## ready to use
+
 - Email registry
 - Account edit form
 - User Management
@@ -23,49 +26,68 @@ Dynamic CRUD in seconds with good code quality and NoSQL flexibility.
 - Dynamic form generation
 
 ## CoC
+
 Configuration over Convention.<br>
 Know and edit the configuration of the project and control the foundations.
-````sh
+
+```sh
 vi config.json
-````
+```
+
 ### database
+
 Main database of the project. Every plugin has their own db url.
-````js
+
+```js
 "dburl": "mongodb://127.0.0.1/core"
-````
+```
+
 ### application name
-````js
+
+```js
 "site": "Core App"
-````
+```
+
 ### ports
-````js
+
+```js
 "port": {
   "web": 1344,
   "api": 1345,
   "rds": 6379
 }
-````
+```
+
 ### index
+
 Change the index file editing the INDEX property.<br>
 By default app search files in 'view' folder but you can write relative or absolute paths.
-````js
+
+```js
 "INDEX": "plugins/plugin-name/folder/file.pug"
-````
+```
+
 ### email
+
 Add your sendgrid token:
-````js
+
+```js
 # .zshr or .bashrc
 export SENDGRID_TOKEN=mysecret
-````
+```
+
 ### website info
-````js
+
+```js
 "URL": {
   "BASE": "http://core.monoapps.co",
   "ACK": "/api/email/confirm/"
 }
-````
+```
+
 ### variables
-````js
+
+```js
 "APIVARS": {
   "PRE": "/",
   "ID": "/:id",
@@ -76,29 +98,34 @@ export SENDGRID_TOKEN=mysecret
     "CONFIG": "/config.json" // configuration file of the plugins
   }
 }
-````
+```
+
 ### pugins
 
-````js
+```js
 #config.json
 32"plugins": [
   "wizard" // github submodule on plugins folder
 33]
-````
+```
 
 ### pages
 Public pages. Unrestricted access and main file located at {name}/index.pug
-````js
+
+```js
 "pages":[
   "account",
   "recover",
   "registered",
   "docs",
   "dev"]
-````
+```
+
 ### resources
+
 One json definition for models/api/views/cruds.
-````js
+
+```js
 "resources": {
   "rname": {
     "admin": true, // filter, indicates that only (user.admin = true) is able to access this info
@@ -112,10 +139,13 @@ One json definition for models/api/views/cruds.
   }
   ...
 }
-````
+```
+
 ### helpers
+
 We have written a lot of filters like:
-````sh
+
+```sh
 helpers/filters.js # admin, schema, author, cleaner
 helpers/base.js # controller base who knows his own model
 helpers/email.js # send emails
@@ -126,96 +156,114 @@ helpers/models.js # helper for models defined on plugins and core
 helpers/ps.js # helper for redis pub/sub
 helpers/utils.js # helper for password and auth
 helpers/zappy.js # middleware between response and controller
-````
+```
 
 ## migrations
-`````sh
+
+```sh
 Updates are welcome. DropDB or DropCollection need a review.
 node migrations/seed.js
 # drop current database and insert all defaults
-`````
+```
+
 Add your own data
-````js
+
+```js
 #Roles must be defined in config.json
 #Replace 'collection' with your new model
 var #{collection} = require('migrations/data/#{collection}.json');
 persist(#{collection}, db.#{collection});
-````
+```
 
 ## update github modules
-````sh
+
+```sh
 ./refresh.sh
-````
+```
 
 ## form code generator
+
 Add your missing forms.
-````sh
+
+```sh
 # Run wizard to create forms
 gulp autoform
-````
+```
 
 Enable autoform by default
-````json
+
+```json
 //config.json
 autofom: true
-````
+```
 
 ## menu
-````js
+
+```js
 // vi migrations/data/settings.json
 "user": ["tasks"] // menu for normal user
 "admin": ["users"] // menu for admin user
-````
+```
 
 ## themes
-````js
+
+```js
 // vi migrations/data/settings.json
 "themes": [{"name": "the name", "css": "{URL}.min.css" }]
-````
+```
 
 ## user management
+
 Add the guest user.
 
-````json
+```json
 //config.json
 #This will show the button to enter as guest.
 #Be carrefoul with this because user and passw will be visible.
 #Do not enable unless you really want all allow access to the whole world.
 guest.enabled = true;
-````
-````js
+```
+
+```js
 node migrations/guest.js
-````
+```
+
 Create normal users: register your own email.</br>
 Be admin just setting something like:
-````sh
+
+```sh
 mongo
 >use coreapp
 >db.users.update({email: 'admin@monoapps.co', admin: true});
-````
+```
 
 ## writing plugins
 See [wizard sample](https://github.com/MoNoApps/wizard)<br>
 Add plugins on config.plugins.
 
 ## sanbox
+
 Prevent network visibility enabling the trusted mode
 
-````js
+```js
 # web/routes.js
 18 web.use(middleware.trusted);
-````
+```
+
 Write your allowed ips.
-````js
+
+```js
 #config.js
 15   "ALLOW": ["127.0.0.1"],
-````
+```
 
 ## coverage
-````sh
+
+```sh
 npm install istanbul mocha-istanbul -g
 make cov
-````
+```
 
 ## domain name
+
 Use [nginx config](core.conf) to deploy. If needed add the hostname domains on /etc/hosts file.

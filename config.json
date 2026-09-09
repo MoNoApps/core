@@ -8,24 +8,22 @@
     "rds": 6379
   },
   "mail": {
-    "from": "noreply@wrine.co",
-    "name": "Core App"
+    "from": "noreply@monoapps.co",
+    "name": "MoNoApps Core"
   },
   "guest": {
-    "email": "guest@wrine.co",
-    "text": "guest.wrine",
+    "email": "guest@monoapps.co",
+    "text": "guest.monoapps",
     "status": 1,
     "admin": false,
     "enabled": false
   },
   "autoform": true,
   "INDEX": "index/index",
-  "ALLOW": [
-    "127.0.0.1"
-  ],
+  "ALLOW": ["127.0.0.1"],
   "TTL": 84000,
   "URL": {
-    "BASE": "http://core.wrine.co",
+    "BASE": "http://core.monoapps.co",
     "ACK": "/api/email/confirm/",
     "REC": "/api/email/recover/"
   },
@@ -39,16 +37,8 @@
       "CONFIG": "/config.json"
     }
   },
-  "plugins": [
-    "wizard"
-  ],
-  "pages": [
-    "account",
-    "recover",
-    "registered",
-    "docs",
-    "dev"
-  ],
+  "plugins": ["wizard"],
+  "pages": ["account", "recover", "registered", "docs", "dev"],
   "resources": {
     "tokens": {
       "admin": true,

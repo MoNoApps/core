@@ -1,16 +1,16 @@
-var f = require('fs');
-var _ = require('underscore');
+var f = require("fs");
+var _ = require("underscore");
 var r = {};
-var cr = require('../config.json').resources;
-var k = require('../config.json').plugins;
-var b = require('../config.json').APIVARS.PLUGINS;
-var n = __dirname.replace('/autoform', b.DIR);
-var w = ['tokens', 'settings'];
-var s = ['actions', 'login', 'recover', 'register'];
-var p = './views/index/forms';
+var cr = require("../config.json").resources;
+var k = require("../config.json").plugins;
+var b = require("../config.json").APIVARS.PLUGINS;
+var n = __dirname.replace("/autoform", b.DIR);
+var w = ["tokens", "settings"];
+var s = ["actions", "login", "recover", "register"];
+var p = "./views/index/forms";
 
 var c = function (n) {
-  return n.replace('.pug', '');
+  return n.replace(".pug", "");
 };
 
 var j = function (props) {
@@ -27,7 +27,7 @@ var init = function () {
   for (var i in k) {
     if (k.hasOwnProperty(i)) {
       var e = k[i];
-      var g = '/' + e;
+      var g = "/" + e;
       var a = require(n + g + b.CONFIG);
 
       j(a.resources);
@@ -64,7 +64,7 @@ var generator = function (cb) {
     valid: x,
     missing: v,
     resources: u,
-    schemas: cr
+    schemas: cr,
   });
 };
 

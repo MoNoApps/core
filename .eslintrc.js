@@ -1,32 +1,20 @@
-const eslint =  {
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true,
-    "node": true
+const eslint = {
+  env: {
+    browser: true,
+    commonjs: true,
+    es6: true,
+    node: true,
   },
-  "extends": "eslint:recommended",
-  "parserOptions": {
-    "sourceType": "module"
+  extends: "eslint:recommended",
+  parserOptions: {
+    sourceType: "module",
   },
-  "rules": {
-    "indent": [
-      "error",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
-  }
+  rules: {
+    indent: ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    quotes: ["error", "single"],
+    semi: ["error", "always"],
+  },
 };
 
 module.exports = eslint;

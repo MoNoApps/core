@@ -3,15 +3,8 @@
     "type": "properties",
     "data": {
       "name": "coreApp",
-      "user": [
-        "groups",
-        "roles",
-        "tasks",
-        "products"
-      ],
-      "admin": [
-        "users"
-      ],
+      "user": ["groups", "roles", "tasks", "products"],
+      "admin": ["users"],
       "themes": [
         {
           "name": "Cerulean",

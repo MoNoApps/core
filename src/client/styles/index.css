@@ -1,0 +1,33 @@
+/* Custom Enhancements and Animations */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
