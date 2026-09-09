@@ -19,6 +19,18 @@ export async function seedDatabase(): Promise<void> {
     console.log(`[Seed] Seeded ${items.length} setting documents.`);
   }
 
+  // Create TTL index for automatic token expiration cleanup (Issue #14)
+  const tokensCol = await getCollection("tokens");
+  try {
+    await tokensCol.createIndex(
+      { createdAt: 1 },
+      { expireAfterSeconds: 84000 },
+    );
+    console.log("[Seed] Ensured TTL index on tokens collection.");
+  } catch (err: any) {
+    // Index may already exist
+  }
+
   console.log("[Seed] Database migration completed successfully.");
 }
 

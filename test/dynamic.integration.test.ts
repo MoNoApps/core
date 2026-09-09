@@ -31,6 +31,8 @@ describe("Dynamic Resource CRUD & Security Guards Suite", () => {
           _id: adminTokenId,
           token: adminTokenId,
           user: adminUser._id,
+          createdAt: new Date(),
+          expires: 84000,
         } as any;
       }
       if (tokenId.toString() === regularTokenId) {
@@ -38,10 +40,14 @@ describe("Dynamic Resource CRUD & Security Guards Suite", () => {
           _id: regularTokenId,
           token: regularTokenId,
           user: regularUser._id,
+          createdAt: new Date(),
+          expires: 84000,
         } as any;
       }
       return null;
     };
+
+    models.tokens.deleteById = async () => true;
 
     models.users.findById = async (userId: any) => {
       if (userId.toString() === adminUser._id) return adminUser as any;
