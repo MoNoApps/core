@@ -1,5 +1,5 @@
-window.app.service('Socket', [
+window.app.service("Socket", [
   function () {
     return window.io();
-  }
+  },
 ]);

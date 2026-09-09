@@ -5,31 +5,45 @@
   "description": "MoNoApps Core",
   "main": "app.js",
   "scripts": {
-    "test": "node migrations/seed.js; node migrations/guest.js; protractor protractor.js; mocha;",
-    "start": "gulp"
+    "dev": "node --watch app.js",
+    "dev:client": "vite",
+    "build:client": "vite build",
+    "build": "tsc --noEmit && vite build",
+    "test": "NODE_ENV=test tsx --test 'test/*.test.ts'",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "start": "node app.js"
   },
-  "author": "Daniel Martinez",
+  "author": "Dan Matz <dan@monoapps.co>",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "dependencies": {
-    "async": "latest",
-    "express": "latest",
-    "hamper": "latest",
-    "pug": "latest",
-    "mpill": "latest",
-    "redis": "latest",
-    "restify": "latest",
-    "sendgrid": "latest",
-    "socket.io": "latest",
-    "underscore": "latest",
-    "uuid": "latest"
+    "@sendgrid/mail": "^8.1.4",
+    "async": "^3.2.6",
+    "express": "^5.2.1",
+    "lucide-react": "^1.43.0",
+    "mongodb": "^6.21.0",
+    "pug": "^3.0.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "redis": "^6.2.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "underscore": "^1.13.8",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "gulp": "latest",
-    "gulp-concat": "latest",
-    "gulp-cssnano": "latest",
-    "gulp-jshint": "latest",
-    "gulp-sourcemaps": "latest",
-    "gulp-uglify": "latest",
-    "jshint": "latest"
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "prettier": "^3.9.6",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2"
   }
 }

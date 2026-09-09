@@ -1,8 +1,8 @@
-var F = require('../autoform/content.json');
-var indent = require('../autoform/_indent');
+var F = require("../autoform/content.json");
+var indent = require("../autoform/_indent");
 
-var ext = '.pug';
-var dir = '/../views/index/forms/';
+var ext = ".pug";
+var dir = "/../views/index/forms/";
 
 function add(opts) {
   var dest = __dirname + dir + opts.name + ext;
@@ -15,49 +15,66 @@ function add(opts) {
       var field = model[name];
       count += 1;
       var title = name.charAt(0).toUpperCase() + name.slice(1);
-      data += '' +
-        indent(2) + F.block.value +
-        indent(3) + F.label.value +
-        ' ' + F.label.bind +
-        indent(3) + F.rocky.value;
+      data +=
+        "" +
+        indent(2) +
+        F.block.value +
+        indent(3) +
+        F.label.value +
+        " " +
+        F.label.bind +
+        indent(3) +
+        F.rocky.value;
 
-      var hasOptions = '';
-      var properties = '';
+      var hasOptions = "";
+      var properties = "";
 
       for (var prop in field) {
-        if (prop === 'tag' || prop === 'exclude') { continue; }
-        properties += ', ' + prop + '="' + field[prop] + '"';
+        if (prop === "tag" || prop === "exclude") {
+          continue;
+        }
+        properties += ", " + prop + '="' + field[prop] + '"';
       }
 
       switch (field.tag) {
-        case 'image':
+        case "image":
           var imgSource = F.image.source;
           var imgValue = F.image.value;
-          imgSource = imgSource.replace('[[properties]]', properties);
-          data += indent(4) + imgSource.replace('[[field]]', name);
-          data += indent(4) + F.image.pre.replace('[[field]]', name) +
-            indent(5) + imgValue +
-            '(' + F.image.bind + ')';
+          imgSource = imgSource.replace("[[properties]]", properties);
+          data += indent(4) + imgSource.replace("[[field]]", name);
+          data +=
+            indent(4) +
+            F.image.pre.replace("[[field]]", name) +
+            indent(5) +
+            imgValue +
+            "(" +
+            F.image.bind +
+            ")";
           break;
-        case 'select':
+        case "select":
           for (var s in field.options) {
             data += indent(4) + "option(value='" + s + "') " + field.options[s];
           }
-          data += indent(4) + F.select.value +
-            '(' + F.select.bind + properties + ')';
+          data +=
+            indent(4) + F.select.value + "(" + F.select.bind + properties + ")";
           break;
-        case 'textarea':
-          data += indent(4) + F.textarea.value +
-            '(' + F.textarea.bind + properties + ')';
+        case "textarea":
+          data +=
+            indent(4) +
+            F.textarea.value +
+            "(" +
+            F.textarea.bind +
+            properties +
+            ")";
           break;
-        case 'input':
-          data += indent(4) + F.input.value +
-            '(' + F.input.bind + properties + ')';
+        case "input":
+          data +=
+            indent(4) + F.input.value + "(" + F.input.bind + properties + ")";
           break;
       }
 
-      data = data.replace('[[title]]', title || name);
-      data = data.replace('[[field]]', name);
+      data = data.replace("[[title]]", title || name);
+      data = data.replace("[[field]]", name);
       data += hasOptions;
     }
   }
@@ -68,13 +85,13 @@ function add(opts) {
     data += indent(2) + F.schema;
   }
 
-  var fs = require('fs');
+  var fs = require("fs");
   fs.writeFile(dest, data);
 }
 
 function destroy(opts) {
   var dest = __dirname + dir + opts.name + ext;
-  var fs = require('fs');
+  var fs = require("fs");
   if (fs.existsSync(dest)) {
     fs.unlink(dest);
   }
