@@ -44,6 +44,9 @@ jobs:
       - name: Code formatting check (prettier)
         run: npm run format:check
 
+      - name: Build Client SPA (Vite React 19)
+        run: npm run build:client
+
       - name: Run Test Suite (node:test / tsx)
         run: npm test
         env:

@@ -87,7 +87,7 @@
 
 ### Testing & Quality Gates
 
-- **Run Test Suite:** `npm test` (Runs native Node 24 / tsx test runner executing 30 unit, integration, and security tests in ~250ms).
+- **Run Test Suite:** `npm test` (Runs native Node 24 / tsx test runner executing unit, integration, and security tests).
 - **Type Checking:** `npm run typecheck` (`tsc --noEmit` with zero errors).
 - **Format Code:** `npm run format` (Auto-formats entire repository with Prettier).
 - **Verify Format:** `npm run format:check` (Validates Prettier compliance).
