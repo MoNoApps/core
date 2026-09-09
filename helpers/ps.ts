@@ -37,8 +37,30 @@ export async function connectRedis(): Promise<{
   return { pub, sub };
 }
 
+export async function closeRedis(): Promise<void> {
+  try {
+    if (pub.isOpen) {
+      await pub.quit();
+    }
+  } catch {
+    try {
+      await pub.disconnect();
+    } catch {}
+  }
+  try {
+    if (sub.isOpen) {
+      await sub.quit();
+    }
+  } catch {
+    try {
+      await sub.disconnect();
+    } catch {}
+  }
+}
+
 export default {
   pub,
   sub,
   connectRedis,
+  closeRedis,
 };

@@ -41,6 +41,14 @@ export async function getCollection<T extends Document = Document>(
   return db.collection<T>(name);
 }
 
+export async function closeDb(): Promise<void> {
+  if (client) {
+    await client.close();
+    client = null;
+    dbInstance = null;
+  }
+}
+
 export class ModernModel<T extends Document = Document> {
   public name: string;
 

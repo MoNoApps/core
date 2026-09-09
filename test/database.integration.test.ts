@@ -1,8 +1,8 @@
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert";
 import { MongoClient } from "mongodb";
-import { getDb, ModernModel } from "../helpers/db";
-import { connectRedis, pub, sub } from "../helpers/ps";
+import { getDb, ModernModel, closeDb } from "../helpers/db";
+import { connectRedis, pub, sub, closeRedis } from "../helpers/ps";
 import { seedDatabase } from "../migrations/seed";
 import { createGuestUser } from "../migrations/guest";
 
@@ -45,12 +45,10 @@ describe("Live Database & Redis Integration Suite (MongoDB 8 & Redis 7)", () => 
 
   after(async () => {
     if (isRedisAvailable) {
-      try {
-        if (pub.isOpen) await pub.quit();
-        if (sub.isOpen) await sub.quit();
-      } catch {
-        // Ignore disconnect errors
-      }
+      await closeRedis();
+    }
+    if (isMongoAvailable) {
+      await closeDb();
     }
   });
 
