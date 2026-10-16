@@ -1,8 +1,10 @@
+export type UserRole = "admin" | "user" | "viewer";
+
 export interface User {
   _id?: string;
   name?: string;
   email: string;
-  role?: string;
+  role?: UserRole;
   admin?: boolean;
   status?: number;
   date?: string | number;
@@ -13,11 +15,12 @@ export interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isViewer: boolean;
   isLoading: boolean;
 }
 
 export interface SchemaField {
-  tag?: "input" | "select" | "textarea" | "image";
+  tag?: string;
   type?: string;
   active?: boolean;
   text?: string;
@@ -26,17 +29,21 @@ export interface SchemaField {
   required?: boolean;
   min?: number;
   max?: number;
+  step?: number;
+  ref?: string;
   autocomplete?: boolean;
   autofocus?: boolean;
   value?: any;
-  options?: Array<{ label: string; value: any }>;
+  options?: Array<string | { label: string; value: any }>;
 }
 
 export interface ResourceConfig {
   desc?: string;
+  subtitle?: string;
   admin?: boolean;
   exclude?: boolean;
   param?: string;
+  icon?: string;
   clean?: Record<string, number>;
   schema?: Record<string, SchemaField | number>;
 }
@@ -51,13 +58,6 @@ export interface AppConfig {
   };
   resources?: Record<string, ResourceConfig>;
   pages?: string[];
-  guest?: {
-    email: string;
-    text: string;
-    status: number;
-    admin: boolean;
-    enabled: boolean;
-  };
 }
 
 export interface ApiResponse<T = any> {

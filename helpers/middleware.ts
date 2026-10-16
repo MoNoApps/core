@@ -188,7 +188,9 @@ export function browser(req: Request, res: Response, next: NextFunction): void {
   const isLegacyBrowser = header && regex.test(header);
 
   if (isLegacyBrowser) {
-    res.render("browser");
+    res
+      .status(400)
+      .send("Browser not supported. Please upgrade to a modern browser.");
     return;
   }
 

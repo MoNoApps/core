@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import config from "../config.json";
-import { ModernModel } from "./db";
+import { models } from "./models";
 import type { AuthToken, User } from "../src/types/index";
 
 export interface PwdOptions {
@@ -13,8 +13,6 @@ export interface PwdHash {
   value: string;
   [key: string]: unknown;
 }
-
-const tokensModel = new ModernModel<AuthToken>("tokens");
 
 function deriveKeyAndIv(secret: string): { key: Buffer; iv: Buffer } {
   const key = crypto.createHash("sha256").update(secret).digest();
@@ -121,7 +119,7 @@ export async function createTokenAsync(user: User): Promise<AuthToken> {
       user: user._id as string,
       expires: config.TTL || 86400,
     };
-    return await tokensModel.insert(token);
+    return (await models.tokens.insert(token)) as AuthToken;
   } catch (error) {
     throw new Error(`Token creation failed: ${(error as Error).message}`);
   }
@@ -129,7 +127,7 @@ export async function createTokenAsync(user: User): Promise<AuthToken> {
 
 export function createToken(
   user: User,
-  cb?: (err: Error | null, rst?: AuthToken | any) => void,
+  cb?: (err: Error | null, rst?: AuthToken) => void,
 ): Promise<AuthToken> {
   const promise = createTokenAsync(user);
   if (cb) {
@@ -143,7 +141,7 @@ export function createToken(
  */
 export async function revokeToken(tokenId: string): Promise<boolean> {
   try {
-    const res = await tokensModel.deleteById(tokenId);
+    const res = await models.tokens.deleteById(tokenId);
     return Boolean(res);
   } catch {
     return false;
@@ -155,7 +153,7 @@ export async function revokeToken(tokenId: string): Promise<boolean> {
  */
 export async function revokeTokensForUser(userId: string): Promise<boolean> {
   try {
-    return await tokensModel.delete({ user: userId });
+    return await models.tokens.delete({ user: userId });
   } catch {
     return false;
   }

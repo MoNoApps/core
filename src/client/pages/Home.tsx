@@ -1,49 +1,109 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import api from "../api/client";
+import config from "../config";
 import {
   Lock,
   Mail,
-  KeyRound,
-  Sparkles,
   Server,
   Zap,
   Database,
   CheckCircle2,
   AlertCircle,
+  FileCode2,
+  FolderKanban,
+  ArrowRight,
+  RefreshCw,
 } from "lucide-react";
-import config from "../config";
+import { getResourceIcon } from "../components/icons";
+import { formatResourceTitle } from "../utils";
 
 interface HomeProps {
   onNavigate: (view: string, resourceName?: string) => void;
 }
 
 export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
-  const { user, isAuthenticated, login, loginGuest, register, recover } =
-    useAuth();
-  const [activeTab, setActiveTab] = useState<"login" | "register" | "recover">(
-    "login",
-  );
+  const { user, isAuthenticated, isAdmin, isLoading, login } = useAuth();
 
   // Form states
+  const [loginEmail, setLoginEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
   const [statusMessage, setStatusMessage] = useState<{
     type: "success" | "error";
     text: string;
   } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Resource counts for authenticated card
+  const [resourceCounts, setResourceCounts] = useState<Record<string, number>>(
+    {},
+  );
+  const [countsLoading, setCountsLoading] = useState(false);
+
+  const accessibleResources = Object.entries(config.resources || {}).filter(
+    ([, res]: [string, any]) => {
+      if (res.exclude) return false;
+      if (res.admin && !isAdmin) return false;
+      return true;
+    },
+  );
+
+  const firstResourceKey = accessibleResources[0]?.[0] || "products";
+  const firstResourceName = formatResourceTitle(firstResourceKey);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let isMounted = true;
+    setCountsLoading(true);
+
+    Promise.all(
+      accessibleResources.map(async ([key]) => {
+        try {
+          const res = await api.getResourceCount(key);
+          if (res.success && typeof res.count === "number") {
+            return [key, res.count] as const;
+          }
+          if (res.success && typeof (res.data as any)?.count === "number") {
+            return [key, (res.data as any).count] as const;
+          }
+          const fallbackRes = await api.getResources(key);
+          if (fallbackRes.success && Array.isArray(fallbackRes.data)) {
+            return [key, fallbackRes.data.length] as const;
+          }
+          return [key, 0] as const;
+        } catch {
+          return [key, 0] as const;
+        }
+      }),
+    ).then((results) => {
+      if (isMounted) {
+        const counts: Record<string, number> = {};
+        results.forEach(([k, c]) => {
+          counts[k] = c;
+        });
+        setResourceCounts(counts);
+        setCountsLoading(false);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthenticated, isAdmin]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!password) return;
     setIsSubmitting(true);
     setStatusMessage(null);
-    const res = await login(password);
+    const res = loginEmail
+      ? await login(loginEmail, password)
+      : await login(password);
     setIsSubmitting(false);
     if (!res.success) {
       setStatusMessage({
         type: "error",
-        text: res.error || "Login failed. Please check password.",
+        text: res.error || "Login failed. Please check credentials.",
       });
     } else {
       setStatusMessage({
@@ -53,429 +113,453 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setIsSubmitting(true);
-    setStatusMessage(null);
-    const res = await register(email);
-    setIsSubmitting(false);
-    if (res.success) {
-      setStatusMessage({
-        type: "success",
-        text:
-          res.message ||
-          "Registration link sent! Please check your email inbox.",
-      });
-      setEmail("");
-    } else {
-      setStatusMessage({
-        type: "error",
-        text: res.error || "Registration failed.",
-      });
-    }
-  };
-
-  const handleRecover = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setIsSubmitting(true);
-    setStatusMessage(null);
-    const res = await recover(email);
-    setIsSubmitting(false);
-    if (res.success) {
-      setStatusMessage({
-        type: "success",
-        text:
-          res.message || "Recovery password instructions sent to your email.",
-      });
-      setEmail("");
-    } else {
-      setStatusMessage({
-        type: "error",
-        text: res.error || "Recovery failed.",
-      });
-    }
-  };
-
-  const handleGuestLogin = async () => {
-    setIsSubmitting(true);
-    setStatusMessage(null);
-    const res = await loginGuest();
-    setIsSubmitting(false);
-    if (!res.success) {
-      setStatusMessage({
-        type: "error",
-        text: res.error || "Guest login unavailable or disabled.",
-      });
-    }
-  };
-
   return (
     <div className="container" style={{ paddingBottom: 60 }}>
-      {/* Hero Header */}
-      <div
-        className="jumbotron"
-        style={{ borderRadius: 8, padding: "36px 40px", marginBottom: 32 }}
-      >
-        <h1 style={{ fontSize: 36, fontWeight: 700, marginBottom: 12 }}>
-          {config.site || "MoNoApps Core"}
-        </h1>
-        <p className="lead" style={{ fontSize: 18, opacity: 0.9 }}>
-          Enterprise full-stack foundation powered by{" "}
-          <strong>Node.js 24</strong>, <strong>MongoDB 8</strong>, and{" "}
-          <strong>React 19 + TypeScript</strong> with sub-second reactivity and
-          dynamic NoSQL schemas.
-        </p>
-        <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-          {isAuthenticated ? (
-            <button
-              className="btn btn-primary btn-lg"
-              onClick={() => onNavigate("resource", "products")}
-            >
-              Explore Products Resource &rarr;
-            </button>
-          ) : (
-            <button
-              className="btn btn-success btn-lg"
-              onClick={handleGuestLogin}
-              disabled={isSubmitting}
-              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
-            >
-              <Sparkles size={20} />
-              Instant Guest Access
-            </button>
-          )}
-          <button
-            className="btn btn-default btn-lg"
-            onClick={() => onNavigate("docs")}
-          >
-            Explore API Specs
-          </button>
+      {/* Hero Header Card */}
+      <div className="card hero-card">
+        <div className="card-body">
+          <h1 className="hero-title">Workspace</h1>
+          <p className="hero-subtitle">
+            Manage business resources, data records, and API integrations in one
+            unified hub.
+          </p>
+          <div className="hero-actions">
+            {isAuthenticated ? (
+              <>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => onNavigate("resource", firstResourceKey)}
+                  style={{ height: 40, fontWeight: 600 }}
+                >
+                  Explore {firstResourceName} Resource &rarr;
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => onNavigate("docs")}
+                  style={{ height: 40, fontWeight: 600 }}
+                >
+                  View API Documentation
+                </button>
+              </>
+            ) : isLoading ? (
+              <button
+                className="btn btn-primary"
+                disabled
+                style={{
+                  height: 40,
+                  fontWeight: 600,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <RefreshCw size={16} className="spin" />
+                Verifying Session...
+              </button>
+            ) : (
+              <>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    const el = document.querySelector(
+                      'input[type="email"]',
+                    ) as HTMLInputElement;
+                    if (el) el.focus();
+                  }}
+                  style={{ height: 40, fontWeight: 600 }}
+                >
+                  Sign In to Workspace &rarr;
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="row">
-        {/* Left Column: Authentication / User Dashboard */}
-        <div className="col-md-5">
-          <div
-            className="panel panel-default"
-            style={{
-              borderRadius: 6,
-              boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-            }}
-          >
-            <div className="panel-heading" style={{ padding: "12px 20px" }}>
-              <ul className="nav nav-pills nav-justified">
-                <li className={activeTab === "login" ? "active" : ""}>
-                  <a
-                    href="#login"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setActiveTab("login");
-                      setStatusMessage(null);
-                    }}
-                  >
-                    Sign In
-                  </a>
-                </li>
-                <li className={activeTab === "register" ? "active" : ""}>
-                  <a
-                    href="#register"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setActiveTab("register");
-                      setStatusMessage(null);
-                    }}
-                  >
-                    Register
-                  </a>
-                </li>
-                <li className={activeTab === "recover" ? "active" : ""}>
-                  <a
-                    href="#recover"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setActiveTab("recover");
-                      setStatusMessage(null);
-                    }}
-                  >
-                    Recover
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="panel-body" style={{ padding: 24 }}>
-              {statusMessage && (
+      {/* Main Equal-Height Layout Row */}
+      <div className="home-layout-row">
+        {/* Left Column: Resources (Authenticated) or Authentication Card */}
+        <div className="home-auth-col">
+          {isAuthenticated ? (
+            <div className="card">
+              <div className="card-body">
                 <div
-                  className={`alert alert-${statusMessage.type === "success" ? "success" : "danger"}`}
-                  style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 10,
+                  }}
                 >
-                  {statusMessage.type === "success" ? (
-                    <CheckCircle2 size={18} />
-                  ) : (
-                    <AlertCircle size={18} />
-                  )}
-                  <span>{statusMessage.text}</span>
-                </div>
-              )}
-
-              {isAuthenticated && activeTab === "login" ? (
-                <div style={{ textAlign: "center", padding: "20px 0" }}>
-                  <CheckCircle2
-                    size={48}
-                    className="text-success"
-                    style={{ marginBottom: 12 }}
-                  />
-                  <h4 style={{ fontWeight: 600 }}>You are authenticated!</h4>
-                  <p className="text-muted">
-                    Logged in as{" "}
-                    <strong>{user?.name || user?.email || "User"}</strong>
-                  </p>
                   <div
                     style={{
-                      marginTop: 20,
                       display: "flex",
-                      justifyContent: "center",
-                      gap: 10,
+                      alignItems: "center",
+                      gap: 12,
                     }}
                   >
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => onNavigate("account")}
-                    >
-                      Manage Profile
-                    </button>
-                    <button
-                      className="btn btn-default"
-                      onClick={() => onNavigate("resource", "tasks")}
-                    >
-                      View Tasks
-                    </button>
+                    <div className="icon-badge">
+                      <FolderKanban size={20} />
+                    </div>
+                    <h4 style={{ margin: 0, fontWeight: 600, fontSize: 16 }}>
+                      Active Resources
+                    </h4>
                   </div>
+                  <span
+                    className="badge"
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      padding: "4px 8px",
+                      borderRadius: 10,
+                      backgroundColor: "var(--bg-badge)",
+                      color: "var(--text-color)",
+                      border: "1px solid var(--border-color)",
+                    }}
+                  >
+                    {accessibleResources.length} Resources
+                  </span>
                 </div>
-              ) : activeTab === "login" ? (
+
+                <p
+                  className="card-desc"
+                  style={{ marginBottom: 16, flex: "0 0 auto" }}
+                >
+                  Live business resources configured in your workspace with
+                  real-time record counts.
+                </p>
+
+                <div
+                  className="home-resource-list"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8,
+                    flex: "1 1 auto",
+                  }}
+                >
+                  {accessibleResources.map(([key, res]: [string, any]) => {
+                    const count = resourceCounts[key];
+                    const Icon = getResourceIcon(key);
+                    return (
+                      <a
+                        key={key}
+                        href={`#/${key}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onNavigate("resource", key);
+                        }}
+                        className="home-resource-item"
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                          }}
+                        >
+                          <Icon size={16} className="text-primary" />
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              fontSize: 13,
+                            }}
+                          >
+                            {formatResourceTitle(key)}
+                          </span>
+                          {res.admin && (
+                            <span
+                              className="badge badge-danger"
+                              style={{
+                                fontSize: 9,
+                                padding: "2px 5px",
+                                textTransform: "uppercase",
+                              }}
+                            >
+                              Admin
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                          }}
+                        >
+                          {countsLoading && count === undefined ? (
+                            <RefreshCw size={12} className="spin text-muted" />
+                          ) : (
+                            <span
+                              className="badge"
+                              style={{
+                                fontSize: 11,
+                                fontWeight: 700,
+                                backgroundColor: "var(--bg-card)",
+                                color: "var(--text-color)",
+                                border: "1px solid var(--border-color)",
+                                padding: "3px 8px",
+                                borderRadius: 10,
+                              }}
+                            >
+                              {(count ?? 0).toLocaleString()}
+                            </span>
+                          )}
+                          <ArrowRight
+                            size={14}
+                            className="resource-arrow"
+                            style={{ opacity: 0.6 }}
+                          />
+                        </div>
+                      </a>
+                    );
+                  })}
+                </div>
+
+                {/* Session overview footer */}
+                <div
+                  style={{
+                    marginTop: 16,
+                    paddingTop: 14,
+                    borderTop: "1px solid var(--border-color)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      backgroundColor: "#4CAF50",
+                      display: "inline-block",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: 12,
+                      color: "var(--text-muted)",
+                    }}
+                  >
+                    Signed in as{" "}
+                    <strong style={{ color: "var(--text-color)" }}>
+                      {user?.name || user?.email || "User"}
+                    </strong>
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : isLoading ? (
+            <div className="card">
+              <div
+                className="card-body"
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  minHeight: 280,
+                }}
+              >
+                <RefreshCw
+                  size={24}
+                  className="spin text-muted"
+                  style={{ marginBottom: 12 }}
+                />
+                <p className="text-muted" style={{ margin: 0, fontSize: 14 }}>
+                  Verifying workspace access...
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="card auth-card">
+              <div
+                className="card-header"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "16px 20px",
+                  borderBottom: "1px solid var(--border-color)",
+                }}
+              >
+                <div className="icon-badge">
+                  <Lock size={18} />
+                </div>
+                <h4 style={{ margin: 0, fontWeight: 600, fontSize: 16 }}>
+                  Sign In to Workspace
+                </h4>
+              </div>
+
+              <div className="card-body">
+                {statusMessage && (
+                  <div
+                    className={`alert alert-${statusMessage.type === "success" ? "success" : "danger"}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 16,
+                    }}
+                  >
+                    {statusMessage.type === "success" ? (
+                      <CheckCircle2 size={18} />
+                    ) : (
+                      <AlertCircle size={18} />
+                    )}
+                    <span>{statusMessage.text}</span>
+                  </div>
+                )}
+
                 <form onSubmit={handleLogin}>
-                  <div className="form-group">
-                    <label style={{ fontWeight: 600 }}>
-                      Password / Access Key
-                    </label>
-                    <div className="input-group">
-                      <span className="input-group-addon">
-                        <Lock size={16} />
-                      </span>
-                      <input
-                        type="password"
-                        className="form-control"
-                        placeholder="Enter password or token key"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        autoFocus
-                      />
+                  <div>
+                    <div className="form-group" style={{ marginBottom: 14 }}>
+                      <label className="form-label">
+                        Email Address{" "}
+                        <span
+                          className="text-muted"
+                          style={{ fontWeight: 400, fontSize: 11 }}
+                        >
+                          (or leave blank for Token)
+                        </span>
+                      </label>
+                      <div className="input-group">
+                        <span className="input-addon">
+                          <Mail size={15} />
+                        </span>
+                        <input
+                          type="email"
+                          className="input"
+                          placeholder="user@company.com"
+                          value={loginEmail}
+                          onChange={(e) => setLoginEmail(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-group" style={{ marginBottom: 16 }}>
+                      <label className="form-label">
+                        Password or Access Token
+                      </label>
+                      <div className="input-group">
+                        <span className="input-addon">
+                          <Lock size={15} />
+                        </span>
+                        <input
+                          type="password"
+                          className="input"
+                          placeholder="Enter password or access token"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                        />
+                      </div>
                     </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-block"
-                    disabled={isSubmitting}
-                    style={{ marginTop: 16, height: 42, fontWeight: 600 }}
-                  >
-                    {isSubmitting ? "Authenticating..." : "Sign In"}
-                  </button>
-
-                  <div style={{ textAlign: "center", marginTop: 16 }}>
+                  <div style={{ marginTop: "auto" }}>
                     <button
-                      type="button"
-                      className="btn btn-link btn-sm"
-                      onClick={handleGuestLogin}
+                      type="submit"
+                      className="btn btn-primary btn-block"
                       disabled={isSubmitting}
+                      style={{ height: 40, fontWeight: 600 }}
                     >
-                      ⚡ Fast Sign In as Guest User
+                      {isSubmitting ? "Authenticating..." : "Log In"}
                     </button>
                   </div>
                 </form>
-              ) : activeTab === "register" ? (
-                <form onSubmit={handleRegister}>
-                  <div className="form-group">
-                    <label style={{ fontWeight: 600 }}>Email Address</label>
-                    <div className="input-group">
-                      <span className="input-group-addon">
-                        <Mail size={16} />
-                      </span>
-                      <input
-                        type="email"
-                        className="form-control"
-                        placeholder="you@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        autoFocus
-                      />
-                    </div>
-                    <span className="help-block" style={{ fontSize: 12 }}>
-                      A secure confirmation link and generated key will be sent
-                      to this email.
-                    </span>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-success btn-block"
-                    disabled={isSubmitting}
-                    style={{ marginTop: 16, height: 42, fontWeight: 600 }}
-                  >
-                    {isSubmitting ? "Processing..." : "Create Account"}
-                  </button>
-                </form>
-              ) : (
-                <form onSubmit={handleRecover}>
-                  <div className="form-group">
-                    <label style={{ fontWeight: 600 }}>Registered Email</label>
-                    <div className="input-group">
-                      <span className="input-group-addon">
-                        <KeyRound size={16} />
-                      </span>
-                      <input
-                        type="email"
-                        className="form-control"
-                        placeholder="you@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        autoFocus
-                      />
-                    </div>
-                    <span className="help-block" style={{ fontSize: 12 }}>
-                      We will reset your key and send recovery instructions.
-                    </span>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-warning btn-block"
-                    disabled={isSubmitting}
-                    style={{ marginTop: 16, height: 42, fontWeight: 600 }}
-                  >
-                    {isSubmitting ? "Sending..." : "Send Recovery Key"}
-                  </button>
-                </form>
-              )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Right Column: Platform Architecture & Modules */}
-        <div className="col-md-7">
-          <div className="row">
-            <div className="col-sm-6" style={{ marginBottom: 20 }}>
-              <div
-                className="panel panel-default"
-                style={{ height: "100%", borderRadius: 6 }}
-              >
-                <div className="panel-body">
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      marginBottom: 10,
-                    }}
-                  >
-                    <Server className="text-primary" size={24} />
-                    <h4 style={{ margin: 0, fontWeight: 600 }}>
-                      Node 24 + Express 5
-                    </h4>
+        {/* Right Column: Platform Architecture & Modules (Equal-Height 2x2 Grid) */}
+        <div className="home-features-col">
+          <div className="feature-grid">
+            <div className="card">
+              <div className="card-body">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    marginBottom: 10,
+                  }}
+                >
+                  <div className="icon-badge">
+                    <Server size={20} />
                   </div>
-                  <p className="text-muted" style={{ fontSize: 13 }}>
-                    Native ES2024 runtime with sub-millisecond execution,
-                    type-safe route controllers, and built-in microsecond test
-                    runners.
-                  </p>
+                  <h4 className="card-title">Application Backend</h4>
                 </div>
+                <p className="card-desc">
+                  Secure, low-latency API foundation built for high availability
+                  and seamless data flow.
+                </p>
               </div>
             </div>
 
-            <div className="col-sm-6" style={{ marginBottom: 20 }}>
-              <div
-                className="panel panel-default"
-                style={{ height: "100%", borderRadius: 6 }}
-              >
-                <div className="panel-body">
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      marginBottom: 10,
-                    }}
-                  >
-                    <Database className="text-success" size={24} />
-                    <h4 style={{ margin: 0, fontWeight: 600 }}>
-                      MongoDB 8 Data Layer
-                    </h4>
+            <div className="card">
+              <div className="card-body">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    marginBottom: 10,
+                  }}
+                >
+                  <div className="icon-badge">
+                    <Database size={20} />
                   </div>
-                  <p className="text-muted" style={{ fontSize: 13 }}>
-                    Modern connection pooling and async/await driver execution
-                    with dynamic schema filtering and sanitized queries.
-                  </p>
+                  <h4 className="card-title">Data Management</h4>
                 </div>
+                <p className="card-desc">
+                  Reliable database records with role-based access, automated
+                  indexing, and input sanitization.
+                </p>
               </div>
             </div>
 
-            <div className="col-sm-6" style={{ marginBottom: 20 }}>
-              <div
-                className="panel panel-default"
-                style={{ height: "100%", borderRadius: 6 }}
-              >
-                <div className="panel-body">
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      marginBottom: 10,
-                    }}
-                  >
-                    <Zap className="text-warning" size={24} />
-                    <h4 style={{ margin: 0, fontWeight: 600 }}>
-                      Real-time Redis Pub/Sub
-                    </h4>
+            <div className="card">
+              <div className="card-body">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    marginBottom: 10,
+                  }}
+                >
+                  <div className="icon-badge">
+                    <Zap size={20} />
                   </div>
-                  <p className="text-muted" style={{ fontSize: 13 }}>
-                    Socket.IO v4 synchronization channels automatically
-                    broadcasting data modifications across connected clients.
-                  </p>
+                  <h4 className="card-title">Event Broadcasting</h4>
                 </div>
+                <p className="card-desc">
+                  Asynchronous change propagation and decoupled event messaging
+                  powered by a high-throughput event bus.
+                </p>
               </div>
             </div>
 
-            <div className="col-sm-6" style={{ marginBottom: 20 }}>
-              <div
-                className="panel panel-default"
-                style={{ height: "100%", borderRadius: 6 }}
-              >
-                <div className="panel-body">
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      marginBottom: 10,
-                    }}
-                  >
-                    <Sparkles className="text-info" size={24} />
-                    <h4 style={{ margin: 0, fontWeight: 600 }}>
-                      Dynamic Autoform
-                    </h4>
+            <div className="card">
+              <div className="card-body">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    marginBottom: 10,
+                  }}
+                >
+                  <div className="icon-badge">
+                    <FileCode2 size={20} />
                   </div>
-                  <p className="text-muted" style={{ fontSize: 13 }}>
-                    Automatic UI forms, validation, and REST API generation
-                    driven purely by declarative configuration schemas.
-                  </p>
+                  <h4 className="card-title">Declarative Resources</h4>
                 </div>
+                <p className="card-desc">
+                  Create custom business entities and interactive forms directly
+                  from data schemas.
+                </p>
               </div>
             </div>
           </div>

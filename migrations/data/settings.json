@@ -2,78 +2,27 @@
   "0": {
     "type": "properties",
     "data": {
-      "name": "coreApp",
-      "user": ["groups", "roles", "tasks", "products"],
-      "admin": ["users"],
+      "name": "core",
+      "user": [
+        "products",
+        "orders",
+        "order_items",
+        "inventory",
+        "invoices",
+        "reviews"
+      ],
+      "admin": ["users", "categories", "customers", "warehouses", "suppliers"],
       "themes": [
-        {
-          "name": "Cerulean",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/cerulean/bootstrap.min.css"
-        },
-        {
-          "name": "Cosmo",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/cosmo/bootstrap.min.css"
-        },
-        {
-          "name": "Cyborg",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/cyborg/bootstrap.min.css"
-        },
-        {
-          "name": "Darkly",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/darkly/bootstrap.min.css"
-        },
-        {
-          "name": "Flatly",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/flatly/bootstrap.min.css"
-        },
-        {
-          "name": "Journal",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/journal/bootstrap.min.css"
-        },
-        {
-          "name": "Lumen",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/lumen/bootstrap.min.css"
-        },
-        {
-          "name": "Paper",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/paper/bootstrap.min.css"
-        },
-        {
-          "name": "Readable",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/readable/bootstrap.min.css"
-        },
-        {
-          "name": "Red",
-          "css": "/themes/red.min.css"
-        },
-        {
-          "name": "Sandstone",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/sandstone/bootstrap.min.css"
-        },
-        {
-          "name": "Simplex",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/simplex/bootstrap.min.css"
-        },
-        {
-          "name": "Slate",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/slate/bootstrap.min.css"
-        },
-        {
-          "name": "Spacelab",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/spacelab/bootstrap.min.css"
-        },
-        {
-          "name": "Superhero",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/superhero/bootstrap.min.css"
-        },
-        {
-          "name": "United",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/united/bootstrap.min.css"
-        },
-        {
-          "name": "Yeti",
-          "css": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/yeti/bootstrap.min.css"
-        }
+        { "name": "Classic", "id": "classic" },
+        { "name": "Cobalt", "id": "cobalt" },
+        { "name": "Emerald", "id": "emerald" },
+        { "name": "Charcoal", "id": "charcoal" },
+        { "name": "Studio", "id": "studio" },
+        { "name": "Cyber", "id": "cyber" },
+        { "name": "Daylight", "id": "daylight" },
+        { "name": "Earth", "id": "earth" },
+        { "name": "Sunset", "id": "sunset" },
+        { "name": "Glacier", "id": "glacier" }
       ]
     }
   }

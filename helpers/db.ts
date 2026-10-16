@@ -41,12 +41,16 @@ export async function getCollection<T extends Document = Document>(
   return db.collection<T>(name);
 }
 
+export function setDb(db: Db | null): void {
+  dbInstance = db;
+}
+
 export async function closeDb(): Promise<void> {
   if (client) {
     await client.close();
     client = null;
-    dbInstance = null;
   }
+  dbInstance = null;
 }
 
 export class ModernModel<T extends Document = Document> {
@@ -143,10 +147,21 @@ export class ModernModel<T extends Document = Document> {
     const res = await col.deleteOne({ _id } as unknown as Filter<T>);
     return res.acknowledged;
   }
+
+  async count(filter: Filter<T> = {}): Promise<number> {
+    const col = await getCollection<T>(this.name);
+    return col.countDocuments(filter);
+  }
+
+  async estimatedCount(): Promise<number> {
+    const col = await getCollection<T>(this.name);
+    return col.estimatedDocumentCount();
+  }
 }
 
 export default {
   getDb,
+  setDb,
   getCollection,
   ModernModel,
 };

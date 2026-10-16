@@ -1,72 +1,38 @@
 import express, { type Express } from "express";
 import { createServer, type Server as HTTPServer } from "http";
-import { Server as SocketIOServer } from "socket.io";
 import path from "path";
-import fs from "fs";
-import * as generator from "../helpers/generator";
 import * as inspector from "../helpers/inspector";
 import * as middleware from "../helpers/middleware";
-import config from "../config.json";
+import { api } from "../api/routes";
 
 export const web: Express = express();
 export const svr: HTTPServer = createServer(web);
-export const sio: SocketIOServer = new SocketIOServer(svr);
 
-const pages = config.pages || [];
-const resources = config.resources || {};
-const viewsDir = path.resolve(process.cwd(), "views");
 const publicDir = path.resolve(process.cwd(), "public");
-
-// Configure views and static assets
-const pluginViews = inspector.addPluginsWeb(web, express.static);
-const views = [...pluginViews, viewsDir];
-
 const distDir = path.resolve(publicDir, "dist");
 const distIndex = path.resolve(distDir, "index.html");
 
-web.set("views", views);
-web.set("view engine", "pug");
-web.use(express.static(distDir));
-web.use(express.static(publicDir));
+// Plugin static public assets
+inspector.addPluginsWeb(web, express.static);
+
+// Static assets serving
+web.use(express.static(distDir, { index: false }));
+web.use(express.static(publicDir, { index: false }));
 web.use(middleware.robots);
 web.use(middleware.browser);
 
-// Auto-generated views for resources
-for (const route of Object.keys(resources)) {
-  generator.addView(web, route);
-}
+// Mount REST API service under /api for standalone & dev modes
+web.use("/api", api);
 
-// Auto-generated pages
-for (const page of pages) {
-  generator.addPage(web, page);
-}
-
-// Main root landing page
+// Main root landing page - serve React 19 SPA
 web.get("/", (_req: express.Request, res: express.Response) => {
-  if (fs.existsSync(distIndex)) {
-    res.sendFile(distIndex);
-  } else {
-    res.render(config.INDEX || "index", {
-      model: false,
-      site: config.site,
-      theme: config.theme,
-    });
-  }
-});
-
-// Dynamic template rendering
-web.get("/templates/:name", (req: express.Request, res: express.Response) => {
-  res.render(`templates/${req.params.name}`);
+  res.sendFile(distIndex);
 });
 
 // SPA catch-all fallback for React 19 client-side routing
 web.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (
-      req.method === "GET" &&
-      req.accepts("html") &&
-      fs.existsSync(distIndex)
-    ) {
+    if (req.method === "GET" && req.accepts("html")) {
       res.sendFile(distIndex);
       return;
     }
@@ -77,5 +43,4 @@ web.use(
 export default {
   web,
   svr,
-  sio,
 };

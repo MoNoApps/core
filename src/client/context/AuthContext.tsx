@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/client";
-import config from "../config";
 import type { User } from "../types/index";
 
 interface AuthContextType {
@@ -8,15 +7,12 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isViewer: boolean;
   isLoading: boolean;
-  login: (password: string) => Promise<{ success: boolean; error?: string }>;
-  loginGuest: () => Promise<{ success: boolean; error?: string }>;
-  register: (
-    email: string,
-  ) => Promise<{ success: boolean; error?: string; message?: string }>;
-  recover: (
-    email: string,
-  ) => Promise<{ success: boolean; error?: string; message?: string }>;
+  login: (
+    emailOrPassword: string,
+    password?: string,
+  ) => Promise<{ success: boolean; error?: string }>;
   updateProfile: (
     data: Partial<User>,
   ) => Promise<{ success: boolean; error?: string }>;
@@ -29,14 +25,31 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("core_user");
+        return cached ? JSON.parse(cached) : null;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  });
   const [token, setToken] = useState<string | null>(() => api.getToken());
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const [isLoading, setIsLoading] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return !!api.getToken();
+    }
+    return false;
+  });
   const refreshUser = async () => {
     const currentToken = api.getToken();
     if (!currentToken) {
       setUser(null);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("core_user");
+      }
       setIsLoading(false);
       return;
     }
@@ -45,34 +58,69 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const res = await api.getAccount();
       if (res.success && res.data) {
         setUser(res.data);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("core_user", JSON.stringify(res.data));
+        }
       } else {
         // Invalid or expired token
         api.setToken(null);
         setToken(null);
         setUser(null);
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("core_user");
+        }
       }
     } catch {
       api.setToken(null);
       setToken(null);
       setUser(null);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("core_user");
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    refreshUser();
+    const handleUnauthorized = () => {
+      setToken(null);
+      setUser(null);
+      setIsLoading(false);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem("core_user");
+          window.location.hash = "#/";
+        } catch {}
+      }
+    };
+    window.addEventListener("auth:unauthorized", handleUnauthorized);
+    return () => {
+      window.removeEventListener("auth:unauthorized", handleUnauthorized);
+    };
   }, []);
 
-  const login = async (password: string) => {
+  useEffect(() => {
+    const existingToken = api.getToken();
+    if (existingToken) {
+      refreshUser();
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const login = async (emailOrPassword: string, password?: string) => {
     setIsLoading(true);
     try {
-      const res = await api.login(password);
+      const res = await api.login(emailOrPassword, password);
       if (res.success && res.token) {
         api.setToken(res.token);
         setToken(res.token);
         if (res.user) {
           setUser(res.user);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("core_user", JSON.stringify(res.user));
+          }
         } else {
           await refreshUser();
         }
@@ -89,53 +137,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const loginGuest = async () => {
-    return login(config.guest?.text || "");
-  };
-
-  const register = async (email: string) => {
-    try {
-      const res = await api.register(email);
-      if (res.success) {
-        return {
-          success: true,
-          message:
-            res.message || "Registration email sent. Please check your inbox.",
-        };
-      }
-      return { success: false, error: res.error || "Registration failed" };
-    } catch (err: any) {
-      return { success: false, error: err?.message || "Registration failed" };
-    }
-  };
-
-  const recover = async (email: string) => {
-    try {
-      const res = await api.recover(email);
-      if (res.success) {
-        return {
-          success: true,
-          message:
-            res.message || "Password recovery instructions sent to your email.",
-        };
-      }
-      return {
-        success: false,
-        error: res.error || "Password recovery request failed",
-      };
-    } catch (err: any) {
-      return {
-        success: false,
-        error: err?.message || "Password recovery request failed",
-      };
-    }
-  };
-
   const updateProfile = async (data: Partial<User>) => {
     try {
       const res = await api.updateAccount(data);
       if (res.success) {
-        if (res.data) setUser(res.data);
+        if (res.data) {
+          setUser(res.data);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("core_user", JSON.stringify(res.data));
+          }
+        }
         return { success: true };
       }
       return { success: false, error: res.error || "Failed to update profile" };
@@ -148,10 +159,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     api.setToken(null);
     setToken(null);
     setUser(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("core_user");
+    }
   };
 
   const isAuthenticated = !!token && !!user;
   const isAdmin = !!user?.admin;
+  const isViewer = user?.role === "viewer";
 
   return (
     <AuthContext.Provider
@@ -160,11 +175,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         token,
         isAuthenticated,
         isAdmin,
+        isViewer,
         isLoading,
         login,
-        loginGuest,
-        register,
-        recover,
         updateProfile,
         logout,
         refreshUser,
@@ -182,3 +195,5 @@ export function useAuth(): AuthContextType {
   }
   return context;
 }
+
+export default AuthContext;

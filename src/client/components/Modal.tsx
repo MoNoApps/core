@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean;
   title: string;
+  subtitle?: string;
+  icon?: React.ReactNode;
   onClose: () => void;
   children: React.ReactNode;
   size?: "sm" | "md" | "lg";
@@ -12,83 +15,71 @@ interface ModalProps {
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   title,
+  subtitle,
+  icon,
   onClose,
   children,
   size = "md",
 }) => {
+  const { isDarkMode } = useTheme();
+
   useEffect(() => {
+    if (!isOpen) return;
+
+    // Lock background scroll when modal is active
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === "Escape") {
         onClose();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
-  const maxWidth = size === "sm" ? 400 : size === "lg" ? 800 : 560;
+  const maxWidth = size === "sm" ? 420 : size === "lg" ? 780 : 560;
 
   return (
     <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.55)",
-        zIndex: 1050,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 16,
-        overflowY: "auto",
-        backdropFilter: "blur(2px)",
-      }}
+      className="modal-backdrop-custom"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-heading-title"
     >
       <div
-        className="modal-content"
-        style={{
-          width: "100%",
-          maxWidth,
-          borderRadius: 6,
-          boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
-          overflow: "hidden",
-        }}
+        className={`modal-card-custom ${isDarkMode ? "dark-theme" : ""}`}
+        style={{ maxWidth }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div
-          className="modal-header"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "16px 20px",
-          }}
-        >
-          <h4 className="modal-title" style={{ margin: 0, fontWeight: 600 }}>
-            {title}
-          </h4>
+        <div className="modal-header-custom">
+          <div className="modal-header-left">
+            {icon && <div className="modal-icon-badge">{icon}</div>}
+            <div>
+              <h3 id="modal-heading-title" className="modal-title-custom">
+                {title}
+              </h3>
+              {subtitle && <p className="modal-subtitle-custom">{subtitle}</p>}
+            </div>
+          </div>
           <button
             type="button"
-            className="close"
+            className="modal-close-btn"
             onClick={onClose}
-            style={{
-              fontSize: 20,
-              cursor: "pointer",
-              border: "none",
-              background: "none",
-            }}
+            aria-label="Close modal"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
-        <div className="modal-body" style={{ padding: 20 }}>
-          {children}
-        </div>
+        <div className="modal-body-custom">{children}</div>
       </div>
     </div>
   );

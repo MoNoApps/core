@@ -3,12 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MoNoApps Core</title>
-    <link
-      id="bootstrap-theme"
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/paper/bootstrap.min.css"
-    />
+    <title>Core</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("core_theme");
+          var theme = stored || "classic";
+          document.documentElement.setAttribute("data-theme", theme);
+          var darkThemes = ["charcoal", "studio", "cyber", "sunset"];
+          document.documentElement.setAttribute(
+            "data-theme-mode",
+            darkThemes.indexOf(theme) !== -1 ? "dark" : "light",
+          );
+        } catch (e) {}
+      })();
+    </script>
     <link
       rel="icon"
       type="image/svg+xml"

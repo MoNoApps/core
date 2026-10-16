@@ -2,7 +2,7 @@ import { describe, it, before, after } from "node:test";
 import assert from "node:assert";
 import { api } from "../api/routes";
 import { models } from "../helpers/models";
-import * as filters from "../helpers/filters";
+import { closeRedis } from "../helpers/ps";
 
 describe("Dynamic Resource CRUD & Security Guards Suite", () => {
   let server: any;
@@ -11,13 +11,13 @@ describe("Dynamic Resource CRUD & Security Guards Suite", () => {
 
   const regularUser = {
     _id: "user_regular_123",
-    email: "regular@monoapps.co",
+    email: "regular@example.com",
     admin: false,
   };
 
   const adminUser = {
     _id: "user_admin_999",
-    email: "admin@monoapps.co",
+    email: "admin@example.com",
     admin: true,
   };
 
@@ -60,7 +60,7 @@ describe("Dynamic Resource CRUD & Security Guards Suite", () => {
       {
         _id: "user_regular_123",
         name: "Test User",
-        email: "regular@monoapps.co",
+        email: "regular@example.com",
         password: "super_secret_hashed_password",
         token: "internal_session_token_xyz",
       } as any,
@@ -73,8 +73,12 @@ describe("Dynamic Resource CRUD & Security Guards Suite", () => {
 
   after(async () => {
     if (server && typeof server.close === "function") {
+      server.closeAllConnections?.();
       await new Promise((resolve) => server.close(resolve));
     }
+    try {
+      await closeRedis();
+    } catch {}
   });
 
   it("GET /users should reject request without token (401 Unauthorized)", async () => {

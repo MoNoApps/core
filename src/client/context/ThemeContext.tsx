@@ -1,83 +1,27 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
 
 export interface ThemeInfo {
   name: string;
   label: string;
-  cssUrl: string;
   isDark?: boolean;
 }
 
 export const THEMES: ThemeInfo[] = [
-  {
-    name: "paper",
-    label: "Paper (Default)",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/paper/bootstrap.min.css",
-    isDark: false,
-  },
-  {
-    name: "cosmo",
-    label: "Cosmo",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/cosmo/bootstrap.min.css",
-    isDark: false,
-  },
-  {
-    name: "flatly",
-    label: "Flatly",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/flatly/bootstrap.min.css",
-    isDark: false,
-  },
-  {
-    name: "darkly",
-    label: "Darkly",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/darkly/bootstrap.min.css",
-    isDark: true,
-  },
-  {
-    name: "slate",
-    label: "Slate",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/slate/bootstrap.min.css",
-    isDark: true,
-  },
-  {
-    name: "cyborg",
-    label: "Cyborg",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/cyborg/bootstrap.min.css",
-    isDark: true,
-  },
-  {
-    name: "lumen",
-    label: "Lumen",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/lumen/bootstrap.min.css",
-    isDark: false,
-  },
-  {
-    name: "sandstone",
-    label: "Sandstone",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/sandstone/bootstrap.min.css",
-    isDark: false,
-  },
-  {
-    name: "superhero",
-    label: "Superhero",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/superhero/bootstrap.min.css",
-    isDark: true,
-  },
-  {
-    name: "yeti",
-    label: "Yeti",
-    cssUrl:
-      "https://cdn.jsdelivr.net/npm/bootswatch@3.4.1/yeti/bootstrap.min.css",
-    isDark: false,
-  },
+  { name: "classic", label: "Classic (Default)", isDark: false },
+  { name: "cobalt", label: "Cobalt", isDark: false },
+  { name: "emerald", label: "Emerald", isDark: false },
+  { name: "charcoal", label: "Charcoal", isDark: true },
+  { name: "studio", label: "Studio", isDark: true },
+  { name: "cyber", label: "Cyber", isDark: true },
+  { name: "daylight", label: "Daylight", isDark: false },
+  { name: "earth", label: "Earth", isDark: false },
+  { name: "sunset", label: "Sunset", isDark: true },
+  { name: "glacier", label: "Glacier", isDark: false },
 ];
 
 interface ThemeContextType {
@@ -94,24 +38,24 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [currentTheme, setCurrentTheme] = useState<string>(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("mono_theme") || "paper";
+      const stored = localStorage.getItem("core_theme");
+      if (stored && THEMES.some((t) => t.name === stored)) {
+        return stored;
+      }
     }
-    return "paper";
+    return "classic";
   });
 
   const activeThemeInfo =
     THEMES.find((t) => t.name === currentTheme) || THEMES[0];
 
-  useEffect(() => {
-    let linkTag = document.getElementById("bootstrap-theme") as HTMLLinkElement;
-    if (!linkTag) {
-      linkTag = document.createElement("link");
-      linkTag.id = "bootstrap-theme";
-      linkTag.rel = "stylesheet";
-      document.head.appendChild(linkTag);
-    }
-    linkTag.href = activeThemeInfo.cssUrl;
-    localStorage.setItem("mono_theme", currentTheme);
+  useLayoutEffect(() => {
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    document.documentElement.setAttribute(
+      "data-theme-mode",
+      activeThemeInfo.isDark ? "dark" : "light",
+    );
+    localStorage.setItem("core_theme", currentTheme);
   }, [currentTheme, activeThemeInfo]);
 
   return (
@@ -135,3 +79,5 @@ export function useTheme(): ThemeContextType {
   }
   return context;
 }
+
+export default ThemeContext;
