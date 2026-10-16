@@ -1,6 +1,5 @@
 import { ObjectId } from "mongodb";
 import type { User, AuthToken } from "../src/types/index";
-import { getCollection } from "./db";
 import { models } from "./models";
 
 export type Callback<T = unknown> = (
@@ -91,6 +90,9 @@ export function cleanObject<T extends Record<string, unknown>>(
       }
     }
   } else if (target && typeof target === "object") {
+    if (Array.isArray((target as any).data)) {
+      cleanObject((target as any).data, cleaner);
+    }
     for (const r of Object.keys(cleaner)) {
       delete (target as Record<string, unknown>)[r];
     }

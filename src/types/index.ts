@@ -1,5 +1,7 @@
 import type { ObjectId } from "mongodb";
 
+export type UserRole = "admin" | "user" | "viewer";
+
 export interface User {
   _id?: string | ObjectId;
   name?: string;
@@ -7,6 +9,7 @@ export interface User {
   password?: string | { type: string; value: string };
   token?: string;
   admin?: boolean;
+  role?: UserRole;
   status?: number;
   createdAt?: Date | number;
   updatedAt?: Date | number;
@@ -43,15 +46,6 @@ export interface CoreConfig {
     from: string;
     name: string;
   };
-  guest?: {
-    email: string;
-    text: string;
-    status: number;
-    admin: boolean;
-    enabled: boolean;
-  };
-  autoform?: boolean;
-  INDEX?: string;
   ALLOW?: string[];
   TTL?: number;
   URL?: {
@@ -65,7 +59,6 @@ export interface CoreConfig {
     PLUGINS: {
       DIR: string;
       MAIN: string;
-      VIEWS: string;
       CONFIG: string;
     };
   };

@@ -7,7 +7,7 @@ class ApiClient {
 
   constructor() {
     if (typeof window !== "undefined") {
-      this.token = localStorage.getItem("mono_token");
+      this.token = localStorage.getItem("core_token");
     }
   }
 
@@ -15,16 +15,16 @@ class ApiClient {
     this.token = token;
     if (typeof window !== "undefined") {
       if (token) {
-        localStorage.setItem("mono_token", token);
+        localStorage.setItem("core_token", token);
       } else {
-        localStorage.removeItem("mono_token");
+        localStorage.removeItem("core_token");
       }
     }
   }
 
   public getToken(): string | null {
     if (!this.token && typeof window !== "undefined") {
-      this.token = localStorage.getItem("mono_token");
+      this.token = localStorage.getItem("core_token");
     }
     return this.token;
   }
@@ -63,6 +63,20 @@ class ApiClient {
       }
 
       if (!response.ok) {
+        if (
+          response.status === 401 &&
+          (data?.error === "Missing token" ||
+            data?.error === "Invalid token" ||
+            data?.error === "Token expired")
+        ) {
+          this.setToken(null);
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.removeItem("core_user");
+            } catch {}
+            window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+          }
+        }
         return {
           success: false,
           error:
@@ -90,23 +104,15 @@ class ApiClient {
 
   // Auth Endpoints
   public async login(
-    password: string,
+    emailOrPassword: string,
+    password?: string,
   ): Promise<ApiResponse<{ token: string; user: User }>> {
+    const payload = password
+      ? { email: emailOrPassword, password }
+      : { password: emailOrPassword };
     return this.request("/login", {
       method: "POST",
-      body: JSON.stringify({ password }),
-    });
-  }
-
-  public async register(email: string): Promise<ApiResponse> {
-    return this.request(`/register/${encodeURIComponent(email)}`, {
-      method: "POST",
-    });
-  }
-
-  public async recover(email: string): Promise<ApiResponse> {
-    return this.request(`/recover/${encodeURIComponent(email)}`, {
-      method: "POST",
+      body: JSON.stringify(payload),
     });
   }
 
@@ -131,12 +137,6 @@ class ApiClient {
     });
   }
 
-  public async getTheme(): Promise<ApiResponse<{ theme: string }>> {
-    return this.request("/theme", {
-      method: "GET",
-    });
-  }
-
   // Dynamic Resource CRUD Endpoints
   public async getResources<T = any[]>(
     resource: string,
@@ -150,6 +150,14 @@ class ApiClient {
     }
     const qs = params.toString() ? `?${params.toString()}` : "";
     return this.request(`/${resource}${qs}`, {
+      method: "GET",
+    });
+  }
+
+  public async getResourceCount(
+    resource: string,
+  ): Promise<ApiResponse<{ count: number }>> {
+    return this.request(`/${resource}/count`, {
       method: "GET",
     });
   }

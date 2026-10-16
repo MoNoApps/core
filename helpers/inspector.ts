@@ -7,7 +7,6 @@ const plugins = config.plugins || [];
 const pconf = config.APIVARS?.PLUGINS || {
   DIR: "/plugins",
   MAIN: "/plugin.js",
-  VIEWS: "/views",
   CONFIG: "/config.json",
 };
 const pluginsDir = path.resolve(process.cwd(), pconf.DIR.replace(/^\//, ""));
@@ -120,50 +119,25 @@ export function addResourceRoutes(
   }
 }
 
-function getViewPath(name: string): string {
-  return path.join(pluginsDir, name, pconf.VIEWS.replace(/^\//, ""));
-}
-
 export function addPluginsWeb(web: any, expressStatic: any): string[] {
-  const views: string[] = [];
+  const mounted: string[] = [];
 
   for (const name of plugins) {
-    const prefix = `/${name}`;
-    const configPath = path.join(
-      pluginsDir,
-      name,
-      pconf.CONFIG.replace(/^\//, ""),
-    );
-
-    if (!fs.existsSync(configPath)) {
-      continue;
-    }
-
-    try {
-      const pluginConfig = JSON.parse(fs.readFileSync(configPath, "utf8"));
-      views.push(getViewPath(name));
-      web.use(expressStatic(path.join(pluginsDir, name, "public")));
-
-      if (pluginConfig.pages) {
-        for (const page of pluginConfig.pages) {
-          generator.addPage(web, page);
-        }
+    const publicPath = path.join(pluginsDir, name, "public");
+    if (fs.existsSync(publicPath)) {
+      try {
+        web.use(expressStatic(publicPath));
+        mounted.push(publicPath);
+      } catch (err) {
+        console.warn(
+          `[addPluginsWeb] Error mounting plugin public assets for ${name}:`,
+          err,
+        );
       }
-
-      if (pluginConfig.resources) {
-        for (const route of Object.keys(pluginConfig.resources)) {
-          generator.addView(web, route);
-        }
-      }
-    } catch (err) {
-      console.warn(
-        `[addPluginsWeb] Error loading plugin web assets for ${name}:`,
-        err,
-      );
     }
   }
 
-  return views;
+  return mounted;
 }
 
 export default {

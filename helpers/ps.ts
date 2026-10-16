@@ -1,4 +1,4 @@
-import { createClient, type RedisClientType } from "redis";
+import { createClient } from "redis";
 import config from "../config.json";
 
 const redisUrl =
@@ -40,7 +40,16 @@ export async function connectRedis(): Promise<{
 export async function closeRedis(): Promise<void> {
   try {
     if (pub.isOpen) {
-      await pub.quit();
+      if ((pub as any).isReady) {
+        await Promise.race([
+          pub.quit(),
+          new Promise<void>((_, reject) =>
+            setTimeout(() => reject(new Error("quit timeout")), 500),
+          ),
+        ]);
+      } else {
+        await pub.disconnect();
+      }
     }
   } catch {
     try {
@@ -49,7 +58,16 @@ export async function closeRedis(): Promise<void> {
   }
   try {
     if (sub.isOpen) {
-      await sub.quit();
+      if ((sub as any).isReady) {
+        await Promise.race([
+          sub.quit(),
+          new Promise<void>((_, reject) =>
+            setTimeout(() => reject(new Error("quit timeout")), 500),
+          ),
+        ]);
+      } else {
+        await sub.disconnect();
+      }
     }
   } catch {
     try {
@@ -58,9 +76,39 @@ export async function closeRedis(): Promise<void> {
   }
 }
 
+export interface ResourceChangeEvent {
+  resource: string;
+  action: "create" | "update" | "delete";
+  id?: string;
+  userId?: string;
+  timestamp: number;
+}
+
+export async function publishChange(
+  event: ResourceChangeEvent,
+): Promise<boolean> {
+  try {
+    if (!pub.isOpen) {
+      await pub.connect();
+    }
+    const channel = `${config.site || "Core"}::events`;
+    await pub.publish(channel, JSON.stringify(event));
+    return true;
+  } catch (err: any) {
+    if (process.env.NODE_ENV !== "test" || process.env.DEBUG) {
+      console.warn(
+        `[Redis Pub/Sub] Failed to publish ${event.resource} change:`,
+        err?.message,
+      );
+    }
+    return false;
+  }
+}
+
 export default {
   pub,
   sub,
   connectRedis,
   closeRedis,
+  publishChange,
 };

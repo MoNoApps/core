@@ -1,31 +1,20 @@
 {
   "dburl": "mongodb://127.0.0.1/coreapp",
-  "site": "Core App",
-  "theme": "https://maxcdn.bootstrapcdn.com/bootswatch/latest/paper/bootstrap.min.css",
+  "site": "Core",
+  "theme": "classic",
   "port": {
     "web": 1344,
     "api": 1345,
     "rds": 6379
   },
   "mail": {
-    "from": "noreply@monoapps.co",
-    "name": "MoNoApps Core"
+    "from": "noreply@example.com",
+    "name": "Core"
   },
-  "guest": {
-    "email": "guest@monoapps.co",
-    "text": "guest.monoapps",
-    "status": 1,
-    "admin": false,
-    "enabled": false
-  },
-  "autoform": true,
-  "INDEX": "index/index",
   "ALLOW": ["127.0.0.1"],
   "TTL": 84000,
   "URL": {
-    "BASE": "http://core.monoapps.co",
-    "ACK": "/api/email/confirm/",
-    "REC": "/api/email/recover/"
+    "BASE": "http://localhost:1344"
   },
   "APIVARS": {
     "PRE": "/",
@@ -33,12 +22,11 @@
     "PLUGINS": {
       "DIR": "/plugins",
       "MAIN": "/plugin.js",
-      "VIEWS": "/views",
       "CONFIG": "/config.json"
     }
   },
   "plugins": ["wizard"],
-  "pages": ["account", "recover", "registered", "docs", "dev"],
+  "pages": ["account", "docs", "dev"],
   "resources": {
     "tokens": {
       "admin": true,
@@ -51,6 +39,8 @@
       "exclude": true
     },
     "users": {
+      "icon": "user-check",
+      "subtitle": "User accounts and permissions",
       "admin": true,
       "param": "user",
       "clean": {
@@ -61,81 +51,21 @@
         "date": 1,
         "email": 1,
         "status": 1,
-        "role": 1
-      }
-    },
-    "groups": {
-      "desc": "groups",
-      "param": "group",
-      "exclude": false,
-      "clean": {},
-      "schema": {
-        "name": {
-          "tag": "input",
-          "type": "text",
-          "active": true,
-          "text": "Name",
-          "name": "name",
-          "placeholder": "Group Name",
-          "required": true,
-          "autocomplete": true,
-          "autofocus": true,
-          "min": 1,
-          "max": 40
-        }
-      }
-    },
-    "roles": {
-      "desc": "roles",
-      "param": "role",
-      "admin": false,
-      "exclude": false,
-      "clean": {},
-      "schema": {
-        "name": {
-          "tag": "input",
-          "type": "text",
-          "active": true,
-          "text": "Role Name",
-          "name": "name",
-          "placeholder": "Role Name",
-          "required": true,
-          "autocomplete": true,
-          "min": 1,
-          "max": 10
-        }
-      }
-    },
-    "tasks": {
-      "desc": "tasks",
-      "admin": false,
-      "exclude": false,
-      "param": "task",
-      "clean": {},
-      "schema": {
-        "name": {
-          "tag": "input",
-          "type": "text",
-          "active": true,
-          "text": "Task Name",
-          "name": "name",
-          "placeholder": "Task Name",
-          "required": true,
-          "min": 1,
-          "max": 100
-        },
-        "status": {
+        "role": {
           "tag": "select",
           "type": "text",
           "active": true,
-          "text": "status",
-          "text": "Task Status",
-          "name": "status"
+          "name": "role",
+          "text": "User Role",
+          "options": ["admin", "user", "viewer"],
+          "required": true
         }
       }
     },
     "products": {
       "desc": "products",
+      "subtitle": "Product catalog items",
+      "icon": "box",
       "admin": false,
       "exclude": false,
       "param": "product",
@@ -147,17 +77,37 @@
           "active": true,
           "text": "Product Name",
           "name": "name",
-          "placeholder": "Product Name"
+          "placeholder": "Product Name",
+          "required": true
         },
         "code": {
           "tag": "input",
-          "type": "number",
+          "type": "text",
           "active": true,
-          "text": "Code",
+          "text": "SKU / Code",
           "name": "code",
-          "placeholder": "Product Code",
-          "min": 0,
-          "value": "0"
+          "placeholder": "Product SKU",
+          "required": true
+        },
+        "category": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Category",
+          "name": "category",
+          "ref": "categories",
+          "options": [
+            "Electronics",
+            "Apparel",
+            "Home",
+            "Books",
+            "Sports",
+            "Automotive",
+            "Garden",
+            "Toys",
+            "Health",
+            "Grocery"
+          ]
         },
         "price": {
           "tag": "input",
@@ -165,33 +115,698 @@
           "active": true,
           "text": "Price",
           "name": "price",
-          "placeholder": "Price",
-          "min": 0
+          "placeholder": "0.00",
+          "min": 0,
+          "step": 0.01,
+          "required": true
+        },
+        "cost": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Cost of Goods",
+          "name": "cost",
+          "placeholder": "0.00",
+          "min": 0,
+          "step": 0.01
+        },
+        "taxes": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Tax Rate",
+          "name": "taxes",
+          "placeholder": "0.08",
+          "min": 0,
+          "max": 1,
+          "step": 0.01
+        },
+        "status": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Catalog Status",
+          "name": "status",
+          "options": ["active", "draft", "archived"]
         },
         "image": {
           "tag": "image",
           "active": true,
           "text": "Product Image",
           "name": "image",
-          "placeholder": "Product Image",
+          "placeholder": "Product Image URL",
           "required": false
         },
         "comment": {
           "tag": "input",
           "type": "text",
           "active": true,
-          "text": "Comment",
+          "text": "Description / Notes",
           "name": "comment",
-          "placeholder": "Product Comment"
-        },
-        "taxes": {
+          "placeholder": "Product Description"
+        }
+      }
+    },
+    "categories": {
+      "desc": "categories",
+      "subtitle": "Product taxonomy and groups",
+      "icon": "layers",
+      "admin": true,
+      "exclude": false,
+      "param": "category",
+      "clean": {},
+      "schema": {
+        "name": {
           "tag": "input",
           "type": "text",
           "active": true,
-          "text": "Taxes",
-          "name": "taxes",
-          "placeholder": "Taxes",
+          "text": "Category Name",
+          "name": "name",
+          "placeholder": "Category Name",
+          "required": true,
+          "min": 2,
+          "max": 60
+        },
+        "slug": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Slug",
+          "name": "slug",
+          "placeholder": "category-slug",
+          "required": true
+        },
+        "icon": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Icon Name",
+          "name": "icon",
+          "placeholder": "folder"
+        },
+        "active": {
+          "tag": "checkbox",
+          "type": "checkbox",
+          "active": true,
+          "text": "Active",
+          "name": "active",
+          "value": true
+        }
+      }
+    },
+    "customers": {
+      "desc": "customers",
+      "subtitle": "Customer accounts and CRM",
+      "icon": "user-check",
+      "admin": true,
+      "exclude": false,
+      "param": "customer",
+      "clean": {},
+      "schema": {
+        "name": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Customer Name",
+          "name": "name",
+          "placeholder": "Customer Name",
+          "required": true
+        },
+        "email": {
+          "tag": "input",
+          "type": "email",
+          "active": true,
+          "text": "Email Address",
+          "name": "email",
+          "placeholder": "customer@example.com",
+          "required": true
+        },
+        "phone": {
+          "tag": "input",
+          "type": "tel",
+          "active": true,
+          "text": "Phone Number",
+          "name": "phone",
+          "placeholder": "+1-555-0100"
+        },
+        "company": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Company",
+          "name": "company",
+          "placeholder": "Company / Organization"
+        },
+        "tier": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Customer Tier",
+          "name": "tier",
+          "options": ["standard", "silver", "gold", "vip"]
+        },
+        "billingAddress": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Billing Address",
+          "name": "billingAddress",
+          "placeholder": "Street, City, Postal Code"
+        },
+        "shippingAddress": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Shipping Address",
+          "name": "shippingAddress",
+          "placeholder": "Shipping Street, City, Postal Code"
+        },
+        "status": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Account Status",
+          "name": "status",
+          "options": ["active", "suspended", "lead"]
+        }
+      }
+    },
+    "orders": {
+      "desc": "orders",
+      "subtitle": "Sales orders and fulfillment",
+      "icon": "shopping-cart",
+      "admin": false,
+      "exclude": false,
+      "param": "order",
+      "clean": {},
+      "schema": {
+        "orderNumber": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Order Number",
+          "name": "orderNumber",
+          "placeholder": "ORD-2026-001",
+          "required": true
+        },
+        "customer": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Customer",
+          "name": "customer",
+          "ref": "customers",
+          "options": [
+            "Retail Customer",
+            "Wholesale Buyer",
+            "Enterprise Partner"
+          ]
+        },
+        "orderDate": {
+          "tag": "input",
+          "type": "date",
+          "active": true,
+          "text": "Order Date",
+          "name": "orderDate",
+          "required": true
+        },
+        "status": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Fulfillment Status",
+          "name": "status",
+          "options": [
+            "pending",
+            "processing",
+            "shipped",
+            "delivered",
+            "cancelled"
+          ]
+        },
+        "paymentStatus": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Payment Status",
+          "name": "paymentStatus",
+          "options": ["unpaid", "authorized", "paid", "refunded"]
+        },
+        "totalAmount": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Total Amount",
+          "name": "totalAmount",
+          "placeholder": "0.00",
+          "min": 0,
+          "step": 0.01,
+          "required": true
+        },
+        "currency": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Currency",
+          "name": "currency",
+          "options": ["USD", "EUR", "GBP", "CAD"]
+        }
+      }
+    },
+    "order_items": {
+      "desc": "order_items",
+      "subtitle": "Line items per order",
+      "icon": "list-ordered",
+      "admin": false,
+      "exclude": false,
+      "param": "order_item",
+      "clean": {},
+      "schema": {
+        "order": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Order Reference",
+          "name": "order",
+          "ref": "orders",
+          "options": ["ORD-2026-001", "ORD-2026-002"]
+        },
+        "product": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Product",
+          "name": "product",
+          "ref": "products",
+          "options": ["Sample Product A", "Sample Product B"]
+        },
+        "quantity": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Quantity",
+          "name": "quantity",
+          "min": 1,
+          "value": 1,
+          "required": true
+        },
+        "unitPrice": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Unit Price",
+          "name": "unitPrice",
+          "min": 0,
+          "step": 0.01,
+          "required": true
+        },
+        "discount": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Discount",
+          "name": "discount",
+          "min": 0,
+          "step": 0.01
+        },
+        "subtotal": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Subtotal",
+          "name": "subtotal",
+          "min": 0,
+          "step": 0.01,
+          "required": true
+        }
+      }
+    },
+    "inventory": {
+      "desc": "inventory",
+      "subtitle": "Warehouse stock levels",
+      "icon": "archive",
+      "admin": false,
+      "exclude": false,
+      "param": "inventory",
+      "clean": {},
+      "schema": {
+        "product": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Product",
+          "name": "product",
+          "ref": "products",
+          "options": ["Sample Product A", "Sample Product B"]
+        },
+        "warehouse": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Warehouse",
+          "name": "warehouse",
+          "ref": "warehouses",
+          "options": ["Main Hub", "East Facility", "West Depot"]
+        },
+        "quantityOnHand": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Quantity On Hand",
+          "name": "quantityOnHand",
+          "min": 0,
+          "required": true
+        },
+        "quantityReserved": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Quantity Reserved",
+          "name": "quantityReserved",
           "min": 0
+        },
+        "reorderLevel": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Reorder Threshold",
+          "name": "reorderLevel",
+          "min": 0
+        },
+        "lastCountedAt": {
+          "tag": "input",
+          "type": "date",
+          "active": true,
+          "text": "Last Counted Date",
+          "name": "lastCountedAt"
+        }
+      }
+    },
+    "warehouses": {
+      "desc": "warehouses",
+      "subtitle": "Distribution centers",
+      "icon": "home",
+      "admin": true,
+      "exclude": false,
+      "param": "warehouse",
+      "clean": {},
+      "schema": {
+        "name": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Facility Name",
+          "name": "name",
+          "placeholder": "West Coast Hub",
+          "required": true
+        },
+        "code": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Facility Code",
+          "name": "code",
+          "placeholder": "WH-LAX",
+          "required": true
+        },
+        "city": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "City",
+          "name": "city",
+          "placeholder": "Los Angeles",
+          "required": true
+        },
+        "country": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Country",
+          "name": "country",
+          "placeholder": "United States",
+          "required": true
+        },
+        "capacity": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Capacity Units",
+          "name": "capacity",
+          "min": 0
+        },
+        "active": {
+          "tag": "checkbox",
+          "type": "checkbox",
+          "active": true,
+          "text": "Operational",
+          "name": "active",
+          "value": true
+        }
+      }
+    },
+    "suppliers": {
+      "desc": "suppliers",
+      "subtitle": "Vendor and procurement contacts",
+      "icon": "truck",
+      "admin": true,
+      "exclude": false,
+      "param": "supplier",
+      "clean": {},
+      "schema": {
+        "name": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Supplier Name",
+          "name": "name",
+          "placeholder": "Acme Industrial Supplies",
+          "required": true
+        },
+        "code": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Vendor Code",
+          "name": "code",
+          "placeholder": "VEND-001",
+          "required": true
+        },
+        "contactPerson": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Contact Person",
+          "name": "contactPerson",
+          "placeholder": "Jane Doe"
+        },
+        "email": {
+          "tag": "input",
+          "type": "email",
+          "active": true,
+          "text": "Email Address",
+          "name": "email",
+          "placeholder": "orders@acme.com",
+          "required": true
+        },
+        "phone": {
+          "tag": "input",
+          "type": "tel",
+          "active": true,
+          "text": "Telephone",
+          "name": "phone",
+          "placeholder": "+1-800-555-0199"
+        },
+        "leadTimeDays": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Lead Time (Days)",
+          "name": "leadTimeDays",
+          "min": 1
+        },
+        "rating": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Reliability Rating",
+          "name": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 0.5
+        },
+        "active": {
+          "tag": "checkbox",
+          "type": "checkbox",
+          "active": true,
+          "text": "Active Vendor",
+          "name": "active",
+          "value": true
+        }
+      }
+    },
+    "invoices": {
+      "desc": "invoices",
+      "subtitle": "Customer billing documents",
+      "icon": "file-text",
+      "admin": false,
+      "exclude": false,
+      "param": "invoice",
+      "clean": {},
+      "schema": {
+        "invoiceNumber": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Invoice Number",
+          "name": "invoiceNumber",
+          "placeholder": "INV-2026-0042",
+          "required": true
+        },
+        "order": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Order",
+          "name": "order",
+          "ref": "orders",
+          "options": ["ORD-2026-001", "ORD-2026-002"]
+        },
+        "customer": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Customer",
+          "name": "customer",
+          "ref": "customers",
+          "options": ["Retail Customer", "Wholesale Buyer"]
+        },
+        "issueDate": {
+          "tag": "input",
+          "type": "date",
+          "active": true,
+          "text": "Issue Date",
+          "name": "issueDate",
+          "required": true
+        },
+        "dueDate": {
+          "tag": "input",
+          "type": "date",
+          "active": true,
+          "text": "Due Date",
+          "name": "dueDate",
+          "required": true
+        },
+        "subtotal": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Subtotal",
+          "name": "subtotal",
+          "min": 0,
+          "step": 0.01,
+          "required": true
+        },
+        "taxAmount": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Tax Total",
+          "name": "taxAmount",
+          "min": 0,
+          "step": 0.01,
+          "required": true
+        },
+        "total": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Invoice Total",
+          "name": "total",
+          "min": 0,
+          "step": 0.01,
+          "required": true
+        },
+        "status": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Invoice Status",
+          "name": "status",
+          "options": ["draft", "issued", "paid", "overdue", "void"]
+        }
+      }
+    },
+    "reviews": {
+      "desc": "reviews",
+      "subtitle": "Product ratings and feedback",
+      "icon": "star",
+      "admin": false,
+      "exclude": false,
+      "param": "review",
+      "clean": {},
+      "schema": {
+        "product": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Product",
+          "name": "product",
+          "ref": "products",
+          "options": ["Sample Product A", "Sample Product B"]
+        },
+        "customer": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Customer",
+          "name": "customer",
+          "ref": "customers",
+          "options": ["Verified Customer", "Guest Reviewer"]
+        },
+        "rating": {
+          "tag": "input",
+          "type": "number",
+          "active": true,
+          "text": "Rating (1 to 5)",
+          "name": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "required": true
+        },
+        "title": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Headline",
+          "name": "title",
+          "placeholder": "Great quality!",
+          "required": true
+        },
+        "comment": {
+          "tag": "input",
+          "type": "text",
+          "active": true,
+          "text": "Review Details",
+          "name": "comment",
+          "placeholder": "Detailed feedback on product..."
+        },
+        "status": {
+          "tag": "select",
+          "type": "text",
+          "active": true,
+          "text": "Moderation Status",
+          "name": "status",
+          "options": ["pending", "published", "rejected"]
+        },
+        "verified": {
+          "tag": "checkbox",
+          "type": "checkbox",
+          "active": true,
+          "text": "Verified Purchase",
+          "name": "verified",
+          "value": true
         }
       }
     }

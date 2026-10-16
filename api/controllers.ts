@@ -1,17 +1,17 @@
 import fs from "fs";
 import path from "path";
-import { CBase } from "../helpers/base";
+import { BaseController } from "../helpers/base";
 import { models, addModel } from "../helpers/models";
 import config from "../config.json";
 
-export const controllers: Record<string, CBase> = {};
+export const controllers: Record<string, BaseController> = {};
 
 export function defineModels(resourceNames: Record<string, any> = {}): void {
   for (const name of Object.keys(resourceNames)) {
     if (!models[name]) {
       addModel(name);
     }
-    controllers[name] = new CBase(models[name]);
+    controllers[name] = new BaseController(models[name]);
   }
 }
 

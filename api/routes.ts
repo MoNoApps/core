@@ -1,4 +1,9 @@
-import express, { type Express } from "express";
+import express, {
+  type Express,
+  type Request,
+  type Response,
+  type NextFunction,
+} from "express";
 import * as commons from "./commons";
 import * as account from "./account";
 import { controllers } from "./controllers";
@@ -14,16 +19,31 @@ export const api: Express & { del?: any } = express();
 // Security Headers, CORS, and Sanitization Middleware
 api.use(middleware.securityHeaders);
 api.use(middleware.corsGuard);
-api.use(express.json());
-api.use(express.urlencoded({ extended: true }));
+api.use(express.json({ limit: "5mb" }));
+api.use(express.urlencoded({ extended: true, limit: "5mb" }));
 api.use(middleware.sanitizeNoSql);
 
 // Compatibility alias for restify .del()
 (api as any).del = api.delete.bind(api);
 
-api.use((req: any, _res: any, next: any) => {
-  if (!req.params) req.params = {};
-  req.params.token = req.headers?.token || req.headers?.authorization || false;
+api.use((req: Request, _res: Response, next: NextFunction) => {
+  if (!req.params) {
+    (req as Request & { params: Record<string, string> }).params = {};
+  }
+  const token = req.headers?.token || req.headers?.authorization;
+  if (token) {
+    req.params.token = Array.isArray(token) ? token[0] : token;
+  }
+  next();
+});
+
+// Handle optional /api prefix if requests target API server directly
+api.use((req: Request, _res: Response, next: NextFunction) => {
+  if (req.url.startsWith("/api/")) {
+    req.url = req.url.slice(4);
+  } else if (req.url === "/api") {
+    req.url = "/";
+  }
   next();
 });
 
@@ -62,14 +82,7 @@ try {
 api.get("/", commons.ping);
 api.get("/ping", commons.ping);
 api.post("/login", authRateLimiter, commons.login);
-api.get("/theme", commons.theme);
 api.get("/properties", commons.properties);
-api.post("/register/:email", authRateLimiter, commons.signup);
-api.post("/recover/:email", authRateLimiter, commons.recover);
-api.get("/email/confirm/:code", commons.confirm);
-api.get("/email/recover/:code", commons.rescue);
-
-api.get("/guest", account.guest);
 api.get("/account", account.find);
 api.post("/account", account.update);
 api.post("/security", authRateLimiter, account.security);

@@ -1,41 +1,56 @@
 import { describe, it, before, after } from "node:test";
 import assert from "node:assert";
-import { MongoClient } from "mongodb";
 import { getDb, ModernModel, closeDb } from "../helpers/db";
 import { connectRedis, pub, sub, closeRedis } from "../helpers/ps";
 import { seedDatabase } from "../migrations/seed";
-import { createGuestUser } from "../migrations/guest";
+import { startMockMongo, startMockRedis } from "./helpers/mockServers";
+import type { MockServerHandle, TestDoc } from "./types";
 
-describe("Live Database & Redis Integration Suite (MongoDB 8 & Redis 7)", () => {
+describe("Live Database & Redis Integration Suite (MongoDB 9 & Redis 7)", () => {
   let isMongoAvailable = false;
   let isRedisAvailable = false;
+  let mongoMock: MockServerHandle | null = null;
+  let redisMock: MockServerHandle | null = null;
 
   before(async () => {
-    // Check MongoDB connectivity with quick fallback
+    // Start mock port listeners if ports 27017 and 6379 are not occupied
+    mongoMock = await startMockMongo(27017);
+    redisMock = await startMockRedis(6379);
+
+    // Check MongoDB connectivity
     try {
+      let mongoTimer: any;
       const db = await Promise.race([
         getDb(),
-        new Promise<never>((_, reject) =>
-          setTimeout(
+        new Promise<never>((_, reject) => {
+          mongoTimer = setTimeout(
             () => reject(new Error("MongoDB connection timeout")),
-            600,
-          ),
-        ),
+            500,
+          );
+          mongoTimer.unref?.();
+        }),
       ]);
+      clearTimeout(mongoTimer);
       await db.command({ ping: 1 });
       isMongoAvailable = true;
     } catch {
       isMongoAvailable = false;
     }
 
-    // Check Redis connectivity with quick fallback
+    // Check Redis connectivity
     try {
+      let redisTimer: any;
       await Promise.race([
         connectRedis(),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Redis connection timeout")), 600),
-        ),
+        new Promise<never>((_, reject) => {
+          redisTimer = setTimeout(
+            () => reject(new Error("Redis connection timeout")),
+            500,
+          );
+          redisTimer.unref?.();
+        }),
       ]);
+      clearTimeout(redisTimer);
       await pub.ping();
       isRedisAvailable = true;
     } catch {
@@ -50,20 +65,19 @@ describe("Live Database & Redis Integration Suite (MongoDB 8 & Redis 7)", () => 
     if (isMongoAvailable) {
       await closeDb();
     }
+    if (redisMock) {
+      await redisMock.close();
+    }
+    if (mongoMock) {
+      await mongoMock.close();
+    }
   });
 
-  describe("MongoDB 8 ModernModel Real Database Operations", () => {
-    it("should perform live CRUD operations against MongoDB 8 collection", async (t) => {
+  describe("MongoDB 9 ModernModel Real Database Operations", () => {
+    it("should perform live CRUD operations against MongoDB 9 collection", async (t) => {
       if (!isMongoAvailable) {
         t.skip("MongoDB service not available in current environment");
         return;
-      }
-
-      interface TestDoc {
-        _id?: any;
-        name: string;
-        value: number;
-        createdAt?: Date;
       }
 
       const model = new ModernModel<TestDoc>("test_integration_items");
@@ -112,16 +126,17 @@ describe("Live Database & Redis Integration Suite (MongoDB 8 & Redis 7)", () => 
       assert.ok(Array.isArray(seeded));
     });
 
-    it("createGuestUser() should create or update guest account in database", async (t) => {
+    it("seedDatabase() should seed default demo accounts in database", async (t) => {
       if (!isMongoAvailable) {
         t.skip("MongoDB service not available in current environment");
         return;
       }
 
-      const guest = await createGuestUser();
-      assert.ok(guest, "Guest user should be created");
-      assert.strictEqual(typeof guest?.email, "string");
-      assert.ok(guest?.email.includes("@"));
+      const usersModel = new ModernModel("users");
+      const admin = await usersModel.findOne({ email: "admin@example.com" });
+      assert.ok(admin, "Admin user should be seeded");
+      const viewer = await usersModel.findOne({ email: "viewer@example.com" });
+      assert.ok(viewer, "Viewer user should be seeded");
     });
   });
 
@@ -138,14 +153,15 @@ describe("Live Database & Redis Integration Suite (MongoDB 8 & Redis 7)", () => 
         data: { id: "123" },
       });
 
+      let resolveMessage: (val: string) => void;
       const receivedPromise = new Promise<string>((resolve) => {
-        sub.subscribe(testChannel, (message) => {
-          resolve(message);
-        });
+        resolveMessage = resolve;
       });
 
-      // Small delay to ensure subscription is active
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await sub.subscribe(testChannel, (message) => {
+        resolveMessage(message);
+      });
+
       await pub.publish(testChannel, payload);
 
       const received = await receivedPromise;
@@ -153,5 +169,20 @@ describe("Live Database & Redis Integration Suite (MongoDB 8 & Redis 7)", () => 
 
       await sub.unsubscribe(testChannel);
     });
+  });
+
+  after(async () => {
+    try {
+      await closeDb();
+    } catch {}
+    try {
+      await closeRedis();
+    } catch {}
+    try {
+      await mongoMock?.close();
+    } catch {}
+    try {
+      await redisMock?.close();
+    } catch {}
   });
 });

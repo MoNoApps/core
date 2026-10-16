@@ -12,7 +12,8 @@ export interface ResponseOptions {
 export interface ReviewOptions {
   req: any;
   res: any;
-  zap?: any;
+  /** Resource handler under review; supplies the schema whitelist. */
+  handler?: { schema?: Record<string, boolean | number> };
   admin?: boolean;
   schema?: boolean;
   user?: User;
@@ -24,16 +25,28 @@ export interface ReviewOptions {
  */
 function sendStatus(res: any, code: number, payload?: any): void {
   if (typeof res.status === "function") {
+    const s = res.status(code);
+    const target =
+      s && (typeof s.json === "function" || typeof s.send === "function")
+        ? s
+        : res;
+
     if (payload !== undefined) {
-      if (typeof payload === "object" && typeof res.json === "function") {
-        res.status(code).json(payload);
-      } else {
-        res.status(code).send(payload);
+      if (typeof payload === "object" && typeof target.json === "function") {
+        target.json(payload);
+      } else if (typeof target.send === "function") {
+        target.send(payload);
+      } else if (typeof target.json === "function") {
+        target.json(payload);
       }
     } else {
-      res.sendStatus
-        ? res.sendStatus(code)
-        : res.status(code).send(String(code));
+      if (typeof res.sendStatus === "function") {
+        res.sendStatus(code);
+      } else if (typeof target.send === "function") {
+        target.send(String(code));
+      } else if (typeof target.json === "function") {
+        target.json({ status: code });
+      }
     }
   } else if (typeof res.send === "function") {
     res.send(code, payload);
@@ -46,7 +59,9 @@ function sendStatus(res: any, code: number, payload?: any): void {
 export function response(opts: ResponseOptions): void {
   try {
     if (opts.err) {
-      console.trace(opts.err);
+      if (process.env.NODE_ENV !== "test" || process.env.DEBUG) {
+        console.trace(opts.err);
+      }
       return sendStatus(opts.res, 500, { error: opts.err });
     }
     if (!opts.rsp && opts.rsp !== 0 && opts.rsp !== false) {
@@ -61,7 +76,9 @@ export function response(opts: ResponseOptions): void {
     }
     return sendStatus(opts.res, 200, opts.rsp);
   } catch (error) {
-    console.error("[manager.response] Error formatting response:", error);
+    if (process.env.NODE_ENV !== "test" || process.env.DEBUG) {
+      console.error("[manager.response] Error formatting response:", error);
+    }
     sendStatus(opts.res, 500, { error: "Internal Server Error" });
   }
 }
@@ -108,14 +125,17 @@ export async function review(
       return null;
     }
 
-    if (opts.schema && opts.zap?.sc) {
+    const schemaDef = opts.handler?.schema;
+    if (opts.schema && schemaDef) {
       if (opts.req.body) {
         delete opts.req.body.token;
       }
       try {
-        filters.validateSchema(opts.req.body || {}, opts.zap.sc);
+        filters.validateSchema(opts.req.body || {}, schemaDef);
       } catch (schemaErr) {
-        console.trace(schemaErr);
+        if (process.env.NODE_ENV !== "test" || process.env.DEBUG) {
+          console.trace(schemaErr);
+        }
         sendStatus(opts.res, 401, { error: (schemaErr as Error).message });
         return null;
       }
@@ -126,7 +146,9 @@ export async function review(
     }
     return opts;
   } catch (error) {
-    console.trace(error);
+    if (process.env.NODE_ENV !== "test" || process.env.DEBUG) {
+      console.trace(error);
+    }
     sendStatus(opts.res, 401, { error: "Authentication failed" });
     if (cb) cb(error, opts);
     return null;
